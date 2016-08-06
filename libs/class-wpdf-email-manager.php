@@ -62,7 +62,7 @@ class WPDF_EmailManager{
 		foreach($fields as $field_id => $value){
 
 			// dont show empty fields
-			if(empty($value)){
+			if($value === ""){
 				continue;
 			}
 
@@ -134,7 +134,13 @@ class WPDF_EmailManager{
 	protected function parse_merge_tags($content, $tags){
 
 		foreach($tags as $tag => $tag_content){
-			$content = preg_replace( "/{$tag}/im",$tag_content, $content );
+
+			$replacement = $tag_content;
+			if(is_array($replacement)){
+				$replacement = implode(",", $replacement);
+			}
+
+			$content = preg_replace( "/{$tag}/im", $replacement, $content );
 		}
 
 		return $content;

@@ -8,6 +8,7 @@
 class WPDF_FormData{
 
 	protected $_data = null;
+	protected $_raw_data = null;
 	protected $_fields = null;
 
 	/**
@@ -20,9 +21,12 @@ class WPDF_FormData{
 	public function __construct($fields, $data, $upload_data){
 
 		$this->_data = array();
+		$this->_raw_data = array();
 		$this->_fields = $fields;
 
 		foreach($fields as $field_id => $field){
+
+			$this->_raw_data[$field_id] = $data[$field_id];
 
 			if($field->isType('file')){
 
@@ -57,7 +61,34 @@ class WPDF_FormData{
 			}else{
 
 				if(isset($data[$field_id])){
-					$this->_data[$field_id] = $data[$field_id];
+
+					$type = $field->getType();
+					if($type == 'radio' || $type == 'checkbox' || $type == 'select'){
+
+						if(is_array($data[$field_id])){
+
+							$temp = array();
+							foreach($data[$field_id] as $v){
+								$chosenValue = $field->getOptionValue($v);
+								if($chosenValue !== false){
+									$temp[] = $chosenValue;
+								}
+							}
+
+							if(!empty($temp)){
+								$this->_data[$field_id] = $temp;
+							}
+
+						}else{
+							$chosenValue = $field->getOptionValue($data[$field_id]);
+							if($chosenValue !== false){
+								$this->_data[$field_id] = $chosenValue;
+							}
+						}
+
+					}else{
+						$this->_data[$field_id] = $data[$field_id];
+					}
 				}
 			}
 		}
@@ -69,6 +100,10 @@ class WPDF_FormData{
 
 	public function get($field_id){
 		return isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
+	}
+
+	public function getRaw($field_id){
+		return isset( $this->_raw_data[$field_id] ) ? $this->_raw_data[$field_id] : false;
 	}
 
 	public function getField($field_id){

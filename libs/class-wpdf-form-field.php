@@ -31,13 +31,16 @@ class WPDF_FormField{
 	 */
 	public function output($form_data){
 
-		$value = $form_data->get($this->_name);
-
 		switch($this->getType()){
 			case 'textarea':
+
+				$value = $form_data->get($this->_name);
+
 				echo '<textarea name="'.$this->_name.'" id="'.$this->getId().'" class="'.$this->getClasses().'">'.$value.'</textarea>';
 				break;
 			case 'select':
+
+				$value = $form_data->getRaw($this->_name);
 
 				echo '<select name="'.$this->_name.'" id="'.$this->getId().'" class="'.$this->getClasses().'">';
 
@@ -51,8 +54,8 @@ class WPDF_FormField{
 
 				if(isset($this->_args['options']) && !empty($this->_args['options'])){
 					foreach($this->_args['options'] as $key => $option){
-						$selected = "".$option === $value ? 'selected="selected"' : '';
-						echo '<option name="'.$key.'"'.$selected.'>'.$option.'</option>';
+						$selected = "".$key === $value ? 'selected="selected"' : '';
+						echo '<option value="'.$key.'"'.$selected.'>'.$option.'</option>';
 					}
 				}
 
@@ -60,6 +63,8 @@ class WPDF_FormField{
 
 				break;
 			case 'file':
+
+				$value = $form_data->get($this->_name);
 
 				// display name of previously uploaded file and show the file uploader to allow users to overwrite upload
 				echo '<input type="'.$this->getType().'" name="'.$this->_name.'"  />';
@@ -69,6 +74,8 @@ class WPDF_FormField{
 				break;
 			case 'radio':
 			case 'checkbox':
+
+				$value = $form_data->getRaw($this->_name);
 
 				if(isset($this->_args['options']) && !empty($this->_args['options'])){
 
@@ -95,7 +102,10 @@ class WPDF_FormField{
 
 			case 'text':
 			default:
+
+				$value = $form_data->get($this->_name);
 				echo '<input type="'.$this->getType().'" name="'.$this->_name.'" value="'.$value.'" />';
+
 				break;
 		}
 
@@ -112,6 +122,15 @@ class WPDF_FormField{
 		if($this->_type == $type){
 			return true;
 		}
+		return false;
+	}
+
+	public function getOptionValue($key){
+
+		if(isset($this->_args['options']) && !empty($this->_args['options']) && array_key_exists($key, $this->_args['options'])){
+			return $this->_args['options'][$key];
+		}
+
 		return false;
 	}
 
