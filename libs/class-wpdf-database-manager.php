@@ -32,13 +32,13 @@ class WPDF_DatabaseManager{
 
 		$this->save_submission($name, $data->getIp());
 		$submission_id = $wpdb->insert_id;
-		foreach($values as $field => $value){
-			$f = $data->getField($field);
+		foreach($values as $field_id => $value){
+			$field = $data->getField($field_id);
 			$temp_val = $value;
-			if($f->isType("file")){
+			if($field->isType("file")){
 				$temp_val = wpdf_get_uploads_url() . $value;
 			}
-			$this->save_submission_data($submission_id, $field, $temp_val, $f->getType());
+			$this->save_submission_data($submission_id, $field, $temp_val);
 		}
 
 		return true;
@@ -57,14 +57,25 @@ class WPDF_DatabaseManager{
 		return $wpdb->query($query);
 	}
 
-	protected function save_submission_data($submission_id, $field, $content, $field_type){
+	/**
+	 * @param $submission_id int
+	 * @param $field WPDF_FormField
+	 * @param $content mixed
+	 *
+	 * @return false|int
+	 */
+	protected function save_submission_data($submission_id, $field, $content){
 
 		$created = date('Y-m-d H:i:s');
 
 		$content = is_array($content) ? implode(",", $content) : $content;
 
+		$field_label = $field->getLabel();
+		$field_type = $field->getType();
+		$field_name = $field->getName();
+
 		global $wpdb;
-		$query = $wpdb->prepare("INSERT INTO {$this->_submission_data_table}(`submission_id`, `field`, `content`, `created`, `field_type`) VALUES(%d, %s, %s, %s, %s)", array($submission_id, $field, $content, $created, $field_type) );
+		$query = $wpdb->prepare("INSERT INTO {$this->_submission_data_table}(`submission_id`, `field`, `content`, `created`, `field_type`, `field_label`) VALUES(%d, %s, %s, %s, %s, %s)", array($submission_id, $field_name, $content, $created, $field_type, $field_label) );
 		return $wpdb->query($query);
 	}
 
@@ -122,6 +133,7 @@ class WPDF_DatabaseManager{
 		    field VARCHAR(50),
 		    content TEXT,
 		    field_type VARCHAR(50),
+		    field_label VARCHAR(50),
 		    created DATETIME,
 		    UNIQUE KEY id (id)
 		) $charset_collate;";

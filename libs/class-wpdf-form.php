@@ -357,7 +357,11 @@ class WPDF_Form{
 		return $this->_name;
 	}
 
-	public function getFieldLabel($field){
+	public function getFieldLabel($field, $fallback = null){
+
+		if(!is_null($fallback)){
+			return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $fallback;
+		}
 
 		return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $field;
 	}

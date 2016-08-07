@@ -87,7 +87,11 @@ class WPDF_FormData{
 						}
 
 					}else{
-						$this->_data[$field_id] = $field->sanitize($data[$field->getInputName()]);
+						$sanitized_data = $field->sanitize($data[$field->getInputName()]);
+						if($sanitized_data !== ""){
+							// only add non empty data
+							$this->_data[$field_id] = $sanitized_data;
+						}
 					}
 				}
 			}
