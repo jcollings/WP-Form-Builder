@@ -68,3 +68,9 @@ if(function_exists('wpdf_display_form')){
 }
 ?>
 ```
+
+Or display it on a page by using a Shortcode:
+
+```
+[wp_form form="Contact"/]
+```

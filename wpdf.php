@@ -77,6 +77,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/class-wpdf-database-manager.php';
 
 		include_once 'libs/wpdf-functions.php';
+		include_once 'libs/wpdf-shortcodes.php';
 
 		if ( is_admin() ) {
 			include_once 'libs/admin/wpdf-admin.php';
