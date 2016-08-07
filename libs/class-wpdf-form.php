@@ -265,4 +265,16 @@ class WPDF_Form{
 	}
 
 	#endregion
+
+	/**
+	 * @return string
+	 */
+	public function getName() {
+		return $this->_name;
+	}
+
+	public function getFieldLabel($field){
+
+		return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $field;
+	}
 }

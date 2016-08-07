@@ -13,32 +13,34 @@ class WPDF_Admin{
 	}
 
 	function wpdf_register_pages(){
-		add_menu_page("WP Form", "WP Form", "manage_options", "wpdf-forms", array( $this, 'wpdf_form_page') );
+		add_menu_page("WP Form", "Forms", "manage_options", "wpdf-forms", array( $this, 'wpdf_form_page') );
 	}
 
 	function wpdf_form_page(){
 
 		echo '<div class="wrap">';
 
-		$form = isset($_GET['form']) ? $_GET['form'] : false;
+		$form = isset($_GET['form']) ? wpdf_get_form($_GET['form']) : false;
 		$view = isset($_GET['view']) ? $_GET['view'] : false;
 		$submission_id = isset($_GET['submission']) ? $_GET['submission'] : false;
 		if($form) {
 
 			if($submission_id){
 
+
+
 				echo '<h1>Submission</h1>';
-				echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form).'">Back</a>';
+				echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'">Back</a>';
 				$db = new WPDF_DatabaseManager();
 				$submissions = $db->get_submission($submission_id);
 
 				foreach($submissions as $submission ){
-					echo "<p><strong>{$submission->field}</strong>:<br />{$submission->content}</p>";
+					echo "<p><strong>{$form->getFieldLabel($submission->field)}</strong>:<br />{$submission->content}</p>";
 				}
 
 			}else{
 
-				echo '<h1>Form: ' . $form . '</h1>';
+				echo '<h1>Form: ' . $form->getName() . '</h1>';
 				require 'class-wpdf-submissions-list-table.php';
 				$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
 				$wpdf_submissions_table->prepare_items();

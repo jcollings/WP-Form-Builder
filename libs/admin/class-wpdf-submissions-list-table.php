@@ -14,9 +14,9 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 	protected $form_id = null;
 
-	public function __construct($form_id) {
+	public function __construct($form) {
 
-		$this->form_id = $form_id;
+		$this->form_id = $form->getName();
 
 		parent::__construct( array(
 			'singular' => 'wpdf_submissions_list',

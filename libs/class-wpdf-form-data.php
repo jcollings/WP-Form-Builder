@@ -26,7 +26,7 @@ class WPDF_FormData{
 
 		foreach($fields as $field_id => $field){
 
-			$this->_raw_data[$field_id] = $data[$field_id];
+			$this->_raw_data[$field_id] = isset($data[$field_id]) ? $field->sanitize($data[$field_id]) : false;
 
 			if($field->isType('file')){
 
@@ -87,7 +87,7 @@ class WPDF_FormData{
 						}
 
 					}else{
-						$this->_data[$field_id] = $data[$field_id];
+						$this->_data[$field_id] = $field->sanitize($data[$field_id]);
 					}
 				}
 			}

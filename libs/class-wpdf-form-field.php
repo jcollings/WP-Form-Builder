@@ -104,7 +104,7 @@ class WPDF_FormField{
 			default:
 
 				$value = $form_data->get($this->_name);
-				echo '<input type="'.$this->getType().'" name="'.$this->_name.'" value="'.$value.'" />';
+				echo '<input type="'.$this->getType().'" name="'.$this->_name.'" value="'.$value.'" id="'.$this->getId().'" class="'.$this->getClasses().'" />';
 
 				break;
 		}
@@ -132,6 +132,34 @@ class WPDF_FormField{
 		}
 
 		return false;
+	}
+
+	public function sanitize($data){
+
+		if(is_array($data)){
+
+			$output = array();
+
+			if(!empty($data)) {
+				foreach ( $data as $k => $d ) {
+					$output[ $k ] = $this->sanitize( $d );
+				}
+			}
+
+			return $output;
+
+		}else{
+			switch($this->getType()){
+				case 'select':
+				case 'radio':
+				case 'checkbox':
+					return esc_attr($data);
+				default:
+					return sanitize_text_field($data);
+			}
+		}
+
+
 	}
 
 	/**
