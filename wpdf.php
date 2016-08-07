@@ -157,7 +157,9 @@ class WPDF_DeveloperForms {
 	public function register_form($name, $args = array()){
 
 		// register form with system
-		$this->_forms[$name] = new WPDF_Form($name, $args);
+		$form = new WPDF_Form($name, $args);
+		$this->_forms[$name] = $form;
+		return $form;
 	}
 
 	public function get_form($name){

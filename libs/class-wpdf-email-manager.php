@@ -104,9 +104,15 @@ class WPDF_EmailManager{
 			if(!empty($cc)){
 				$headers[] = 'Cc: ' . $cc;
 			}
+
 			$bcc = $this->parse_merge_tags($notification->getBcc(), $raw_template_tags);
 			if(!empty($bcc)){
 				$headers[] = 'Bcc: ' . $bcc;
+			}
+
+			$from = $this->parse_merge_tags($notification->getFrom(), $raw_template_tags);
+			if(!empty($from)){
+				$headers[] = 'From: ' . $from;
 			}
 
 			$subject = $this->parse_merge_tags($notification->getSubject(), $raw_template_tags);

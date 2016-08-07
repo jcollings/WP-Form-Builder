@@ -10,7 +10,7 @@ class WPDF_Notification{
 	protected $_to;
 	protected $_cc;
 	protected $_bcc;
-	protected $_sender;
+	protected $_from;
 
 	protected $_subject;
 	protected $_message;
@@ -29,8 +29,8 @@ class WPDF_Notification{
 			$this->_bcc = $notification['bcc'];
 		}
 
-		if(isset($notification['sender'])){
-			$this->_sender = $notification['sender'];
+		if(isset($notification['from'])){
+			$this->_from = $notification['from'];
 		}
 
 		if(isset($notification['subject'])){
@@ -66,8 +66,8 @@ class WPDF_Notification{
 	/**
 	 * @return mixed
 	 */
-	public function getSender() {
-		return $this->_sender;
+	public function getFrom() {
+		return $this->_from;
 	}
 
 	/**

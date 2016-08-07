@@ -17,6 +17,15 @@ class WPDF_Form{
 	protected $_rules = null;
 	protected $_submitted = false;
 
+	/**
+	 * What happens after the form has been submitted, message or redirect
+	 * @var array
+	 */
+	protected $_confirmation = [
+		'type' => 'message',
+		'message' => 'Form has been successfully submitted!'
+	];
+
 	protected $_has_file_field = false;
 
 	/**
@@ -34,7 +43,7 @@ class WPDF_Form{
 	 */
 	protected $_fields = null;
 
-	public function __construct($name, $args = array()) {
+	public function __construct($name, $fields = array()) {
 
 		$this->_name = $name;
 
@@ -44,35 +53,49 @@ class WPDF_Form{
 		$this->_notifications = array();
 
 		// setup fields
-		if(isset($args['fields'])){
-			foreach($args['fields'] as $field_id => $field ){
+		if(!empty($fields)) {
+			foreach ( $fields as $field_id => $field ) {
 
-				$type = $field['type'];
-				$this->_fields[$field_id] = new WPDF_FormField($field_id, $type , $field);
+				$type                       = $field['type'];
+				$this->_fields[ $field_id ] = new WPDF_FormField( $field_id, $type, $field );
 
-				if($type == 'file'){
+				if ( $type == 'file' ) {
 					$this->_has_file_field = true;
 				}
 
 				// add validation rules to rules array
-				if(isset($field['validation']) && !empty($field['validation'])){
+				if ( isset( $field['validation'] ) && ! empty( $field['validation'] )  ) {
+
+					// validation should end up like [ [ 'type' => 'required'], ['type' => 'email'] ]
+					if(is_array($field['validation'])){
+
+						if(isset($field['validation']['type'])){
+							// is in the format [ 'type' => 'required' ]
+							$rule = array(
+								$field['validation']
+							);
+						}else{
+							// has been given in the same format as needed
+							$rule = $field['validation'];
+						}
+
+
+					}else{
+						// if only validation type string was give, convert to full
+						$rule = array(
+							array(
+								'type' => $field['validation']
+							)
+						);
+					}
 
 					// todo: check to see if this is a valid rule
-					$this->_rules[$field_id] = $field['validation'];
+					$this->_rules[ $field_id ] = $rule;
 				}
 			}
 		}
 
-		// setup notification messages
-		if(isset($args['notifications'])){
-			foreach($args['notifications'] as $notification){
-				$this->_notifications[] = new WPDF_Notification( $notification );
-			}
-		}
-
 		$this->_data = new WPDF_FormData($this->_fields, $_POST, $_FILES);
-		$this->_validation = new WPDF_Validation($this->_rules);
-		$this->_email_manager = new WPDF_EmailManager($this->_notifications);
 	}
 
 	public function process(){
@@ -88,6 +111,7 @@ class WPDF_Form{
 
 		// clear data array
 		$this->_submitted = true;
+		$this->_validation = new WPDF_Validation($this->_rules);
 
 		foreach($this->_fields as $field_id => $field){
 
@@ -115,8 +139,63 @@ class WPDF_Form{
 			$db->save_entry($this->_name, $this->_data);
 
 			// send email notifications with template tags
+			$this->_email_manager = new WPDF_EmailManager($this->_notifications);
 			$this->_email_manager->send($this->_data);
+
+			// redirect now if needed
+			if($this->_confirmation['type'] == "redirect"){
+				wp_redirect($this->_confirmation['redirect_url']);
+				exit;
+			}
 		}
+	}
+
+	public function add_confirmation($type, $value){
+
+		if($type == 'redirect'){
+
+			$this->_confirmation = array(
+				'type' => 'redirect',
+				'redirect_url' => $value
+			);
+
+			return true;
+
+		}elseif($type == 'message'){
+
+			$this->_confirmation = array(
+				'type' => 'message',
+				'message' => $value
+			);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function add_notification($to, $subject, $message, $args = array()){
+
+		$notification = array(
+			'to' => $to,
+			'subject' => $subject,
+			'message' => $message,
+		);
+
+		if(isset($args['cc'])){
+			$notification['cc'] = $args['cc'];
+		}
+
+		if(isset($args['bcc'])){
+			$notification['bcc'] = $args['bcc'];
+		}
+
+		if(isset($args['from'])){
+			$notification['from'] = $args['from'];
+		}
+
+		$this->_notifications[] = new WPDF_Notification( $notification );
+
 	}
 
 	#region Form Output
@@ -190,7 +269,7 @@ class WPDF_Form{
 	/**
 	 * Display form closing tag
 	 */
-	public function end(){
+	public function end($submit_label = 'Send'){
 
 		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->_name );
 
@@ -199,7 +278,7 @@ class WPDF_Form{
 		echo '<input type="hidden" name="wpdf_nonce" value="'.$nonce.'" />';
 
 		// submit
-		echo '<input type="submit" value="Send" />';
+		echo '<input type="submit" value="'.$submit_label.'" />';
 
 		echo '</form>';
 	}
@@ -251,7 +330,7 @@ class WPDF_Form{
 
 		// no data has been submitted
 		if($this->_submitted === true && !$this->has_errors()){
-			$this->confirmation();
+			$this->getConfirmationMessage();
 			return true;
 		}
 		return false;
@@ -260,8 +339,13 @@ class WPDF_Form{
 	/**
 	 * Output form complete/confirmation/thank you message
 	 */
-	public function confirmation(){
-		var_dump("Form submitted successfully");
+	public function getConfirmationMessage(){
+
+		if($this->_confirmation['type'] == "message"){
+			return $this->_confirmation['message'];
+		}
+
+		return "DEFAULT: Form submitted successfully";
 	}
 
 	#endregion
@@ -276,5 +360,21 @@ class WPDF_Form{
 	public function getFieldLabel($field){
 
 		return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $field;
+	}
+
+	/**
+	 * @return WPDF_FormField[]
+	 */
+	public function getFields() {
+		return $this->_fields;
+	}
+
+	/**
+	 * @param $field string
+	 *
+	 * @return bool|WPDF_FormField
+	 */
+	public function getField($field){
+		return isset($this->_fields[$field]) ? $this->_fields[$field] : false;
 	}
 }

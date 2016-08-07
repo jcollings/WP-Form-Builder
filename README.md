@@ -1,194 +1,70 @@
 # WordPress Developer Forms
+Author: James Collings
+Version: 0.1
+Created: 05/08/2016
+Updated: 07/08/2016
 
-WordPress forms plugin built for developers.
+## About
+WordPress Developer Forms plugin make it easy to create and display forms within your WordPress theme, With a WordPress admin section where you can easily view past form submissions. 
 
-## Register Form
+## Features
+
+* __Saved Submissions__ - Form submissions are automatically stored and can be viewed from within the WordPress admin area.
+* __Email Notifications__ - Easily setup email notifications when forms are submitted, and customise it with template tags to display for entry data.
+* __Form Validation__ - Fields can make use of multiple validation functions, each allowing for custom validation messages.
+* __Field Types__ - Currently supports (text, text area, file, select, checkbox, radio)
+
+## Quick Start Guide
+
+### Step 1 - Registering a Form
+
+In this example we will create a form with (name, email and message field) all fields are required and the email field has to be a valid email address for the form to submit. Once the form has been submitted we will display a custom thank you message, and send website admins a copy of the data submitted via email.
 
 ```
-// register form
 if(function_exists('wpdf_register_form')){
 
-	wpdf_register_form("Contact", [
-		'notifications' => [
-
-			// test admin notification
-			[
-				'to' => 'to@test.com',
-				'cc' => 'cc@test.com',
-				'bcc' => 'bcc@test.com',
-				'subject' => 'Test {{field_email}} admin notification',
-				'message' => 'Test message Notification {{fields}}'
-			],
-
-			// test user notifiaction, send to field:
-			[
-				'to' => '{{field_email}}',
-				'cc' => 'cc@test.com',
-				'bcc' => 'bcc@test.com',
-				'subject' => 'Test {{field_email}} user notification, sending to field address',
-				'message' => 'Test user notification, sending to field address {{fields}}'
-			]
-		],
-		'fields' => [
-			'fname' => [
-				'type' => 'text',
-				'label' => 'First Name',
-				'validation' => [
-					[
-						'msg' => 'This field is required!',
-						'type' => 'required'
-					]
-				]
-			],
-			'sname' => [
-				'type' => 'text',
-				'label' => 'Surname',
-				'validation' => [
-					[
-						'type' => ['min_length', 5]
-					]
-				]
-			],
-			'email' => [
-				'type' => 'text',
-				'label' => 'Email Address',
-				'validation' => [
-					[
-						'msg' => 'This field is required!',
-						'type' => 'required'
-					],
-					[
-						'msg' => 'Please enter a valid email address!',
-						'type' => 'email'
-					]
-				]
-			],
-			'subject' => [
-				'label' => 'Subject',
-				'type' => 'select',
-				'options' => ['One', 'Two', 'Three'],
-				'empty' => 'Custom select message',
-				'validation' => [
-					[
-						'type' => 'required'
-					]
-				]
-			],
-			'phone' => [
-				'label' => 'Phone Number',
-				'type' => 'text'
-			],
-			'message' => [
-				'label' => 'Message',
-				'type' => 'textarea'
-			],
-			'poster' => [
-				'label' => 'Poster Attachment',
-				'type' => 'file',
-				'validation' => [
-					[
-						'type' => 'required'
-					]
-				]
-			],
-			'radio' => [
-				'label' => 'Radio Choices:',
-				'type' => 'radio',
-				'options' => ['One', 'Two', 'Three']
-			],
-			'checkbox' => [
-				'label' => 'Checkbox Choices:',
-				'type' => 'checkbox',
-				'options' => ['One', 'two' => 'Two', 'Three']
-			]
-		]
-	]);
-
+    // 1. register form
+	$form = wpdf_register_form("Contact", array(
+		'name' => array(
+			'type' => 'text',
+			'label' => 'Name',
+			'validation' => 'required'
+		),
+		'email' => array(
+			'type' => 'text',
+			'label' => 'Email Address',
+			'validation' => array(
+				array(
+					'type' => 'required'
+				),
+				array(
+					'type' => 'email'
+				)
+			)
+		),
+		'message' => array(
+			'type' => 'textarea',
+			'label' => 'Message',
+			'validation' => 'required'
+		)
+	));
+	
+	// 2. register form success message
+	$form->add_confirmation('message', 'Your form has been successfully submitted.');
+	
+	// 3. register form email notification
+	$form->add_notification('admin@website.com', 'Email Notification Subject', 'Email Notification Message: {{fields}}');	
 }
 ```
 
-## Display Form
+### Step 2 - Display Form
+
+Now we have registered the form we can output it by adding the following code in an appropriate themes template file.
 
 ```
-// form
-	
-if(function_exists('wpdf_get_form')){
-	
-	$form = wpdf_get_form("Contact");
-
-	if(!$form->is_complete()){
-
-		// output the form tag <form>
-		$form->start();
-
-		// display form errors if any
-		if($form->has_errors()){
-			$form->errors();
-		}
-
-		// output fields
-		?>
-
-		<div class="form-row <?php $form->classes('fname', 'validation'); ?> <?php $form->classes('fname', 'type'); ?>">
-			<div class="label"><?php $form->label( "fname" ); ?></div>
-			<div class="input"><?php $form->input( "fname" ); ?></div>
-			<?php $form->error( "fname" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('sname', 'validation'); ?> <?php $form->classes('sname', 'type'); ?>">
-			<div class="label"><?php $form->label( "sname" ); ?></div>
-			<div class="input"><?php $form->input( "sname" ); ?></div>
-			<?php $form->error( "sname" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('phone', 'validation'); ?> <?php $form->classes('phone', 'type'); ?>">
-			<div class="label"><?php $form->label( "phone" ); ?></div>
-			<div class="input"><?php $form->input( "phone" ); ?></div>
-			<?php $form->error( "phone" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('email', 'validation'); ?> <?php $form->classes('email', 'type'); ?>">
-			<div class="label"><?php $form->label( "email" ); ?></div>
-			<div class="input"><?php $form->input( "email" ); ?></div>
-			<?php $form->error( "email" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('subject', 'validation'); ?> <?php $form->classes('subject', 'type'); ?>">
-			<div class="label"><?php $form->label( "subject" ); ?></div>
-			<div class="input"><?php $form->input( "subject" ); ?></div>
-			<?php $form->error( "subject" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('message', 'validation'); ?> <?php $form->classes('message', 'type'); ?>">
-			<div class="label"><?php $form->label( "message" ); ?></div>
-			<div class="input"><?php $form->input( "message" ); ?></div>
-			<?php $form->error( "message" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('poster', 'validation'); ?> <?php $form->classes('poster', 'type'); ?>">
-			<div class="label"><?php $form->label( "poster" ); ?></div>
-			<div class="input"><?php $form->input( "poster" ); ?></div>
-			<?php $form->error( "poster" ); ?>
-		</div>
-
-		<div class="form-row <?php $form->classes('radio', 'validation'); ?> <?php $form->classes('radio', 'type'); ?>">
-			<div class="label"><?php $form->label( "radio" ); ?></div>
-			<div class="input"><?php $form->input( "radio" ); ?></div>
-			<?php $form->error( "radio" ); ?>
-		</div>
-
-		
-		<div class="form-row <?php $form->classes('checkbox', 'validation'); ?> <?php $form->classes('checkbox', 'type'); ?>">
-			<div class="label"><?php $form->label( "checkbox" ); ?></div>
-			<div class="input"><?php $form->input( "checkbox" ); ?></div>
-			<?php $form->error( "checkbox" ); ?>
-		</div>
-
-		<?php
-		// close </form>
-		$form->end();
-	}
+<?php
+if(function_exists('wpdf_display_form')){
+    wpdf_display_form("Contact");
 }
-
-// end form
+?>
 ```
