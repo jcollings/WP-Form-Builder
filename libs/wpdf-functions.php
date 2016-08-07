@@ -47,7 +47,7 @@ function wpdf_get_form($name){
  */
 function wpdf_display_form($name){
 
-	$form = wpdf_get_form("Contact");
+	$form = wpdf_get_form($name);
 
 	if($form->is_complete()) {
 
