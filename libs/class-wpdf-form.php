@@ -118,8 +118,8 @@ class WPDF_Form{
 			if($field->isType("file")){
 
 				// check for file upload errors, before checking against field validation rules
-				if(isset($_FILES[$field_id])){
-					$file_data = $_FILES[$field_id];
+				if(isset($_FILES[$field->getInputName()])){
+					$file_data = $_FILES[$field->getInputName()];
 					if($file_data['error'] !== UPLOAD_ERR_OK && $file_data['error'] !== UPLOAD_ERR_NO_FILE){
 						$this->_errors[$field_id] = $this->_validation->get_upload_error($file_data['error']);
 					}

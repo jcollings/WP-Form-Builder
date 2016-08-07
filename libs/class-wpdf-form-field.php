@@ -36,13 +36,13 @@ class WPDF_FormField{
 
 				$value = $form_data->get($this->_name);
 
-				echo '<textarea name="'.$this->_name.'" id="'.$this->getId().'" class="'.$this->getClasses().'">'.$value.'</textarea>';
+				echo '<textarea name="'.$this->getInputName().'" id="'.$this->getId().'" class="'.$this->getClasses().'">'.$value.'</textarea>';
 				break;
 			case 'select':
 
 				$value = $form_data->getRaw($this->_name);
 
-				echo '<select name="'.$this->_name.'" id="'.$this->getId().'" class="'.$this->getClasses().'">';
+				echo '<select name="'.$this->getInputName().'" id="'.$this->getId().'" class="'.$this->getClasses().'">';
 
 				if(isset($this->_args['empty'])){
 					if( $this->_args['empty'] != false ){
@@ -67,7 +67,7 @@ class WPDF_FormField{
 				$value = $form_data->get($this->_name);
 
 				// display name of previously uploaded file and show the file uploader to allow users to overwrite upload
-				echo '<input type="'.$this->getType().'" name="'.$this->_name.'"  />';
+				echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'"  />';
 				if(!empty($value)) {
 					echo '<input type="hidden" name="' . $this->_name . '_uploaded" value="' . $value . '" />';
 				}
@@ -79,7 +79,7 @@ class WPDF_FormField{
 
 				if(isset($this->_args['options']) && !empty($this->_args['options'])){
 
-					$name = $this->_name;
+					$name = $this->getInputName();
 					if($this->isType('checkbox')){
 						$name .= '[]';
 					}
@@ -104,7 +104,7 @@ class WPDF_FormField{
 			default:
 
 				$value = $form_data->get($this->_name);
-				echo '<input type="'.$this->getType().'" name="'.$this->_name.'" value="'.$value.'" id="'.$this->getId().'" class="'.$this->getClasses().'" />';
+				echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'" value="'.$value.'" id="'.$this->getId().'" class="'.$this->getClasses().'" />';
 
 				break;
 		}
@@ -123,6 +123,10 @@ class WPDF_FormField{
 			return true;
 		}
 		return false;
+	}
+
+	public function getInputName(){
+		return 'wpdf_field_' . $this->_name;
 	}
 
 	public function getOptionValue($key){

@@ -26,33 +26,33 @@ class WPDF_FormData{
 
 		foreach($fields as $field_id => $field){
 
-			$this->_raw_data[$field_id] = isset($data[$field_id]) ? $field->sanitize($data[$field_id]) : false;
+			$this->_raw_data[$field_id] = isset($data[$field->getInputName()]) ? $field->sanitize($data[$field->getInputName()]) : false;
 
 			if($field->isType('file')){
 
-				if(isset($upload_data[$field_id])){
+				if(isset($upload_data[$field->getInputName()])){
 
-					if(isset($upload_data[$field_id]['name']) && isset($upload_data[$field_id]['error']) ){
+					if(isset($upload_data[$field->getInputName()]['name']) && isset($upload_data[$field->getInputName()]['error']) ){
 
 						//$this->_data[$field_id] = $upload_data[$field_id];
 
-						if( $upload_data[$field_id]['error'] == 0 ){
+						if( $upload_data[$field->getInputName()]['error'] == 0 ){
 
 							// file uploaded
 
 							// check upload path exists
 							$upload_dir = wpdf_get_uploads_dir();
 
-							$file_name = $upload_data[$field_id]['name'];
+							$file_name = $upload_data[$field->getInputName()]['name'];
 
-							if(move_uploaded_file($upload_data[$field_id]['tmp_name'], $upload_dir . $file_name )){
+							if(move_uploaded_file($upload_data[$field->getInputName()]['tmp_name'], $upload_dir . $file_name )){
 								$this->_data[$field_id] = $file_name;
 							}
-						}elseif( $upload_data[$field_id]['error'] == 4 ){
+						}elseif( $upload_data[$field->getInputName()]['error'] == 4 ){
 							// no file uploaded
 							// load from previously stored upload
-							if(isset($data[$field_id.'_uploaded'])){
-								$this->_data[$field_id] = $data[$field_id.'_uploaded'];
+							if(isset($data[$field->getInputName().'_uploaded'])){
+								$this->_data[$field_id] = $data[$field->getInputName().'_uploaded'];
 							}
 						}
 					}
@@ -60,15 +60,15 @@ class WPDF_FormData{
 
 			}else{
 
-				if(isset($data[$field_id])){
+				if(isset($data[$field->getInputName()])){
 
 					$type = $field->getType();
 					if($type == 'radio' || $type == 'checkbox' || $type == 'select'){
 
-						if(is_array($data[$field_id])){
+						if(is_array($data[$field->getInputName()])){
 
 							$temp = array();
-							foreach($data[$field_id] as $v){
+							foreach($data[$field->getInputName()] as $v){
 								$chosenValue = $field->getOptionValue($v);
 								if($chosenValue !== false){
 									$temp[] = $chosenValue;
@@ -80,14 +80,14 @@ class WPDF_FormData{
 							}
 
 						}else{
-							$chosenValue = $field->getOptionValue($data[$field_id]);
+							$chosenValue = $field->getOptionValue($data[$field->getInputName()]);
 							if($chosenValue !== false){
 								$this->_data[$field_id] = $chosenValue;
 							}
 						}
 
 					}else{
-						$this->_data[$field_id] = $field->sanitize($data[$field_id]);
+						$this->_data[$field_id] = $field->sanitize($data[$field->getInputName()]);
 					}
 				}
 			}
