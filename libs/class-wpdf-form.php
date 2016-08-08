@@ -17,6 +17,11 @@ class WPDF_Form{
 	protected $_rules = null;
 	protected $_submitted = false;
 
+	protected $_settings = null;
+	protected $_settings_default = array(
+		'database' => 'yes'
+	);
+
 	/**
 	 * What happens after the form has been submitted, message or redirect
 	 * @var array
@@ -51,6 +56,7 @@ class WPDF_Form{
 		$this->_errors = array();
 		$this->_rules = array();
 		$this->_notifications = array();
+		$this->_settings = $this->_settings_default;
 
 		// setup fields
 		if(!empty($fields)) {
@@ -135,19 +141,38 @@ class WPDF_Form{
 		if(!$this->has_errors()){
 
 			// store form data in database
-			$db = new WPDF_DatabaseManager();
-			$db->save_entry($this->_name, $this->_data);
+			if($this->get_setting('database') == 'yes') {
+				$db = new WPDF_DatabaseManager();
+				$db->save_entry( $this->getName(), $this->_data );
+			}
 
 			// send email notifications with template tags
-			$this->_email_manager = new WPDF_EmailManager($this->_notifications);
-			$this->_email_manager->send($this->_data);
+			if ( ! empty( $this->_notifications ) ) {
+				$this->_email_manager = new WPDF_EmailManager( $this->_notifications );
+				$this->_email_manager->send( $this->_data );
+			}
 
 			// redirect now if needed
-			if($this->_confirmation['type'] == "redirect"){
-				wp_redirect($this->_confirmation['redirect_url']);
+			if ( $this->_confirmation['type'] == "redirect" ) {
+				wp_redirect( $this->_confirmation['redirect_url'] );
 				exit;
 			}
+
+			// on form complete
+			do_action('wpdf/form_complete', $this->getName(), $this->_data);
 		}
+	}
+
+	public function settings($settings){
+
+		// database setting (yes/no)
+		if(isset($settings['database']) && $settings['database'] == 'no'){
+			$this->_settings['database'] = 'no';
+		}
+	}
+
+	public function get_setting($setting){
+		return isset($this->_settings[$setting]) ? $this->_settings[$setting] : false;
 	}
 
 	public function add_confirmation($type, $value){

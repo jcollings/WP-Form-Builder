@@ -31,6 +31,13 @@ class WPDF_Validation{
 	 */
 	public function validate($field, $post_data){
 
+		// hook into field validation
+		$error = apply_filters('wpdf/validate_field', null, $field->getName(), $post_data);
+		if(!empty($error)){
+			$this->_error = $error;
+			return false;
+		}
+
 		if(isset($this->_rules[$field->getName()])) {
 			if(!empty($this->_rules[$field->getName()])) {
 				foreach ( $this->_rules[ $field->getName() ] as $rule ) {
