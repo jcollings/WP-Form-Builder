@@ -74,8 +74,6 @@ class WPDF_EmailManager{
 				}else{
 					$value = wpdf_get_uploads_url() . $value;
 				}
-
-
 			}
 
 			$tag = $this->setup_merge_tag("field_" . $field_id);
@@ -85,7 +83,10 @@ class WPDF_EmailManager{
 				'{{field_value}}' => $value
 			));
 
-			$all .= $tag;
+			if(!$field->isType('password')){
+				// dont add password fields to {{fields}} tag
+				$all .= $tag;
+			}
 		}
 
 		$template_tags[$this->setup_merge_tag('fields')] = $all;

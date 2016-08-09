@@ -19,7 +19,10 @@ class WPDF_Form{
 
 	protected $_settings = null;
 	protected $_settings_default = array(
-		'database' => 'yes'
+		'database' => 'yes',
+		'labels' => array(
+			'submit' => 'Send'
+		)
 	);
 
 	/**
@@ -47,6 +50,8 @@ class WPDF_Form{
 	 * @var WPDF_FormField[]
 	 */
 	protected $_fields = null;
+
+	protected $_modules = array();
 
 	public function __construct($name, $fields = array()) {
 
@@ -119,6 +124,10 @@ class WPDF_Form{
 		$this->_submitted = true;
 		$this->_validation = new WPDF_Validation($this->_rules);
 
+		// load modules
+		// todo: modules should be loaded after form has been registered with all settings
+		$this->load_modules();
+
 		foreach($this->_fields as $field_id => $field){
 
 			if($field->isType("file")){
@@ -140,6 +149,11 @@ class WPDF_Form{
 
 		if(!$this->has_errors()){
 
+			$submit = apply_filters( 'wpdf/process_form', true, $this, $this->_data );
+			if(!$submit){
+				return;
+			}
+
 			// store form data in database
 			if($this->get_setting('database') == 'yes') {
 				$db = new WPDF_DatabaseManager();
@@ -159,16 +173,44 @@ class WPDF_Form{
 			}
 
 			// on form complete
-			do_action('wpdf/form_complete', $this->getName(), $this->_data);
+			do_action('wpdf/form_complete', $this, $this->_data);
+		}
+	}
+
+	public function load_modules(){
+
+		$modules = apply_filters('wpdf/list_modules', array());
+
+		foreach($modules as $module_id => $module){
+
+			// check if class exists
+			// todo: How should we handle errors like this, report it?
+			if(!class_exists($module)){
+				throw new Error("WPDF Module could not be loaded: " . $module);
+			}
+
+			// check if class key exists
+			if($this->get_setting($module_id)){
+				$this->_modules[$module_id] = new $module;
+			}
 		}
 	}
 
 	public function settings($settings){
 
 		// database setting (yes/no)
-		if(isset($settings['database']) && $settings['database'] == 'no'){
+		/*if(isset($settings['database']) && $settings['database'] == 'no'){
 			$this->_settings['database'] = 'no';
 		}
+
+		if(isset($settings['submit_label']) && !empty($settings['submit_label'])){
+			$this->_settings['labels']['submit'] = $settings['submit_label'];
+		}*/
+
+		//var_dump($settings);
+//		var_dump($this->_settings);
+
+		$this->_settings = array_replace_recursive($this->_settings, $settings);
 	}
 
 	public function get_setting($setting){
@@ -221,6 +263,14 @@ class WPDF_Form{
 
 		$this->_notifications[] = new WPDF_Notification( $notification );
 
+	}
+
+	public function add_field_error($field, $message){
+		$this->_errors[$field] = $message;
+	}
+
+	public function add_error($message){
+		$this->_error = $message;
 	}
 
 	#region Form Output
@@ -294,9 +344,12 @@ class WPDF_Form{
 	/**
 	 * Display form closing tag
 	 */
-	public function end($submit_label = 'Send'){
+	public function end($submit_label = false){
 
 		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->_name );
+		if(empty($submit_label)){
+			$submit_label = $this->_settings['labels']['submit'];
+		}
 
 		// hidden fields
 		echo '<input type="hidden" name="wpdf_action" value="' . $this->_name .'" />';

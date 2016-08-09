@@ -33,9 +33,16 @@ class WPDF_DatabaseManager{
 		$this->save_submission($name, $data->getIp());
 		$submission_id = $wpdb->insert_id;
 		foreach($values as $field_id => $value){
+
 			$field = $data->getField($field_id);
+			if($field->isType("password")){
+				// dont store password data in entry table
+				continue;
+			}
+
 			$temp_val = $value;
 			if($field->isType("file")){
+				// if file, add url to file instead of just filename
 				$temp_val = wpdf_get_uploads_url() . $value;
 			}
 			$this->save_submission_data($submission_id, $field, $temp_val);
