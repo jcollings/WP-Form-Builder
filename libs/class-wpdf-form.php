@@ -292,6 +292,16 @@ class WPDF_Form{
 		echo "<form {$attrs}>";
 	}
 
+	public function getFieldName($field_id){
+
+		$field = isset($this->_fields[$field_id]) ? $this->_fields[$field_id] : false;
+		if($field){
+			return $field->getInputName();
+		}
+
+		return false;
+	}
+
 	/**
 	 * Display form field
 	 *
@@ -337,26 +347,24 @@ class WPDF_Form{
 	 * @param $label
 	 * @param array $args
 	 */
-	public function submit($label, $args = array()){
+	public function submit($label = false, $args = array()){
 
+		if(empty($label)){
+			$label = $this->_settings['labels']['submit'];
+		}
+		echo '<input type="submit" value="'.$label.'" />';
 	}
 
 	/**
 	 * Display form closing tag
 	 */
-	public function end($submit_label = false){
+	public function end(){
 
 		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->_name );
-		if(empty($submit_label)){
-			$submit_label = $this->_settings['labels']['submit'];
-		}
 
 		// hidden fields
 		echo '<input type="hidden" name="wpdf_action" value="' . $this->_name .'" />';
 		echo '<input type="hidden" name="wpdf_nonce" value="'.$nonce.'" />';
-
-		// submit
-		echo '<input type="submit" value="'.$submit_label.'" />';
 
 		echo '</form>';
 	}
@@ -388,7 +396,7 @@ class WPDF_Form{
 			return;
 		}
 
-		echo "<p>Please make sure you have corrected any errors below before resubmit the form.</p>";
+		echo "<p>Please make sure you have corrected any errors below before resubmitting the form.</p>";
 		echo '<ul>';
 		foreach($this->_errors as $field_id => $error){
 			echo '<li>' . $this->_fields[$field_id]->getLabel() . ' - ' . $error . '</li>';

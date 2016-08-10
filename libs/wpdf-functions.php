@@ -68,6 +68,8 @@ function wpdf_display_form($name){
 			wpdf_display_field($form, $field_id);
 		}
 
+		$form->submit();
+
 		// close </form>
 		$form->end();
 	}
