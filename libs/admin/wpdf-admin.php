@@ -27,15 +27,13 @@ class WPDF_Admin{
 
 			if($submission_id){
 
-
-
 				echo '<h1>Submission</h1>';
 				echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'">Back</a>';
 				$db = new WPDF_DatabaseManager();
 				$submissions = $db->get_submission($submission_id);
 
 				foreach($submissions as $submission ){
-					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$submission->content}</p>";
+					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{esc_html($submission->content)}</p>";
 				}
 
 			}else{

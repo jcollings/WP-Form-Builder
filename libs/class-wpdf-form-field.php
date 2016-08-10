@@ -151,19 +151,11 @@ class WPDF_FormField{
 			}
 
 			return $output;
-
-		}else{
-			switch($this->getType()){
-				case 'select':
-				case 'radio':
-				case 'checkbox':
-					return esc_attr($data);
-				default:
-					return sanitize_text_field($data);
-			}
 		}
 
-
+		$data = wp_check_invalid_utf8( $data );
+		$data = wp_kses_no_null( $data );
+		return sanitize_text_field($data);
 	}
 
 	/**

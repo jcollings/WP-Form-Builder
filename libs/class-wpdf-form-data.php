@@ -65,10 +65,12 @@ class WPDF_FormData{
 					$type = $field->getType();
 					if($type == 'radio' || $type == 'checkbox' || $type == 'select'){
 
-						if(is_array($data[$field->getInputName()])){
+						$sanitized_data = $field->sanitize($data[$field->getInputName()]);
+
+						if(is_array($sanitized_data)){
 
 							$temp = array();
-							foreach($data[$field->getInputName()] as $v){
+							foreach($sanitized_data as $v){
 								$chosenValue = $field->getOptionValue($v);
 								if($chosenValue !== false){
 									$temp[] = $chosenValue;
@@ -80,7 +82,7 @@ class WPDF_FormData{
 							}
 
 						}else{
-							$chosenValue = $field->getOptionValue($data[$field->getInputName()]);
+							$chosenValue = $field->getOptionValue($sanitized_data);
 							if($chosenValue !== false){
 								$this->_data[$field_id] = $chosenValue;
 							}
