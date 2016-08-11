@@ -33,7 +33,8 @@ class WPDF_Admin{
 				$submissions = $db->get_submission($submission_id);
 
 				foreach($submissions as $submission ){
-					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{esc_html($submission->content)}</p>";
+					$content = esc_html($submission->content);
+					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
 				}
 
 			}else{

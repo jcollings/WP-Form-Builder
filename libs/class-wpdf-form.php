@@ -4,6 +4,10 @@ class WPDF_Form{
 
 	protected $_templates = null;
 	protected $_messages = null;
+
+	/**
+	 * @var WPDF_FormData
+	 */
 	protected $_data = null;
 	protected $_name = null;
 
@@ -300,6 +304,16 @@ class WPDF_Form{
 		}
 
 		return false;
+	}
+
+	public function getFieldValue($field_id, $default = false){
+
+		$data = $this->_data->get($field_id);
+		if($data){
+			return $data;
+		}
+
+		return $default;
 	}
 
 	/**
