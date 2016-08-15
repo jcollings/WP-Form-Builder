@@ -132,6 +132,8 @@ class WPDF_Form{
 		// todo: modules should be loaded after form has been registered with all settings
 		$this->load_modules();
 
+		$form_data = $this->_data->toArray();
+
 		foreach($this->_fields as $field_id => $field){
 
 			if($field->isType("file")){
@@ -145,8 +147,7 @@ class WPDF_Form{
 				}
 			}
 
-			// todo: no need to pass all data to the validator each time
-			if(!isset($this->_errors[$field_id]) && !$this->_validation->validate($field, $this->_data->toArray())){
+			if(!isset($this->_errors[$field_id]) && !$this->_validation->validate($field, $form_data)){
 				$this->_errors[$field_id] = $this->_validation->get_error();
 			}
 		}
@@ -288,9 +289,25 @@ class WPDF_Form{
 
 		// if is file upload form need to add
 
-		$attrs = ' method="post" action="?wpdf_action='.$this->_name.'"';
+		$attrs = ' method="post"';
 		if($this->_has_file_field){
 			$attrs .= ' enctype="multipart/form-data"';
+		}
+
+		if(isset($args['id'])){
+			$attrs .= sprintf( ' id="%s"', esc_attr( $args['id'] ) );
+
+			if(!isset($args['action'])){
+				$attrs .= sprintf( ' action="#%s"', esc_attr( $args['id'] ) );
+			}
+		}
+
+		if(isset($args['action'])){
+			$attrs .= sprintf( ' action="#%s"', esc_attr( $args['action'] ) );
+		}
+
+		if(isset($args['class'])){
+			$attrs .= sprintf( ' class="%s"', esc_attr( $args['class'] ) );
 		}
 
 		echo "<form {$attrs}>";

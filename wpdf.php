@@ -24,7 +24,7 @@ class WPDF_DeveloperForms {
 
 	/**
 	 * List of all registered forms
-	 * @var null
+	 * @var WPDF_Form[]
 	 */
 	protected $_forms = null;
 
@@ -166,10 +166,17 @@ class WPDF_DeveloperForms {
 		return $form;
 	}
 
+	/**
+	 * Load form, and initialise it if required
+	 * @param $name
+	 *
+	 * @return bool|WPDF_Form
+	 */
 	public function get_form($name){
 
 		if(isset($this->_forms[$name])){
-			return $this->_forms[$name];
+			$form = $this->_forms[$name];
+			return $form;
 		}
 
 		return false;
@@ -183,17 +190,19 @@ class WPDF_DeveloperForms {
 		}
 	}
 
-	private function get_current_form(){
+	public function get_current_form(){
+
+		if($this->_form != null){
+			return $this->_form;
+		}
 
 		// find active form, maybe a hidden form action field was submitted?
 		// if so load that form
-		if(isset($_GET['wpdf_action'])){
+		if(isset($_POST['wpdf_action'])){
 
-			$form_id = $_GET['wpdf_action'];
-			$this->_form = wpdf_get_form($form_id);
-			if($this->_form){
-				return true;
-			}
+			$form_id = $_POST['wpdf_action'];
+			$this->_form = $this->get_form($form_id);
+			return $this->_form;
 		}
 
 		return false;

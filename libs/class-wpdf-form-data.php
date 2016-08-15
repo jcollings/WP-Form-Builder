@@ -101,11 +101,18 @@ class WPDF_FormData{
 	}
 
 	public function toArray(){
-		return $this->_data;
+
+		$temp = array();
+		foreach($this->_data as $k => $v){
+			$temp[$k] = $this->get($k);
+		}
+		return $temp;
 	}
 
 	public function get($field_id){
-		return isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
+		$result = isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
+		$result = apply_filters('wpdf/field_data', $result, $field_id);
+		return $result;
 	}
 
 	public function getRaw($field_id){

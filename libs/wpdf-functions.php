@@ -20,6 +20,14 @@ function wpdf_get_uploads_url(){
 	return content_url('/uploads/wpdf/');
 }
 
+function wpdf_is_submitted_form($form_id){
+	$form = WPDF()->get_current_form();
+	if( $form != false && $form->getName() == $form_id){
+		return true;
+	}
+	return false;
+}
+
 #region Setup Forms
 
 function wpdf_register_form($name, $args = array()){

@@ -77,6 +77,11 @@ class WPDF_DatabaseManager{
 
 		$content = is_array($content) ? implode(",", $content) : $content;
 
+		// dont store data if empty content
+		if($content === ''){
+			return false;
+		}
+
 		$field_label = $field->getLabel();
 		$field_type = $field->getType();
 		$field_name = $field->getName();
