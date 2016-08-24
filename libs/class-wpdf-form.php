@@ -22,21 +22,13 @@ class WPDF_Form{
 	protected $_submitted = false;
 
 	protected $_settings = null;
-	protected $_settings_default = array(
-		'database' => 'yes',
-		'labels' => array(
-			'submit' => 'Send'
-		)
-	);
+	protected $_settings_default = array();
 
 	/**
 	 * What happens after the form has been submitted, message or redirect
 	 * @var array
 	 */
-	protected $_confirmation = [
-		'type' => 'message',
-		'message' => 'Form has been successfully submitted!'
-	];
+	protected $_confirmation = array();
 
 	protected $_has_file_field = false;
 
@@ -66,6 +58,18 @@ class WPDF_Form{
 		$this->_rules = array();
 		$this->_notifications = array();
 		$this->_settings = $this->_settings_default;
+
+		$this->_settings_default = array(
+			'database' => 'yes',
+			'labels' => array(
+				'submit' => __('Send', "wpdf")
+			)
+		);
+
+		$this->_confirmation = array(
+			'type' => 'message',
+			'message' => __('Form has been successfully submitted!', "wpdf")
+		);
 
 		// setup fields
 		if(!empty($fields)) {
@@ -116,12 +120,12 @@ class WPDF_Form{
 	public function process(){
 
 		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->_name )){
-			$this->_error = "An Error occurred when submitting the form, please retry.";
+			$this->_error = __("An Error occurred when submitting the form, please retry.", "wpdf");
 //			return;
 		}
 
 		if( intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0 ){
-			$this->_error = "An Error occurred: PHP discarded POST data because of request exceeding post_max_size.";
+			$this->_error = __("An Error occurred: PHP discarded POST data because of request exceeding post_max_size.", "wpdf");
 		}
 
 		// clear data array
@@ -427,7 +431,8 @@ class WPDF_Form{
 			return;
 		}
 
-		echo "<p>Please make sure you have corrected any errors below before resubmitting the form.</p>";
+
+		echo sprintf("<p>%s</p>", __("Please make sure you have corrected any errors below before resubmitting the form.", "wpdf"));
 		echo '<ul>';
 		foreach($this->_errors as $field_id => $error){
 			echo '<li>' . $this->_fields[$field_id]->getLabel() . ' - ' . $error . '</li>';
@@ -462,7 +467,7 @@ class WPDF_Form{
 			return $this->_confirmation['message'];
 		}
 
-		return "DEFAULT: Form submitted successfully";
+		return __("Form submitted successfully", "wpdf");
 	}
 
 	#endregion

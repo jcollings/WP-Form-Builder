@@ -49,7 +49,7 @@ class WPDF_FormField{
 						echo '<option value="">'.$this->_args['empty'].'</option>';
 					}
 				}else{
-					echo '<option value="">Select an option</option>';
+					echo sprintf('<option value="">%s</option>', __("Select an option", "wpdf") );
 				}
 
 				if(isset($this->_args['options']) && !empty($this->_args['options'])){

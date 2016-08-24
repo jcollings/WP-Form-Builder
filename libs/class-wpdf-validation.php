@@ -10,16 +10,18 @@ class WPDF_Validation{
 
 	protected $_error = null;
 	protected $_rules = array();
-	protected $_validation_msgs = array(
-		'required' => 'This field is required',
-		'email' => 'Please enter a valid email address',
-		'min_length' => 'Please enter a value longer than %d',
-		'max_length' => 'Please enter a value shorter than %d'
-	);
+	protected $_validation_msgs = array();
 
 
 	public function __construct($rules = array()) {
 		$this->_rules = $rules;
+
+		$this->_validation_msgs = array(
+			'required' => __('This field is required', "wpdf"),
+			'email' => __('Please enter a valid email address', "wpdf"),
+			'min_length' => __('Please enter a value longer than %d', "wpdf"),
+			'max_length' => __('Please enter a value shorter than %d', "wpdf")
+		);
 	}
 
 	/**
@@ -69,7 +71,7 @@ class WPDF_Validation{
 
 							// throw error if no argumments passed
 							if(count($args) == 0){
-								throw new Exception("No argument for minimum length validation");
+								throw new Exception(__("No argument for minimum length validation", "wpdf"));
 							}
 
 							if( !$this->is_min_length($field->getName(), $args[0], $post_data) ){
@@ -81,7 +83,7 @@ class WPDF_Validation{
 
 							// throw error if no argumments passed
 							if(count($args) == 0){
-								throw new Exception("No argument for maximum length validation");
+								throw new Exception(__("No argument for maximum length validation", "wpdf"));
 							}
 
 							if( !$this->is_max_length($field->getName(), $args[0], $post_data) ){
@@ -107,29 +109,29 @@ class WPDF_Validation{
 
 			switch ( $code ) {
 				case UPLOAD_ERR_INI_SIZE:
-					$message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+					$message = __("The uploaded file exceeds the upload_max_filesize directive in php.ini", "wpdf");
 					break;
 				case UPLOAD_ERR_FORM_SIZE:
-					$message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+					$message = __("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form", "wpdf");
 					break;
 				case UPLOAD_ERR_PARTIAL:
-					$message = "The uploaded file was only partially uploaded";
+					$message = __("The uploaded file was only partially uploaded", "wpdf");
 					break;
 				case UPLOAD_ERR_NO_FILE:
-					$message = "No file was uploaded";
+					$message = __("No file was uploaded", "wpdf");
 					break;
 				case UPLOAD_ERR_NO_TMP_DIR:
-					$message = "Missing a temporary folder";
+					$message = __("Missing a temporary folder", "wpdf");
 					break;
 				case UPLOAD_ERR_CANT_WRITE:
-					$message = "Failed to write file to disk";
+					$message = __("Failed to write file to disk", "wpdf");
 					break;
 				case UPLOAD_ERR_EXTENSION:
-					$message = "File upload stopped by extension";
+					$message = __("File upload stopped by extension", "wpdf");
 					break;
 
 				default:
-					$message = "Unknown upload error";
+					$message = __("Unknown upload error", "wpdf");
 					break;
 			}
 
@@ -138,9 +140,9 @@ class WPDF_Validation{
 		}else{
 
 			if($code == UPLOAD_ERR_INI_SIZE){
-				$message = "The uploaded file is to large.";
+				$message = __("The uploaded file is to large.", "wpdf");
 			}else{
-				$message = "An error occured when uploading the file.";
+				$message = __("An error occured when uploading the file.", "wpdf");
 			}
 
 			return $message;

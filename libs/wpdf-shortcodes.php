@@ -23,7 +23,7 @@ function wpdf_shortcode_form( $atts, $content = null ){
 
 	$form = wpdf_get_form($a['form']);
 	if(!$form){
-		return '<p>Shortcode Error: Form could not be displayed!</p>';
+		return sprintf('<p>%s</p>', __( "Shortcode Error: Form could not be displayed!", "wpdf"));
 	}
 
 	// output form
