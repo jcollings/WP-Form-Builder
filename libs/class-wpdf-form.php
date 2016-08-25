@@ -51,25 +51,25 @@ class WPDF_Form{
 
 	public function __construct($name, $fields = array()) {
 
+		// Setup default values
 		$this->_name = $name;
-
 		$this->_fields = array();
 		$this->_errors = array();
 		$this->_rules = array();
 		$this->_notifications = array();
-		$this->_settings = $this->_settings_default;
-
 		$this->_settings_default = array(
 			'database' => 'yes',
 			'labels' => array(
 				'submit' => __('Send', "wpdf")
 			)
 		);
-
 		$this->_confirmation = array(
 			'type' => 'message',
 			'message' => __('Form has been successfully submitted!', "wpdf")
 		);
+
+		// load default settings
+		$this->_settings = $this->_settings_default;
 
 		// setup fields
 		if(!empty($fields)) {
