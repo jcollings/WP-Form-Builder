@@ -76,15 +76,6 @@ class WPDF_EmailManager{
 				}
 			}
 
-			// remove slashes from data and email
-			if(is_array($value)){
-				foreach($value as &$val){
-					$val = wp_unslash( trim( $val ) );
-				}
-			}else{
-				$value = wp_unslash( trim( $value ) );
-			}
-
 			$tag = $this->setup_merge_tag("field_" . $field_id);
 			$raw_template_tags[$tag] = $value;
 			$template_tags[$tag] = $this->parse_merge_tags( $this->_template['field_'.$this->_email_type], array(

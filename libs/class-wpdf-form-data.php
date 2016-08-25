@@ -111,6 +111,7 @@ class WPDF_FormData{
 
 	public function get($field_id){
 		$result = isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
+		$result = $this->unslashValue($result);
 		$result = apply_filters('wpdf/field_data', $result, $field_id);
 		return $result;
 	}
@@ -125,6 +126,20 @@ class WPDF_FormData{
 
 	public function list_keys(){
 		return array_keys($this->_data);
+	}
+
+	public function unslashValue($value){
+
+		// remove slashes from data and email
+		if(is_array($value)){
+			foreach($value as &$val){
+				$val = wp_unslash( trim( $val ) );
+			}
+		}else{
+			$value = wp_unslash( trim( $value ) );
+		}
+
+		return $value;
 	}
 
 	public function getIp(){
