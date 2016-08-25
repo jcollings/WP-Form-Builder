@@ -98,6 +98,11 @@ class WPDF_EmailManager{
 		// loop through notifications, setup, and send
 		foreach($this->_notifications as $notification){
 
+			if(!$notification->isValid($data)){
+				continue;
+			}
+
+
 			$headers = array();
 
 			$to = $this->parse_merge_tags($notification->getTo(), $raw_template_tags);

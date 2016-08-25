@@ -15,6 +15,8 @@ class WPDF_Notification{
 	protected $_subject;
 	protected $_message;
 
+	protected $_conditions = array();
+
 	public function __construct($notification) {
 
 		if(isset($notification['to'])){
@@ -39,6 +41,10 @@ class WPDF_Notification{
 
 		if(isset($notification['message'])){
 			$this->_message = $notification['message'];
+		}
+
+		if(isset($notification['conditions'])){
+			$this->_conditions = $notification['conditions'];
 		}
 	}
 
@@ -82,5 +88,27 @@ class WPDF_Notification{
 	 */
 	public function getMessage() {
 		return $this->_message;
+	}
+
+	/**
+	 * Check to see if conditions have been met
+	 *
+	 * @param $data WPDF_FormData
+	 *
+	 * @return bool
+	 */
+	public function isValid($data){
+
+		if(!empty($this->_conditions)){
+
+			// loop through conditions and escape if not valid
+			foreach($this->_conditions as $field => $value){
+				if( $data->get($field) !== $value){
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

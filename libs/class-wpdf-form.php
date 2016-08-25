@@ -270,6 +270,10 @@ class WPDF_Form{
 			$notification['from'] = $args['from'];
 		}
 
+		if(isset($args['conditions'])){
+			$notification['conditions'] = $args['conditions'];
+		}
+
 		$this->_notifications[] = new WPDF_Notification( $notification );
 
 	}
