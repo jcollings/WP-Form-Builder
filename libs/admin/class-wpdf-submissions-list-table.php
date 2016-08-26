@@ -85,10 +85,11 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 				switch($column_name){
 					case 'col_entry_id':
 						$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form='.$this->form_id);
+						$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form='.$this->form_id);
 						echo '<td>
 							<a href="'.$link.'">Entry: ' . $item->id . '</a>
 							<div class="row-actions">
-								<span class="edit"><a href="'.$link.'" aria-label="View">View</a></span>
+								<span class="edit"><a href="'.$link.'" aria-label="View">View</a></span> | <span class="delete"><a href="'.$del_link.'" aria-label="View">Delete</a></span>
 							</div>
 							</td>';
 						break;

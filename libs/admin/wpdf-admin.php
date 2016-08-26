@@ -8,12 +8,36 @@
 
 class WPDF_Admin{
 
+	protected $_messages = array();
+
 	public function __construct() {
 		add_action( 'admin_menu', array($this, 'wpdf_register_pages'));
+		add_action('admin_init', array( $this, 'init'));
 	}
 
 	function wpdf_register_pages(){
-		add_menu_page("WP Form", "Forms", "manage_options", "wpdf-forms", array( $this, 'wpdf_form_page') );
+
+		$forms = WPDF()->get_forms();
+
+		$admin_slug = "wpdf-forms";
+		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page') );
+
+		foreach($forms as $form_id => $form){
+			add_submenu_page( $admin_slug , $form->getName(), $form->getName(), "manage_options", 'admin.php?page=wpdf-forms&form='.$form_id);
+		}
+	}
+
+	function init(){
+		$delete_submission = isset($_GET['delete_submission']) ? $_GET['delete_submission'] : false;
+		if($delete_submission){
+
+			$db = new WPDF_DatabaseManager();
+			$db->delete_entry($delete_submission);
+
+			$url = remove_query_arg('delete_submission');
+			wp_redirect($url);
+			exit();
+		}
 	}
 
 	function wpdf_form_page(){

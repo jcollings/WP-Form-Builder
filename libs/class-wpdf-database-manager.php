@@ -51,6 +51,22 @@ class WPDF_DatabaseManager{
 		return true;
 	}
 
+	public function delete_entry($entry_id, $active = 'N'){
+
+		global $wpdb;
+		return $wpdb->update(
+			$this->_submission_table,
+			array(
+				'active' => $active
+			),
+			array(
+				'id' => $entry_id
+			),
+			array('%d'),
+			array('%d')
+		);
+	}
+
 	protected function save_submission($form, $ip){
 
 		$created = date('Y-m-d H:i:s');
@@ -95,7 +111,7 @@ class WPDF_DatabaseManager{
 
 		global $wpdb;
 
-		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} WHERE form=%s", $form_id);
+		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} WHERE form=%s AND active='Y'", $form_id);
 		return $wpdb->get_col($query);
 	}
 
@@ -108,7 +124,7 @@ class WPDF_DatabaseManager{
 		}
 
 		$offset = ($paged-1)*$per_page;
-		$query = $wpdb->prepare("SELECT * FROM {$this->_submission_table} WHERE form=%s".$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
+		$query = $wpdb->prepare("SELECT * FROM {$this->_submission_table} WHERE form=%s AND active='Y'".$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
 		return $wpdb->get_results($query);
 	}
 
