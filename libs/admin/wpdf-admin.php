@@ -20,7 +20,7 @@ class WPDF_Admin{
 		$forms = WPDF()->get_forms();
 
 		$admin_slug = "wpdf-forms";
-		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page') );
+		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
 
 		foreach($forms as $form_id => $form){
 			add_submenu_page( $admin_slug , $form->getName(), $form->getName(), "manage_options", 'admin.php?page=wpdf-forms&form='.$form_id);

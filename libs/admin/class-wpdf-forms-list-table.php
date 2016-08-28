@@ -52,6 +52,12 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 			$count = $db->get_form_count($form_id);
 			$row->form_entries = $count[0];
 
+			$last_entry_data = $db->get_form_last_entry($form_id);
+			$row->last_entry = 'N/A';
+			if($last_entry_data){
+				$row->last_entry = $last_entry_data->created;
+			}
+
 			$this->items[] = $row;
 		}
 	}
@@ -59,8 +65,9 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 	public function get_columns(){
 
 		return $columns= array(
-			'col_form_name'=>__('Name'),
-			'col_form_entries' => __('Entries')
+			'col_form_name'=>__('Name', 'wpdf'),
+			'col_form_entries' => __('Entries', 'wpdf'),
+			'col_form_last' => __('Last Entry', 'wpdf'),
 		);
 
 	}
@@ -77,10 +84,13 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 				switch($column_name){
 					case 'col_form_name':
-						echo '<td><a href="'.admin_url('admin.php?page=wpdf-forms&form=' . $item->form_name).'">' . $item->form_name . '</a></td>';
+						echo '<td><strong><a href="'.admin_url('admin.php?page=wpdf-forms&form=' . $item->form_name).'">' . $item->form_name . '</a></strong></td>';
 						break;
 					case 'col_form_entries':
 						echo '<td>' . $item->form_entries . '</td>';
+						break;
+					case 'col_form_last':
+						echo '<td>' . $item->last_entry .'</td>';
 						break;
 					default:
 						echo '<td></td>';

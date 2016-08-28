@@ -128,6 +128,13 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_results($query);
 	}
 
+	public function get_form_last_entry($form_id){
+
+		global $wpdb;
+		$query = $wpdb->prepare("SELECT * FROM {$this->_submission_table} WHERE form=%s AND active='Y' ORDER BY created DESC LIMIT 1", $form_id);
+		return $wpdb->get_row($query);
+	}
+
 	public function get_submission($submission_id){
 
 		global $wpdb;
