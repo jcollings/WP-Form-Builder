@@ -12,11 +12,25 @@ if(!class_exists('WP_List_Table')){
 
 class WPDF_Submissions_List_Table extends WP_List_Table{
 
+	/**
+	 * @var String form id
+	 */
 	protected $form_id = null;
 
+	/**
+	 * @var WPDF_Form
+	 */
+	protected $form = null;
+
+	/**
+	 * WPDF_Submissions_List_Table constructor.
+	 *
+	 * @param WPDF_Form $form
+	 */
 	public function __construct($form) {
 
 		$this->form_id = $form->getName();
+		$this->form = $form;
 
 		parent::__construct( array(
 			'singular' => 'wpdf_submissions_list',
@@ -59,11 +73,21 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 	public function get_columns(){
 
-		return $columns= array(
-			'col_entry_id'=>__('ID'),
-			'col_submitted_date' => __('Submitted')
+		$columns = array(
+			'col_entry_id' => __('ID', 'wpdf'),
 		);
 
+		$cols = $this->form->get_setting('admin_columns');
+		if(!empty($cols)){
+			foreach($cols as $field_id => $label){
+				if(!isset($columns['col_' . $field_id])) {
+					$columns[ 'col_' . $field_id ] = $label;
+				}
+			}
+		}
+
+		$columns['col_submitted_date'] =  __('Submitted', 'wpdf');
+		return $columns;
 	}
 
 	public function get_sortable_columns() {
@@ -87,7 +111,7 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 						$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form='.$this->form_id);
 						$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form='.$this->form_id);
 						echo '<td>
-							<a href="'.$link.'">Entry: ' . $item->id . '</a>
+							<strong><a href="'.$link.'">Entry: ' . $item->id . '</a></strong>
 							<div class="row-actions">
 								<span class="edit"><a href="'.$link.'" aria-label="View">View</a></span> | <span class="delete"><a href="'.$del_link.'" aria-label="View">Delete</a></span>
 							</div>
@@ -100,7 +124,29 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 						echo '<td>' . $item->created . '</td>';
 						break;
 					default:
-						echo '<td></td>';
+						
+						$col_key = substr($column_name, 4);
+						$val = '';
+
+						// load entry data from database if not already loaded
+						if(!isset($item->data)){
+							$db = new WPDF_DatabaseManager();
+							$submission_data = $db->get_submission($item->id);
+							foreach($submission_data as $v){
+
+								if(!isset($item->data)){
+									$item->data = new stdClass();
+								}
+								$item->data->{$v->field} = $v->content;
+							}
+						}
+
+
+						if(isset($item->data->{$col_key})){
+							$val = $item->data->{$col_key};
+						}
+
+						echo '<td>'.$val.'</td>';
 						break;
 				}
 			}

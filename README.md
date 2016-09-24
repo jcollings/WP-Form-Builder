@@ -316,3 +316,15 @@ The following example expects the form to have a field called "Email", and the n
 ```
 $form->add_notification( "{{field_email}}", "Thank you!", "Thank you for taking the time to fill out the form with the following data: {{fields}}" );
 ```
+
+### Entry Table Headings Columns
+
+Entry admin headings can be customised by to display specific entry data.
+
+```
+$form->settings(array(
+    'admin_columns' => array(
+        'column_name' 	=> __('Column Label', 'wpdf')
+    )
+));
+```
