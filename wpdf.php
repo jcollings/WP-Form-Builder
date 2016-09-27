@@ -4,7 +4,7 @@
 Plugin Name: WordPress Developer Forms
 Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
 Description: Simple WordPress forms library
-Version: 0.0.1
+Version: 0.2
 Author: James Collings
 Author URI: https://www.jclabs.co.uk
 License: A "Slug" license name e.g. GPL2
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WPDF_DeveloperForms {
 
-	protected $version = '0.0.1';
+	protected $version = '0.2';
 	public $plugin_dir = false;
 	public $plugin_url = false;
 	protected $plugin_slug = false;
@@ -83,6 +83,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/modules/class-wpdf-user-registration.php';
 
 		if ( is_admin() ) {
+			include_once 'libs/admin/class-wp-github-updater.php';
 			include_once 'libs/admin/wpdf-admin.php';
 		}
 	}

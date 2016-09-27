@@ -13,6 +13,7 @@ class WPDF_Admin{
 	public function __construct() {
 		add_action( 'admin_menu', array($this, 'wpdf_register_pages'));
 		add_action('admin_init', array( $this, 'init'));
+		add_action('init', array($this, 'update_check'));
 	}
 
 	function wpdf_register_pages(){
@@ -38,6 +39,23 @@ class WPDF_Admin{
 			wp_redirect($url);
 			exit();
 		}
+	}
+
+	function update_check(){
+		$config = array(
+			'slug' => 'wpdf/wpdf.php', // this is the slug of your plugin
+			'proper_folder_name' => WPDF()->get_plugin_slug(), // this is the name of the folder your plugin lives in
+			'api_url' => 'https://api.github.com/repos/jcollings/wordPress-developer-forms', // the GitHub API url of your GitHub repo
+			'raw_url' => 'https://raw.github.com/jcollings/wordPress-developer-forms/master', // the GitHub raw url of your GitHub repo
+			'github_url' => 'https://github.com/jcollings/wordPress-developer-forms', // the GitHub url of your GitHub repo
+			'zip_url' => 'https://github.com/jcollings/wordPress-developer-forms/zipball/master', // the zip url of the GitHub repo
+			'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+			'requires' => '3.0', // which version of WordPress does your plugin require?
+			'tested' => '4.6', // which version of WordPress is your plugin tested up to?
+			'readme' => 'README.md', // which file to use as the readme for the version number
+			'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+		);
+		new WP_GitHub_Updater($config);
 	}
 
 	function wpdf_form_page(){
