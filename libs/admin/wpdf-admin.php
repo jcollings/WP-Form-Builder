@@ -60,7 +60,7 @@ class WPDF_Admin{
 
 	function wpdf_form_page(){
 
-		echo '<div class="wrap">';
+		echo '<div class="wrap wpdf">';
 
 		$form = isset($_GET['form']) ? wpdf_get_form($_GET['form']) : false;
 		$view = isset($_GET['view']) ? $_GET['view'] : false;
@@ -81,10 +81,21 @@ class WPDF_Admin{
 
 			}else{
 
-				echo '<h1>Form: ' . $form->getName() . '</h1>';
+				echo '<form method="GET">';
+
+				echo '<input type="hidden" name="page" value="wpdf-forms" />';
+				echo '<input type="hidden" name="form" value="'.$form->getName().'" />';
+
+				echo '<h1 style="display: block; float:left;">Form: ' . $form->getName() . '</h1>';
+
 				require 'class-wpdf-submissions-list-table.php';
 				$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
 				$wpdf_submissions_table->prepare_items();
+
+				echo $wpdf_submissions_table->search_box('Search Entries', 'wpdf-search');
+
+				echo '<div style="clear:both"></div>';
+				echo '</form>';
 
 				$wpdf_submissions_table->display();
 			}

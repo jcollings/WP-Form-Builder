@@ -107,24 +107,40 @@ class WPDF_DatabaseManager{
 		return $wpdb->query($query);
 	}
 
-	public function get_form_count($form_id){
+	public function get_form_count($form_id, $search = ''){
 
 		global $wpdb;
 
-		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} WHERE form=%s AND active='Y'", $form_id);
+		$search_join = '';
+		$search_where = '';
+		if(!empty($search)){
+
+			$search_join = " INNER JOIN {$this->_submission_data_table} sdt1 ON st.id = sdt1.submission_id";
+			$search_where = sprintf(" AND sdt1.content LIKE '%%%%%s%%%%'", $search);
+		}
+
+		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y' {$search_where}", $form_id);
 		return $wpdb->get_col($query);
 	}
 
-	public function get_form_submissions($form_id, $paged, $per_page, $orderby, $order){
+	public function get_form_submissions($form_id, $paged, $per_page, $orderby, $order, $search = ''){
 		global $wpdb;
 
 		$order_str = '';
 		if(!empty($orderby) && !empty($order)){
-			$order_str =' ORDER BY '.$orderby.' '.$order;
+			$order_str =' ORDER BY st.'.$orderby.' '.$order;
+		}
+
+		$search_join = '';
+		$search_where = '';
+		if(!empty($search)){
+
+			$search_join = " INNER JOIN {$this->_submission_data_table} sdt1 ON st.id = sdt1.submission_id";
+			$search_where = sprintf(" AND sdt1.content LIKE '%%%%%s%%%%'", $search);
 		}
 
 		$offset = ($paged-1)*$per_page;
-		$query = $wpdb->prepare("SELECT * FROM {$this->_submission_table} WHERE form=%s AND active='Y'".$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
+		$query = $wpdb->prepare("SELECT st.* FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y'".$search_where .$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
 		return $wpdb->get_results($query);
 	}
 

@@ -44,9 +44,13 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 		global $_wp_column_headers;
 
+		$orderby = !empty($_GET["orderby"]) ? sanitize_sql_orderby($_GET["orderby"]) : 'created';
+		$order = !empty($_GET["order"]) && strtoupper($_GET['order']) == 'ASC' ? 'ASC' : 'DESC';
+		$s = !empty($_GET["s"]) ? $_GET['s'] : '';
+
 		$screen = get_current_screen();
 		$db = new WPDF_DatabaseManager();
-		$count = $db->get_form_count($this->form_id);
+		$count = $db->get_form_count($this->form_id, $s);
 
 		$totalitems = intval($count[0]);
 		$perpage = 10;
@@ -54,10 +58,7 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 		$paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
 
-		$orderby = !empty($_GET["orderby"]) ? sanitize_sql_orderby($_GET["orderby"]) : 'created';
-		$order = !empty($_GET["order"]) && strtoupper($_GET['order']) == 'ASC' ? 'ASC' : 'DESC';
-
-		$submissions = $db->get_form_submissions($this->form_id, $paged, $perpage, $orderby, $order);
+		$submissions = $db->get_form_submissions($this->form_id, $paged, $perpage, $orderby, $order, $s);
 
 		$this->set_pagination_args( array(
 			"total_items" => $totalitems,
