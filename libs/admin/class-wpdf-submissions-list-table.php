@@ -54,8 +54,8 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 		$paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
 
-		$orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'ASC';
-		$order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : '';
+		$orderby = !empty($_GET["orderby"]) ? sanitize_sql_orderby($_GET["orderby"]) : 'created';
+		$order = !empty($_GET["order"]) && strtoupper($_GET['order']) == 'ASC' ? 'ASC' : 'DESC';
 
 		$submissions = $db->get_form_submissions($this->form_id, $paged, $perpage, $orderby, $order);
 
