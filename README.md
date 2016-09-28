@@ -1,6 +1,6 @@
 # WordPress Developer Forms
 Author: James Collings  
-Version: 0.2  
+Version: 0.2.1  
 Created: 05/08/2016  
 Updated: 07/08/2016  
 
