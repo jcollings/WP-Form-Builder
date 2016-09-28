@@ -44,21 +44,23 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 		$db = new WPDF_DatabaseManager();
 
-		foreach($forms as $form_id => $form){
+		if(!empty($forms)) {
+			foreach ( $forms as $form_id => $form ) {
 
-			$row = new stdClass();
-			$row->form_name = $form_id;
+				$row            = new stdClass();
+				$row->form_name = $form_id;
 
-			$count = $db->get_form_count($form_id);
-			$row->form_entries = $count[0];
+				$count             = $db->get_form_count( $form_id );
+				$row->form_entries = $count[0];
 
-			$last_entry_data = $db->get_form_last_entry($form_id);
-			$row->last_entry = 'N/A';
-			if($last_entry_data){
-				$row->last_entry = $last_entry_data->created;
+				$last_entry_data = $db->get_form_last_entry( $form_id );
+				$row->last_entry = 'N/A';
+				if ( $last_entry_data ) {
+					$row->last_entry = $last_entry_data->created;
+				}
+
+				$this->items[] = $row;
 			}
-
-			$this->items[] = $row;
 		}
 	}
 
