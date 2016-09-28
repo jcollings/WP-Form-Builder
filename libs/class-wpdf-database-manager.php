@@ -48,6 +48,15 @@ class WPDF_DatabaseManager{
 			$this->save_submission_data($submission_id, $field, $temp_val);
 		}
 
+		// save virtual fields, hidden data the user doesn't see
+		$virtual_fields = apply_filters('wpdf/save_virtual_fields', array(), $name);
+		if(is_array($virtual_fields) && !empty($virtual_fields)){
+			foreach($virtual_fields as $field => $value){
+				$virtual_field = new WPDF_FormField($field, 'virtual');
+				$this->save_submission_data($submission_id, $virtual_field, $value);
+			}
+		}
+
 		return true;
 	}
 

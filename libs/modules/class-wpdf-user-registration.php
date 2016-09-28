@@ -10,8 +10,11 @@
 
 class WPDF_UserRegistration{
 
+	private $_user = false;
+
 	public function __construct() {
 		add_filter( 'wpdf/process_form', array($this, 'process_form'), 10, 3 );
+		add_filter( 'wpdf/save_virtual_fields', array( $this, 'save_virtual_fields'), 10, 2);
 	}
 
 	/**
@@ -46,21 +49,21 @@ class WPDF_UserRegistration{
 		}
 
 		// if result is true, then register the user
-		$user = wp_insert_user( $user_arr );
-		if ( is_wp_error( $user ) ) {
+		$this->_user = wp_insert_user( $user_arr );
+		if ( is_wp_error( $this->_user ) ) {
 
-			switch($user->get_error_code()){
+			switch($this->_user->get_error_code()){
 
 				case 'existing_user_login':
-					$form->add_field_error( $fields['user_login'], $user->get_error_message() );
+					$form->add_field_error( $fields['user_login'], $this->_user->get_error_message() );
 					break;
 
 				case 'existing_user_email':
-					$form->add_field_error( $fields['user_email'], $user->get_error_message() );
+					$form->add_field_error( $fields['user_email'], $this->_user->get_error_message() );
 					break;
 
 				default:
-					$form->add_error($user->get_error_message());
+					$form->add_error($this->_user->get_error_message());
 					break;
 
 			}
@@ -69,6 +72,15 @@ class WPDF_UserRegistration{
 		}
 
 		return $result;
+	}
+
+	function save_virtual_fields($fields, $form_id){
+
+		if(intval($this->_user) > 0) {
+			$fields['user_id'] = $this->_user;
+		}
+
+		return $fields;
 	}
 
 }
