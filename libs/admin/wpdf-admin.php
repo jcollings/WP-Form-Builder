@@ -77,7 +77,12 @@ class WPDF_Admin{
 				$submissions = $db->get_submission($submission_id);
 
 				foreach($submissions as $submission ){
-					$content = esc_html($submission->content);
+
+					if($submission->field_type == 'virtual'){
+						$content = apply_filters('wpdf/display_submission_field', $submission->content, $submission->field, $form);
+					}else{
+						$content = esc_html($submission->content);
+					}
 					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
 				}
 

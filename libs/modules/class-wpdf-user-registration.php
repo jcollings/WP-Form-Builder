@@ -82,8 +82,22 @@ class WPDF_UserRegistration{
 
 		return $fields;
 	}
-
 }
+
+function display_submission_field($content, $field_id){
+
+	switch($field_id){
+		case 'user_id':
+			$user = get_user_by('id', $content);
+			if($user){
+				$content = sprintf('Registered user: <a href="http://wordpress.dev/wp-admin/user-edit.php?user_id=%d">%s</a>', $content, $user->data->user_login);
+			}
+			break;
+	}
+
+	return $content;
+}
+add_filter( 'wpdf/display_submission_field', 'display_submission_field', 10, 2);
 
 // some way to register modules
 function wpdf_register_userreg($modules = array()){
