@@ -53,6 +53,9 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 				$count             = $db->get_form_count( $form_id );
 				$row->form_entries = $count[0];
 
+				$unread_count = $db->get_form_unread_count($form_id);
+				$row->unread_count = $unread_count[0];
+
 				$last_entry_data = $db->get_form_last_entry( $form_id );
 				$row->last_entry = 'N/A';
 				if ( $last_entry_data ) {
@@ -89,7 +92,7 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 						echo '<td><strong><a href="'.admin_url('admin.php?page=wpdf-forms&form=' . $item->form_name).'">' . $item->form_name . '</a></strong></td>';
 						break;
 					case 'col_form_entries':
-						echo '<td>' . $item->form_entries . '</td>';
+						echo sprintf('<td>%d <strong>(%d unread)</strong></td>', $item->form_entries, $item->unread_count);
 						break;
 					case 'col_form_last':
 						echo '<td>' . $item->last_entry .'</td>';

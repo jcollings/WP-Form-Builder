@@ -19,6 +19,8 @@ class WPDF_DatabaseManager{
 	}
 
 	/**
+	 * Save form submission in database
+	 *
 	 * @param $name string
 	 * @param $data WPDF_FormData
 	 *
@@ -60,6 +62,14 @@ class WPDF_DatabaseManager{
 		return true;
 	}
 
+	/**
+	 * Flag submission as deleted
+	 *
+	 * @param $entry_id
+	 * @param string $active
+	 *
+	 * @return false|int
+	 */
 	public function delete_entry($entry_id, $active = 'N'){
 
 		global $wpdb;
@@ -76,6 +86,14 @@ class WPDF_DatabaseManager{
 		);
 	}
 
+	/**
+	 * Save submission details
+	 *
+	 * @param $form
+	 * @param $ip
+	 *
+	 * @return false|int
+	 */
 	protected function save_submission($form, $ip){
 
 		$created = date('Y-m-d H:i:s');
@@ -90,6 +108,8 @@ class WPDF_DatabaseManager{
 	}
 
 	/**
+	 * Save submission field data
+	 *
 	 * @param $submission_id int
 	 * @param $field WPDF_FormField
 	 * @param $content mixed
@@ -116,6 +136,14 @@ class WPDF_DatabaseManager{
 		return $wpdb->query($query);
 	}
 
+	/**
+	 * Get total amount of form submissions
+	 *
+	 * @param $form_id
+	 * @param string $search
+	 *
+	 * @return array
+	 */
 	public function get_form_count($form_id, $search = ''){
 
 		global $wpdb;
@@ -132,6 +160,18 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_col($query);
 	}
 
+	/**
+	 * Get form submissions
+	 *
+	 * @param $form_id
+	 * @param $paged
+	 * @param $per_page
+	 * @param $orderby
+	 * @param $order
+	 * @param string $search
+	 *
+	 * @return array|null|object
+	 */
 	public function get_form_submissions($form_id, $paged, $per_page, $orderby, $order, $search = ''){
 		global $wpdb;
 
@@ -153,6 +193,13 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_results($query);
 	}
 
+	/**
+	 * Get last submitted form data
+	 *
+	 * @param $form_id
+	 *
+	 * @return array|null|object|void
+	 */
 	public function get_form_last_entry($form_id){
 
 		global $wpdb;
@@ -160,6 +207,13 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_row($query);
 	}
 
+	/**
+	 * Get submission by id
+	 *
+	 * @param $submission_id
+	 *
+	 * @return array|null|object
+	 */
 	public function get_submission($submission_id){
 
 		global $wpdb;
@@ -169,13 +223,37 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_results($query);
 	}
 
+	/**
+	 * Mark submission as read
+	 *
+	 * @param $submission_id
+	 * @param int $state
+	 *
+	 * @return false|int
+	 */
 	public function mark_as_read($submission_id, $state = 1){
 
 		global $wpdb;
-
 		return $wpdb->update($this->_submission_table, array('is_read' => $state), array('id' => $submission_id), array('%d'));
 	}
 
+	/**
+	 * Get total amount of unread submissions
+	 *
+	 * @param $form_id string Name of form
+	 *
+	 * @return array
+	 */
+	public function get_form_unread_count($form_id){
+
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT COUNT(*) FROM {$this->_submission_table} WHERE form=%s AND active='Y' AND is_read=%d" , $form_id, 0);
+		return $wpdb->get_col($query);
+	}
+
+	/**
+	 * Create and Upgrade plugin database
+	 */
 	public function install(){
 
 		$db_version = intval(get_option('wpdf_db', 0));
