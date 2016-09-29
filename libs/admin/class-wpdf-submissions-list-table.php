@@ -111,8 +111,15 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 					case 'col_entry_id':
 						$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form='.$this->form_id);
 						$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form='.$this->form_id);
+
+						// visualize unread state
+						$entry_str = sprintf('<strong><a href="%s">Entry: %s</a> - unread</strong>', $link, $item->id);
+						if(1 == intval($item->is_read)){
+							$entry_str = sprintf('<a href="%s">Entry: %s</a>', $link, $item->id);
+						}
+
 						echo '<td>
-							<strong><a href="'.$link.'">Entry: ' . $item->id . '</a></strong>
+							'. $entry_str .'
 							<div class="row-actions">
 								<span class="edit"><a href="'.$link.'" aria-label="View">View</a></span> | <span class="delete"><a href="'.$del_link.'" aria-label="View">Delete</a></span>
 							</div>

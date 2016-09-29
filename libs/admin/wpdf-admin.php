@@ -75,6 +75,7 @@ class WPDF_Admin{
 				echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'">Back</a>';
 				$db = new WPDF_DatabaseManager();
 				$submissions = $db->get_submission($submission_id);
+				$db->mark_as_read($submission_id);
 
 				foreach($submissions as $submission ){
 

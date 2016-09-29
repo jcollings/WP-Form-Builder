@@ -169,36 +169,54 @@ class WPDF_DatabaseManager{
 		return $wpdb->get_results($query);
 	}
 
+	public function mark_as_read($submission_id, $state = 1){
+
+		global $wpdb;
+
+		return $wpdb->update($this->_submission_table, array('is_read' => $state), array('id' => $submission_id), array('%d'));
+	}
+
 	public function install(){
+
+		$db_version = intval(get_option('wpdf_db', 0));
 
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-		$sql = "CREATE TABLE {$this->_submission_table}(
-			id INT NOT NULL AUTO_INCREMENT,
-		    form VARCHAR(50),
-		    ip VARCHAR(15),
-		    user_id INT,
-		    active CHAR(1) DEFAULT 'Y',
-		    created DATETIME,
-		    UNIQUE KEY id (id)
-		) $charset_collate;";
-		dbDelta( $sql );
+		if($db_version < 1) {
 
-		$sql = "CREATE TABLE {$this->_submission_data_table}(
-			id INT NOT NULL AUTO_INCREMENT,
-			submission_id INT,
-		    field VARCHAR(50),
-		    content TEXT,
-		    field_type VARCHAR(50),
-		    field_label VARCHAR(50),
-		    created DATETIME,
-		    UNIQUE KEY id (id)
-		) $charset_collate;";
-		dbDelta( $sql );
+			$sql = "CREATE TABLE {$this->_submission_table}(
+				id INT NOT NULL AUTO_INCREMENT,
+			    form VARCHAR(50),
+			    unread INT(1) DEFAULT 1,
+			    ip VARCHAR(15),
+			    user_id INT,
+			    active CHAR(1) DEFAULT 'Y',
+			    created DATETIME,
+			    UNIQUE KEY id (id)
+			) $charset_collate;";
+			dbDelta( $sql );
 
-		update_option('wpdf_db', 1);
+			$sql = "CREATE TABLE {$this->_submission_data_table}(
+				id INT NOT NULL AUTO_INCREMENT,
+				submission_id INT,
+			    field VARCHAR(50),
+			    content TEXT,
+			    field_type VARCHAR(50),
+			    field_label VARCHAR(50),
+			    created DATETIME,
+			    UNIQUE KEY id (id)
+			) $charset_collate;";
+			dbDelta( $sql );
+			update_option('wpdf_db', 1);
+		}
+
+		if($db_version < 2){
+			if($wpdb->query("ALTER TABLE {$this->_submission_table} ADD `is_read` INT(1) NOT NULL DEFAULT '0' AFTER `form`")){
+				update_option('wpdf_db', 2);
+			}
+		}
 	}
 }
