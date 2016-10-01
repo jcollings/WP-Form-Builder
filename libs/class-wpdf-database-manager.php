@@ -252,6 +252,27 @@ class WPDF_DatabaseManager{
 	}
 
 	/**
+	 * Check if field data is unique
+	 *
+	 * @param $form_id string Name of form
+	 * @param $field string Field Name
+	 * @param $value string Value to compare
+	 *
+	 * @return bool
+	 */
+	public function is_data_unique($form_id, $field, $value){
+
+		global $wpdb;
+		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} as st INNER JOIN {$this->_submission_data_table} as sdt ON st.id = sdt.submission_id WHERE st.form=%s AND sdt.field=%s AND sdt.content=%s AND active='Y'", $form_id, $field, $value);
+		$count = $wpdb->get_var($query);
+		if( intval($count) > 0){
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Create and Upgrade plugin database
 	 */
 	public function install(){

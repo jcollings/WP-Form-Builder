@@ -91,6 +91,14 @@ class WPDF_Validation{
 								return false;
 							}
 							break;
+						case 'unique':
+
+							$form = WPDF()->get_current_form();
+							if( ! $this->is_unique( $form->getName(), $field->getName(), $post_data ) ) {
+								$this->set_error($rule);
+								return false;
+							}
+							break;
 					}
 				}
 			}
@@ -254,6 +262,25 @@ class WPDF_Validation{
 		}
 
 		if(strlen($post_data[$field]) <= $length){
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Is unique entry
+	 *
+	 * @param $form_id string
+	 * @param $field string
+	 * @param $post_data array
+	 *
+	 * @return bool
+	 */
+	public function is_unique($form_id, $field, $post_data){
+
+		$db = new WPDF_DatabaseManager();
+		if( $db->is_data_unique($form_id, $field, $post_data[$field]) ){
 			return true;
 		}
 
