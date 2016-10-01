@@ -156,7 +156,7 @@ class WPDF_DatabaseManager{
 			$search_where = sprintf(" AND sdt1.content LIKE '%%%%%s%%%%'", $search);
 		}
 
-		$query = $wpdb->prepare("SELECT COUNT(*) FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y' {$search_where}", $form_id);
+		$query = $wpdb->prepare("SELECT COUNT(*), DISTINCT st.id FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y' {$search_where}", $form_id);
 		return $wpdb->get_col($query);
 	}
 
@@ -189,7 +189,7 @@ class WPDF_DatabaseManager{
 		}
 
 		$offset = ($paged-1)*$per_page;
-		$query = $wpdb->prepare("SELECT st.* FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y'".$search_where .$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
+		$query = $wpdb->prepare("SELECT DISTINCT st.id, st.* FROM {$this->_submission_table} as st {$search_join} WHERE form=%s AND active='Y'".$search_where .$order_str." LIMIT %d, %d", $form_id, $offset, $per_page);
 		return $wpdb->get_results($query);
 	}
 
