@@ -103,8 +103,29 @@ class WPDF_Notification{
 
 			// loop through conditions and escape if not valid
 			foreach($this->_conditions as $field => $value){
-				if( $data->get($field) !== $value){
-					return false;
+
+				if(is_array($value)){
+
+					$condition = isset($value['condition']) ? $value['condition'] : '=';
+					$val = isset($value['value']) ? $value['value'] : '';
+					switch($condition){
+						case '!=':
+							if( $data->get($field) === $val){
+								return false;
+							}
+							break;
+						case '=':
+						default:
+							if( $data->get($field) !== $val){
+								return false;
+							}
+							break;
+					}
+
+				}else{
+					if( $data->get($field) !== $value){
+						return false;
+					}
 				}
 			}
 		}
