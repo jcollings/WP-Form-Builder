@@ -64,6 +64,8 @@ class WPDF_DeveloperForms {
 		//add_action( 'init', array( $this, 'init' ) );
 
 		register_activation_hook( __FILE__, array($this, 'on_activation') );
+
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
 	}
 
 	public function includes(){
@@ -146,6 +148,10 @@ class WPDF_DeveloperForms {
 	}
 	public function get_plugin_dir(){
 		return $this->plugin_dir;
+	}
+
+	public function enqueue_scripts(){
+		wp_enqueue_script('wpdf-main', $this->get_plugin_url() . '/assets/public/js/main.js', array('jquery'), $this->get_version(), true);
 	}
 
 	public function on_activation(){

@@ -47,6 +47,8 @@ class WPDF_Form{
 	 */
 	protected $_fields = null;
 
+	protected $_field_display_conds = array();
+
 	protected $_modules = array();
 
 	public function __construct($name, $fields = array()) {
@@ -82,6 +84,9 @@ class WPDF_Form{
 					$this->_has_file_field = true;
 				}
 
+				// get display rules
+				$this->extract_display_conditions($field_id, $field);
+
 				// add validation rules to rules array
 				if ( isset( $field['validation'] ) && ! empty( $field['validation'] )  ) {
 
@@ -114,7 +119,42 @@ class WPDF_Form{
 			}
 		}
 
+		// now all fields have been initialized
+		if(!empty($fields)) {
+			foreach ( $fields as $field_id => $field ) {
+
+				// setup display conditions
+				$this->extract_display_conditions( $field_id, $field );
+			}
+		}
+
 		$this->_data = new WPDF_FormData($this->_fields, $_POST, $_FILES);
+	}
+
+	/**
+	 * Build array of field display conditions
+	 *
+	 * @param $field_id string Name of field
+	 * @param $field array
+	 */
+	private function extract_display_conditions($field_id, $field){
+
+		if(isset($field['display_conditions']) && is_array($field['display_conditions']) && !empty($field['display_conditions'])){
+
+			$name = $this->_fields[ $field_id ]->getInputName();
+			$this->_field_display_conds[$name] = array();
+
+			foreach($field['display_conditions'] as $f => $v){
+
+				$target = $this->_fields[$f];
+				$this->_field_display_conds[$name][] = array(
+					'field' => $target->getInputName(),
+					'field_type' =>  $target->getType(),
+					'operator' => '=',
+					'value' => $v,
+				);
+			}
+		}
 	}
 
 	public function process(){
@@ -314,8 +354,16 @@ class WPDF_Form{
 			$attrs .= sprintf( ' action="#%s"', esc_attr( $args['action'] ) );
 		}
 
+		$classes = 'wpdf-form ';
+
 		if(isset($args['class'])){
-			$attrs .= sprintf( ' class="%s"', esc_attr( $args['class'] ) );
+			$classes .= esc_attr( $args['class'] );
+		}
+		$attrs .= sprintf( ' class="%s"', $classes );
+
+		//todo: output js data attributes
+		if(!empty($this->_field_display_conds)){
+			$attrs .= sprintf( " data-wpdf-display='%s'", json_encode($this->_field_display_conds));
 		}
 
 		echo "<form {$attrs}>";

@@ -41,7 +41,7 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 			'conditions' => array(
 				'name' => array(
 					'value' => 'asd',
-					'condition' => '='
+					'operator' => '='
 				)
 			)
 		));
@@ -59,7 +59,7 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 			'conditions' => array(
 				'name' => array(
 					'value' => 'asd',
-					'condition' => '!='
+					'operator' => '!='
 				)
 			)
 		));

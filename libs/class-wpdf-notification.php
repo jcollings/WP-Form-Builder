@@ -106,7 +106,7 @@ class WPDF_Notification{
 
 				if(is_array($value)){
 
-					$condition = isset($value['condition']) ? $value['condition'] : '=';
+					$condition = isset($value['operator']) ? $value['operator'] : '=';
 					$val = isset($value['value']) ? $value['value'] : '';
 					switch($condition){
 						case '!=':
