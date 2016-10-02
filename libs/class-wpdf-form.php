@@ -146,12 +146,20 @@ class WPDF_Form{
 
 			foreach($field['display_conditions'] as $f => $v){
 
+				$operator = '=';
+				$value = $v;
+
+				if(is_array($v)){
+					$operator = isset($v['operator']) && $v['operator'] == '!=' ? '!=' : $operator;
+					$value = isset($v['value']) ? $v['value'] : $value;
+				}
+
 				$target = $this->_fields[$f];
 				$this->_field_display_conds[$name][] = array(
 					'field' => $target->getInputName(),
 					'field_type' =>  $target->getType(),
-					'operator' => '=',
-					'value' => $v,
+					'operator' => $operator,
+					'value' => $value,
 				);
 			}
 		}

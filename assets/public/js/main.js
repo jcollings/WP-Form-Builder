@@ -18,7 +18,7 @@
 
                     var _elem = form.find('[name="'+condition['field']+'[]"][value="'+condition['value']+'"], [name="'+condition['field']+'"][value="'+condition['value']+'"]');
                     if(_elem !== undefined) {
-                        if (( equals && _elem.prop('checked') == true ) || (!equals && _elem.prop('checked', false))) {
+                        if (( equals && _elem.prop('checked') == true ) || (!equals && _elem.prop('checked') == false)) {
                             found = true;
                             return false;
                         }
