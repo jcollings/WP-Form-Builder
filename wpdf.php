@@ -2,21 +2,46 @@
 
 /*
 Plugin Name: WordPress Developer Forms
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: https://www.wordpressdeveloperforms.com/
 Description: Simple WordPress forms library
-Version: 0.2.1
+Version: 0.2.2
 Author: James Collings
 Author URI: https://www.jclabs.co.uk
-License: A "Slug" license name e.g. GPL2
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-
+/**
+ * @package WordPress Developer Forms
+ * @author James Collings <james@jclabs.co.uk>
+ * @link https://www.wordpressdeveloperforms.com/
+ *
+ * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @copyright Copyright (c) 2016, James Collings
+ *
+ * GNU General Public License, Free Software Foundation
+ * <http://creativecommons.org/licenses/GPL/2.0/>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 class WPDF_DeveloperForms {
 
-	protected $version = '0.2.1';
+	protected $version = '0.2.2';
 	public $plugin_dir = false;
 	public $plugin_url = false;
 	protected $plugin_slug = false;

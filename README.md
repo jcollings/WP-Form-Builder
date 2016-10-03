@@ -3,6 +3,8 @@ Author: James Collings
 Version: 0.2.2  
 Created: 05/08/2016  
 Updated: 07/08/2016  
+License: GPLv2 or later  
+License URI: http://www.gnu.org/licenses/gpl-2.0.html  
 
 ## About
 WordPress Developer Forms plugin make it easy to create and display forms within your WordPress theme, With a WordPress admin section where you can easily view past form submissions. 
