@@ -45,7 +45,7 @@ class WPDF_Admin{
 
 	function update_check(){
 		$config = array(
-			'slug' => 'wpdf/wpdf.php', // this is the slug of your plugin
+			'slug' => WPDF()->get_plugin_slug() . '/wpdf.php', // this is the slug of your plugin
 			'proper_folder_name' => WPDF()->get_plugin_slug(), // this is the name of the folder your plugin lives in
 			'api_url' => 'https://api.github.com/repos/jcollings/wordPress-developer-forms', // the GitHub API url of your GitHub repo
 			'raw_url' => 'https://raw.github.com/jcollings/wordPress-developer-forms/master', // the GitHub raw url of your GitHub repo
@@ -71,21 +71,79 @@ class WPDF_Admin{
 
 			if($submission_id){
 
-				echo '<h1>Submission</h1>';
-				echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'">Back</a>';
-				$db = new WPDF_DatabaseManager();
-				$submissions = $db->get_submission($submission_id);
-				$db->mark_as_read($submission_id);
+				?>
+				<h1>Submission</h1>
+				<?php echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'" class="button">Back</a>'; ?>
 
-				foreach($submissions as $submission ){
+				<div id="poststuff">
+					<div id="post-body" class="metabox-holder columns-2">
 
-					if($submission->field_type == 'virtual'){
-						$content = apply_filters('wpdf/display_submission_field', $submission->content, $submission->field, $form);
-					}else{
-						$content = esc_html($submission->content);
-					}
-					echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
-				}
+						<div id="post-body-content">
+
+							<div class="postbox">
+								<div class="inside">
+									<?php
+									$db = new WPDF_DatabaseManager();
+									$submissions = $db->get_submission($submission_id);
+									$db->mark_as_read($submission_id);
+
+									// get user name
+									$user_id = isset($submissions[0]->user_id) ? $submissions[0]->user_id : 'N/A';
+									$user = 'Guest';
+									if(intval($user_id) > 0){
+										$user = get_user_by('id', intval($user_id));
+										if($user){
+											$user = $user->data->user_login;
+										}
+									}
+
+									// get ip
+									$ip = isset($submissions[0]->ip) ? $submissions[0]->ip : 'N/A';
+
+									// date
+									$date = isset($submissions[0]->created) ? $submissions[0]->created : false;
+									if($date){
+										$date = date( 'M j, Y @ H:i', strtotime($date));
+									}
+
+									if(!empty($submissions)) {
+
+										foreach ( $submissions as $submission ) {
+
+											if ( $submission->field_type == 'virtual' ) {
+												$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
+											} else {
+												$content = esc_html( $submission->content );
+											}
+											echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+										}
+									}
+									?>
+								</div>
+							</div>
+						</div>
+
+						<div id="postbox-container-1" class="postbox-container">
+							<div class="postbox">
+								<h2 class="hndle"><span>Information</span></h2>
+								<div class="inside">
+									<?php if($date): ?>
+									<div class="misc-pub-section curtime misc-pub-curtime">
+										<span id="timestamp">Submitted on: <b><?php echo $date; ?></b></span>
+									</div>
+									<?php endif; ?>
+
+									<div class="misc-pub-section misc-pub-visibility" id="visibility">
+										From: <span id="post-visibility-display"><?php echo $user; ?> (<?php echo $ip; ?>)</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div><!-- /post-body -->
+					<br class="clear">
+				</div>
+				<?php
 
 			}else{
 
