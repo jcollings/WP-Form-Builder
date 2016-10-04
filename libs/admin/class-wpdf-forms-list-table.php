@@ -95,7 +95,7 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 						echo sprintf('<td>%d <strong>(%d unread)</strong></td>', $item->form_entries, $item->unread_count);
 						break;
 					case 'col_form_last':
-						echo '<td>' . $item->last_entry .'</td>';
+						echo '<td>' . date( 'M j, Y @ H:i', strtotime($item->last_entry)) .'</td>';
 						break;
 					default:
 						echo '<td></td>';

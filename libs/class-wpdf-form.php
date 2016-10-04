@@ -128,7 +128,7 @@ class WPDF_Form{
 			}
 		}
 
-		$this->_data = new WPDF_FormData($this->_fields, $_POST, $_FILES);
+		$this->_data = new WPDF_FormData($this, $_POST, $_FILES);
 	}
 
 	/**

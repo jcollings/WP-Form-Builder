@@ -12,6 +12,7 @@ class WPDF_FormField{
 	protected $_type;
 	protected $_label;
 	protected $_args;
+	protected $_default;
 
 	public function __construct($name, $type, $args = array()) {
 		$this->_name = $name;
@@ -24,6 +25,7 @@ class WPDF_FormField{
 			$this->_label = ucfirst($this->_name);
 		}
 
+		$this->_default = isset($args['default']) ? $args['default'] : false;
 	}
 
 	/**
@@ -104,6 +106,7 @@ class WPDF_FormField{
 			default:
 
 				$value = $form_data->get($this->_name);
+
 				echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'" value="'.$value.'" id="'.$this->getId().'" class="'.$this->getClasses().'" />';
 
 				break;
@@ -178,5 +181,12 @@ class WPDF_FormField{
 
 	public function getClasses(){
 		return '';
+	}
+
+	/**
+	 * @return mixed|string
+	 */
+	public function getDefaultValue() {
+		return $this->_default;
 	}
 }

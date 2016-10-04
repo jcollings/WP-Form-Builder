@@ -129,7 +129,7 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 						echo '<td>' . $item->user_id . '</td>';
 						break;
 					case 'col_submitted_date':
-						echo '<td>' . $item->created . '</td>';
+						echo '<td>' . date( 'M j, Y @ H:i', strtotime($item->created)) . '</td>';
 						break;
 					default:
 						
