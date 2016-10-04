@@ -10,23 +10,35 @@ class WPDF_FormData{
 	protected $_data = null;
 	protected $_raw_data = null;
 	protected $_fields = null;
+	protected $_defaults = array();
+
+	/**
+	 * If the form has been submitted
+	 *
+	 * @var bool
+	 */
+	private $_submitted = true;
 
 	/**
 	 * WPDF_FormData constructor.
 	 *
-	 * @param $fields WPDF_FormField[]
+	 * @param $form WPDF_Form
 	 * @param $data []
 	 * @param $upload_data []
 	 */
-	public function __construct($fields, $data, $upload_data){
+	public function __construct($form, $data, $upload_data){
 
+		$fields = $form->getFields();
 		$this->_data = array();
 		$this->_raw_data = array();
 		$this->_fields = $fields;
 
+		$this->_submitted = isset($data['wpdf_action']) && $data['wpdf_action'] == $form->getName() ? true : false;
+
 		foreach($fields as $field_id => $field){
 
 			$this->_raw_data[$field_id] = isset($data[$field->getInputName()]) ? $field->sanitize($data[$field->getInputName()]) : false;
+			$this->_defaults[$field_id] = $field->getDefaultValue();
 
 			if($field->isType('file')){
 
@@ -110,14 +122,27 @@ class WPDF_FormData{
 	}
 
 	public function get($field_id){
-		$result = isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
-		$result = $this->unslashValue($result);
+
+		if($this->isSubmitted()){
+			$result = isset( $this->_data[$field_id] ) ? $this->_data[$field_id] : false;
+			$result = $this->unslashValue($result);
+		}else{
+			$result = $this->_defaults[$field_id];
+		}
+
 		$result = apply_filters('wpdf/field_data', $result, $field_id);
 		return $result;
 	}
 
 	public function getRaw($field_id){
-		return isset( $this->_raw_data[$field_id] ) ? $this->_raw_data[$field_id] : false;
+
+		if($this->isSubmitted()){
+			$result = isset( $this->_raw_data[$field_id] ) ? $this->_raw_data[$field_id] : false;
+		}else{
+			$result = $this->_defaults[$field_id];
+		}
+
+		return $result;
 	}
 
 	public function getField($field_id){
@@ -155,5 +180,9 @@ class WPDF_FormData{
 		}
 
 		return $ip;
+	}
+
+	public function isSubmitted(){
+		return $this->_submitted;
 	}
 }
