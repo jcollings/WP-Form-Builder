@@ -53,14 +53,20 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 
 	public function testTextField(){
 
-		$field = new WPDF_FormField("fname", "text");
+		$form = new WPDF_Form("TestForm", array(
+			'fname' => array(
+				'type' => 'text'
+			)
+		));
+
+		$field = $form->getField('fname');
 
 		// no value
-		$data = new WPDF_FormData(array("fname" => $field), array(), array());
+		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => '')));
 
 		// basic value
-		$data = new WPDF_FormData(array("fname" => $field), array($field->getInputName() => 'test value'), array());
+		$data = new WPDF_FormData($form, array($field->getInputName() => 'test value', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => 'test value')));
 	}
 }

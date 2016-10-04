@@ -65,119 +65,146 @@ class WPDF_Admin{
 		echo '<div class="wrap wpdf">';
 
 		$form = isset($_GET['form']) ? wpdf_get_form($_GET['form']) : false;
-		$view = isset($_GET['view']) ? $_GET['view'] : false;
 		$submission_id = isset($_GET['submission']) ? $_GET['submission'] : false;
 		if($form) {
 
 			if($submission_id){
 
-				?>
-				<h1>Submission</h1>
-				<?php echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'" class="button">Back</a>'; ?>
-
-				<div id="poststuff">
-					<div id="post-body" class="metabox-holder columns-2">
-
-						<div id="post-body-content">
-
-							<div class="postbox">
-								<div class="inside">
-									<?php
-									$db = new WPDF_DatabaseManager();
-									$submissions = $db->get_submission($submission_id);
-									$db->mark_as_read($submission_id);
-
-									// get user name
-									$user_id = isset($submissions[0]->user_id) ? $submissions[0]->user_id : 'N/A';
-									$user = 'Guest';
-									if(intval($user_id) > 0){
-										$user = get_user_by('id', intval($user_id));
-										if($user){
-											$user = $user->data->user_login;
-										}
-									}
-
-									// get ip
-									$ip = isset($submissions[0]->ip) ? $submissions[0]->ip : 'N/A';
-
-									// date
-									$date = isset($submissions[0]->created) ? $submissions[0]->created : false;
-									if($date){
-										$date = date( 'M j, Y @ H:i', strtotime($date));
-									}
-
-									if(!empty($submissions)) {
-
-										foreach ( $submissions as $submission ) {
-
-											if ( $submission->field_type == 'virtual' ) {
-												$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
-											} else {
-												$content = esc_html( $submission->content );
-											}
-											echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
-										}
-									}
-									?>
-								</div>
-							</div>
-						</div>
-
-						<div id="postbox-container-1" class="postbox-container">
-							<div class="postbox">
-								<h2 class="hndle"><span>Information</span></h2>
-								<div class="inside">
-									<?php if($date): ?>
-									<div class="misc-pub-section curtime misc-pub-curtime">
-										<span id="timestamp">Submitted on: <b><?php echo $date; ?></b></span>
-									</div>
-									<?php endif; ?>
-
-									<div class="misc-pub-section misc-pub-visibility" id="visibility">
-										From: <span id="post-visibility-display"><?php echo $user; ?> (<?php echo $ip; ?>)</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div><!-- /post-body -->
-					<br class="clear">
-				</div>
-				<?php
-
+				$this->display_submission_page($form, $submission_id);
 			}else{
 
-				echo '<form method="GET">';
-
-				echo '<input type="hidden" name="page" value="wpdf-forms" />';
-				echo '<input type="hidden" name="form" value="'.$form->getName().'" />';
-
-				echo '<h1 style="display: block; float:left;">Form: ' . $form->getName() . '</h1>';
-
-				require 'class-wpdf-submissions-list-table.php';
-				$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
-				$wpdf_submissions_table->prepare_items();
-
-				echo $wpdf_submissions_table->search_box('Search Entries', 'wpdf-search');
-
-				echo '<div style="clear:both"></div>';
-				echo '</form>';
-
-				$wpdf_submissions_table->display();
+				$this->display_submissions_archive($form);
 			}
 
 		}else{
-			echo '<h1>Forms</h1>';
 
-			require 'class-wpdf-forms-list-table.php';
-			$wpdf_forms_table = new WPDF_Forms_List_Table();
-			$wpdf_forms_table->prepare_items();
-
-			$wpdf_forms_table->display();
+			$this->display_forms_archive();
 		}
 
 		echo '</div>';
 
+	}
+
+	/**
+	 * Display view submission page
+	 *
+	 * @param $form WPDF_Form
+	 * @param $submission_id int
+	 */
+	private function display_submission_page($form, $submission_id){
+
+		?>
+		<h1>Submission</h1>
+		<?php echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'" class="button">Back</a>'; ?>
+
+		<div id="poststuff">
+			<div id="post-body" class="metabox-holder columns-2">
+
+				<div id="post-body-content">
+
+					<div class="postbox">
+						<div class="inside">
+							<?php
+							$db = new WPDF_DatabaseManager();
+							$submissions = $db->get_submission($submission_id);
+							$db->mark_as_read($submission_id);
+
+							// get user name
+							$user_id = isset($submissions[0]->user_id) ? $submissions[0]->user_id : 'N/A';
+							$user = 'Guest';
+							if(intval($user_id) > 0){
+								$user = get_user_by('id', intval($user_id));
+								if($user){
+									$user = $user->data->user_login;
+								}
+							}
+
+							// get ip
+							$ip = isset($submissions[0]->ip) ? $submissions[0]->ip : 'N/A';
+
+							// date
+							$date = isset($submissions[0]->created) ? $submissions[0]->created : false;
+							if($date){
+								$date = date( 'M j, Y @ H:i', strtotime($date));
+							}
+
+							if(!empty($submissions)) {
+
+								foreach ( $submissions as $submission ) {
+
+									if ( $submission->field_type == 'virtual' ) {
+										$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
+									} else {
+										$content = esc_html( $submission->content );
+									}
+									echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+								}
+							}
+							?>
+						</div>
+					</div>
+				</div>
+
+				<div id="postbox-container-1" class="postbox-container">
+					<div class="postbox">
+						<h2 class="hndle"><span>Information</span></h2>
+						<div class="inside">
+							<?php if($date): ?>
+								<div class="misc-pub-section curtime misc-pub-curtime">
+									<span id="timestamp">Submitted on: <b><?php echo $date; ?></b></span>
+								</div>
+							<?php endif; ?>
+
+							<div class="misc-pub-section misc-pub-visibility" id="visibility">
+								From: <span id="post-visibility-display"><?php echo $user; ?> (<?php echo $ip; ?>)</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /post-body -->
+			<br class="clear">
+		</div>
+		<?php
+	}
+
+	/**
+	 * Display submissions archive
+	 *
+	 * @param $form WPDF_Form
+	 */
+	private function display_submissions_archive($form){
+
+		echo '<form method="GET">';
+
+		echo '<input type="hidden" name="page" value="wpdf-forms" />';
+		echo '<input type="hidden" name="form" value="'.$form->getName().'" />';
+
+		echo '<h1 style="display: block; float:left;">Form: ' . $form->getName() . '</h1>';
+
+		require 'class-wpdf-submissions-list-table.php';
+		$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
+		$wpdf_submissions_table->prepare_items();
+
+		echo $wpdf_submissions_table->search_box('Search Entries', 'wpdf-search');
+
+		echo '<div style="clear:both"></div>';
+		echo '</form>';
+
+		$wpdf_submissions_table->display();
+	}
+
+	/**
+	 * Display forms archive
+	 */
+	private function display_forms_archive(){
+		echo '<h1>Forms</h1>';
+
+		require 'class-wpdf-forms-list-table.php';
+		$wpdf_forms_table = new WPDF_Forms_List_Table();
+		$wpdf_forms_table->prepare_items();
+
+		$wpdf_forms_table->display();
 	}
 }
 
