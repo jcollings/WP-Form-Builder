@@ -14,6 +14,11 @@ class WPDF_Admin{
 		add_action( 'admin_menu', array($this, 'wpdf_register_pages'));
 		add_action('admin_init', array( $this, 'init'));
 		add_action('init', array($this, 'update_check'));
+		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+	}
+
+	function enqueue_scripts(){
+		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/main.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), WPDF()->get_version());
 	}
 
 	function wpdf_register_pages(){
@@ -66,7 +71,13 @@ class WPDF_Admin{
 
 		$form = isset($_GET['form']) ? wpdf_get_form($_GET['form']) : false;
 		$submission_id = isset($_GET['submission']) ? $_GET['submission'] : false;
-		if($form) {
+		$action = isset($_GET['action']) ? $_GET['action'] : false;
+
+		if( $action == 'new' || ( $action == 'manage' && $form ) ){
+
+			$this->display_manage_form($form);
+
+		}elseif($form) {
 
 			if($submission_id){
 
@@ -198,13 +209,262 @@ class WPDF_Admin{
 	 * Display forms archive
 	 */
 	private function display_forms_archive(){
-		echo '<h1>Forms</h1>';
+		$url = admin_url('admin.php?page=wpdf-forms&action=new');
+		echo '<h1>Forms <a href="'.$url.'" class="button">Add New</a></h1>';
 
 		require 'class-wpdf-forms-list-table.php';
 		$wpdf_forms_table = new WPDF_Forms_List_Table();
 		$wpdf_forms_table->prepare_items();
 
 		$wpdf_forms_table->display();
+	}
+
+	private function display_manage_form($form = false){
+		?>
+		<div class="wpdf-form-manager">
+
+			<div class="wpdf-header">
+
+			</div>
+			<div class="wpdf-cols">
+				<div class="wpdf-left">
+					<div class="wpdf-left__inside">
+						<div class="wpdf-fields">
+							<ul id="sortable">
+								<li class="placeholder">Drop field here to add to the form</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+				<div class="wpdf-right">
+					<div class="wpdf-right__inside">
+						<div class="wpdf-panel wpdf-panel--active">
+							<div class="wpdf-panel__header">
+								<p class="wpdf-panel__title">Available Fields</p>
+							</div>
+							<div class="wpdf-panel__content">
+								<ul class="wpdf-field-list">
+									<li class="draggable ui-state-highlight" data-field="text"><a href="#">Text</a></li>
+									<li class="draggable ui-state-highlight" data-field="textarea"><a href="#">Textarea</a></li>
+									<li class="draggable ui-state-highlight" data-field="dropdown"><a href="#">Dropdown</a></li>
+									<li class="draggable ui-state-highlight" data-field="checkbox"><a href="#">Checkbox</a></li>
+									<li class="draggable ui-state-highlight" data-field="radio"><a href="#">Radio</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="wpdf-clear"></div>
+		</div>
+
+		<div id="field-placeholder" style="display:none;">
+			<div class="wpdf-panel" data-field-type="text">
+				<div class="wpdf-panel__header">
+					Field: Text
+				</div>
+				<div class="wpdf-panel__content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+				</div>
+			</div>
+			<div class="wpdf-panel" data-field-type="textarea">
+				<div class="wpdf-panel__header">
+					Field: Textarea
+				</div>
+				<div class="wpdf-panel__content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+				</div>
+			</div>
+			<div class="wpdf-panel" data-field-type="dropdown">
+				<div class="wpdf-panel__header">
+					Field: Dropdown
+				</div>
+				<div class="wpdf-panel__content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+				</div>
+			</div>
+			<div class="wpdf-panel" data-field-type="checkbox">
+				<div class="wpdf-panel__header">
+					Field: Checkbox
+				</div>
+				<div class="wpdf-panel__content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+				</div>
+			</div>
+			<div class="wpdf-panel" data-field-type="radio">
+				<div class="wpdf-panel__header">
+					Field: Radio
+				</div>
+				<div class="wpdf-panel__content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
+				</div>
+			</div>
+		</div>
+
+		<style>
+			.wpdf-form-manager{
+				border:1px solid #dedede;
+			}
+			.wpdf-header{
+				height: 70px;
+				background: #FFF;
+				width: 100%;
+				border-bottom:1px solid #dedede;
+			}
+			.wpdf-clear{
+				clear:both;
+			}
+			.wpdf-cols{
+				display: table;
+			}
+			.wpdf-left, .wpdf-right{
+				/*float:left;*/
+				min-height: 500px;
+				display: table-cell;
+			}
+			.wpdf-left{
+				background: #f7f7f7;
+				width: 70%;
+			}
+			.wpdf-right{
+				background: #ececec;
+				width: 30%;
+			}
+
+			/**/
+			.wpdf-panel{
+				background: #f7f7f7;
+			}
+			.wpdf-panel--active .wpdf-panel__content{
+				display: block;
+			}
+			.wpdf-panel__header{
+				padding:15px;
+				border-bottom:1px solid #ececec;
+			}
+			.wpdf-panel__title{
+				font-size:14px;
+				margin: 0;
+				padding: 0;
+			}
+			.wpdf-panel__content{
+				display: none;
+				margin: 7px;
+				overflow: hidden;
+			}
+
+			.wpdf-right__inside, .wpdf-left__inside{
+				margin: 20px;
+			}
+
+			.wpdf-field-list{
+				margin: 0 0 7px;
+				padding:0;
+				list-style: none;
+				overflow: hidden;
+			}
+			.wpdf-field-list li{
+				margin: 0;
+				padding: 0;
+				width: 50%;
+				float:left;
+			}
+			.wpdf-field-list a{
+				background: #ececec;
+				padding: 15px 0;
+				margin: 7px;
+				display: block;
+				text-align: center;
+				text-decoration: none;
+				color: #444444;
+			}
+
+			/**/
+
+			#sortable {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				min-height: 50px;
+			}
+			#sortable li {
+				margin:5px 0;
+			}
+			/*.ui-state-default{
+				background: #999;
+				width: 100%;
+				position: relative;
+			}*/
+			/*.wpdf-fields .ui-state-highlight {
+				background: #999999;
+				height: 20px;
+				width: 100%;
+			}*/
+			
+			/**
+			**/
+			.wpdf-fields .wpdf-panel{
+				background: #ffffff;
+			}
+			.wpdf-fields .wpdf-panel__header{
+				border: 1px solid #ececec;
+			}
+			/*.wpdf-fields .placeholder{
+				border: 1px dashed #999999;
+				padding: 15px;
+			}*/
+
+			/*The element used to show the future position of the item currently being sorted.*/
+			/*.ui-sortable-placeholder{
+				margin: 10px;
+				background: red;
+			}*/
+
+			/*The element shown while dragging a sortable item. The element actually used depends on the*/
+			.ui-sortable-helper{
+				background: yellow;
+				padding: 0;
+				margin:0;
+			}
+
+
+			/*The handle of each sortable item, specified using the handle option. By default, each sortable item itself is also the handle.*/
+			/*.ui-sortable-handle{
+				margin: 10px;
+				background: green;
+			}*/
+
+			/*The sortable element.*/
+			.ui-sortable{
+				margin: 10px;
+				background: none;
+			}
+
+			/*.wpdf-dropped-item{
+				margin: 10px;
+				background: cyan;
+			}*/
+
+			.sortable-placeholder{
+				height: 30px;
+				border: 1px dashed #b4b9be;
+			}
+
+		</style>
+		<?php
 	}
 }
 
