@@ -5,7 +5,7 @@
 
     $(document).ready(function(){
 
-        var debug = true;
+        var debug = false;
         var _sortable_elem = $('#sortable');
         var _draggable_elem = $( ".draggable" );
         var _placeholder_text  = $('#sortable .placeholder').text();
@@ -64,6 +64,7 @@
             if(template.length > 0){
                 $(ui.helper).addClass('wpdf-dropped-item');
                 $(ui.helper).html(template);
+                $(ui.helper).find('.wpdf-panel').addClass('wpdf-panel--active');
             }
         } );
 
@@ -116,7 +117,7 @@
  */
 (function($){
 
-    $('body').on('click', '.wpdf-panel__header', function(){
+    $(document).on('click', '.wpdf-panel__header', function(){
         $(this).parents('.wpdf-panel').toggleClass('wpdf-panel--active');
     });
 

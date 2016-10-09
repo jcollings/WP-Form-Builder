@@ -27,6 +27,7 @@ class WPDF_Admin{
 
 		$admin_slug = "wpdf-forms";
 		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
+		add_submenu_page( $admin_slug, 'New Form', 'Add Form', 'manage_options', 'admin.php?page=wpdf-forms&action=new');
 
 		if(!empty($forms)) {
 			foreach ( $forms as $form_id => $form ) {
@@ -220,6 +221,9 @@ class WPDF_Admin{
 	}
 
 	private function display_manage_form($form = false){
+
+		$available_fields = array('text', 'textarea', 'dropdown', 'checkbox', 'radio');
+
 		?>
 		<div class="wpdf-form-manager">
 
@@ -231,7 +235,13 @@ class WPDF_Admin{
 					<div class="wpdf-left__inside">
 						<div class="wpdf-fields">
 							<ul id="sortable">
-								<li class="placeholder">Drop field here to add to the form</li>
+<!--								<li class="placeholder">Drop field here to add to the form</li>-->
+
+								<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
+									<?php $this->display_field_panel('text', true); ?>
+								</li>
+
+
 							</ul>
 						</div>
 					</div>
@@ -245,11 +255,9 @@ class WPDF_Admin{
 							</div>
 							<div class="wpdf-panel__content">
 								<ul class="wpdf-field-list">
-									<li class="draggable ui-state-highlight" data-field="text"><a href="#">Text</a></li>
-									<li class="draggable ui-state-highlight" data-field="textarea"><a href="#">Textarea</a></li>
-									<li class="draggable ui-state-highlight" data-field="dropdown"><a href="#">Dropdown</a></li>
-									<li class="draggable ui-state-highlight" data-field="checkbox"><a href="#">Checkbox</a></li>
-									<li class="draggable ui-state-highlight" data-field="radio"><a href="#">Radio</a></li>
+									<?php foreach($available_fields as $field): ?>
+									<li class="draggable ui-state-highlight" data-field="<?php echo $field; ?>"><a href="#"><?php echo ucfirst($field); ?></a></li>
+									<?php endforeach; ?>
 								</ul>
 							</div>
 						</div>
@@ -262,56 +270,11 @@ class WPDF_Admin{
 		</div>
 
 		<div id="field-placeholder" style="display:none;">
-			<div class="wpdf-panel" data-field-type="text">
-				<div class="wpdf-panel__header">
-					Field: Text
-				</div>
-				<div class="wpdf-panel__content">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-				</div>
-			</div>
-			<div class="wpdf-panel" data-field-type="textarea">
-				<div class="wpdf-panel__header">
-					Field: Textarea
-				</div>
-				<div class="wpdf-panel__content">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-				</div>
-			</div>
-			<div class="wpdf-panel" data-field-type="dropdown">
-				<div class="wpdf-panel__header">
-					Field: Dropdown
-				</div>
-				<div class="wpdf-panel__content">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-				</div>
-			</div>
-			<div class="wpdf-panel" data-field-type="checkbox">
-				<div class="wpdf-panel__header">
-					Field: Checkbox
-				</div>
-				<div class="wpdf-panel__content">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-				</div>
-			</div>
-			<div class="wpdf-panel" data-field-type="radio">
-				<div class="wpdf-panel__header">
-					Field: Radio
-				</div>
-				<div class="wpdf-panel__content">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem enim esse illum laboriosam nemo nulla, placeat tempore! Ea eius est illum incidunt nihil. Cupiditate eaque enim esse harum, quo reprehenderit?</p>
-				</div>
-			</div>
+			<?php
+			foreach($available_fields as $field){
+				$this->display_field_panel($field);
+			}
+			?>
 		</div>
 
 		<style>
@@ -329,11 +292,13 @@ class WPDF_Admin{
 			}
 			.wpdf-cols{
 				display: table;
+				width: 100%;
 			}
 			.wpdf-left, .wpdf-right{
 				/*float:left;*/
 				min-height: 500px;
 				display: table-cell;
+				vertical-align: top;
 			}
 			.wpdf-left{
 				background: #f7f7f7;
@@ -363,7 +328,6 @@ class WPDF_Admin{
 			.wpdf-panel__content{
 				display: none;
 				margin: 7px;
-				overflow: hidden;
 			}
 
 			.wpdf-right__inside, .wpdf-left__inside{
@@ -419,8 +383,16 @@ class WPDF_Admin{
 			.wpdf-fields .wpdf-panel{
 				background: #ffffff;
 			}
-			.wpdf-fields .wpdf-panel__header{
+			.wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
 				border: 1px solid #ececec;
+			}
+			.wpdf-fields .wpdf-panel--active .wpdf-panel__header{
+				border-left: none;
+				border-top: none;
+				border-right: none;
+			}
+			.wpdf-fields .wpdf-panel__content{
+				margin: 15px;
 			}
 			/*.wpdf-fields .placeholder{
 				border: 1px dashed #999999;
@@ -463,7 +435,141 @@ class WPDF_Admin{
 				border: 1px dashed #b4b9be;
 			}
 
+			/**
+			 * Form Fields
+			 */
+			.wpdf-field-row{
+				width: 104%;
+				clear:both;
+				margin: 0 -2%;
+			}
+
+			.wpdf-field-row .wpdf-col{
+				float: left;
+				margin-bottom:10px;
+			}
+
+			.wpdf-col.wpdf-col__half{
+				width: 46%;
+				margin-left: 2%;
+				margin-right: 2%;
+			}
+
+			.wpdf-col.wpdf-col__full{
+				width: 96%;
+				margin-left: 2%;
+				margin-right: 2%;
+			}
+
+			.wpdf-col .wpdf-label{
+				width: 100%;
+				display: block;
+			}
+
+			.wpdf-col .wpdf-input{
+				width: 100%;
+				box-sizing: border-box;
+			}
+
 		</style>
+		<?php
+	}
+
+	private function display_field_panel($field, $active = false){
+		?>
+		<div class="wpdf-panel <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field; ?>">
+			<div class="wpdf-panel__header">
+				Field: <?php echo ucfirst($field); ?>
+			</div>
+			<div class="wpdf-panel__content">
+
+				<?php
+				// general fields
+				?>
+				<div class="wpdf-field-row">
+					<div class="wpdf-col wpdf-col__half">
+						<label for="" class="wpdf-label">Name</label>
+						<input type="text" class="wpdf-input" name="field[][name]">
+					</div>
+				</div>
+				<div class="wpdf-field-row">
+					<div class="wpdf-col wpdf-col__half">
+						<label for="" class="wpdf-label">Label</label>
+						<input type="text" class="wpdf-input" name="field[][label]">
+					</div>
+					<div class="wpdf-col wpdf-col__half">
+						<label for="" class="wpdf-label">Placeholder</label>
+						<input type="text" class="wpdf-input" name="field[][placeholder]">
+					</div>
+				</div>
+
+				<div class="wpdf-field-row">
+					<div class="wpdf-col wpdf-col__half">
+						<label for="" class="wpdf-label">Order</label>
+						<input type="text" class="wpdf-input" name="field[][order]">
+					</div>
+				</div>
+
+				<?php
+				// specific fields based on field type
+				switch($field):
+					case 'text':
+						?>
+				<div class="wpdf-field-row">
+					<div class="wpdf-col wpdf-col__half">
+						<label for="" class="wpdf-label">Default Value</label>
+						<input type="text" class="wpdf-input" name="field[][default]">
+					</div>
+				</div>
+						<?php
+						break;
+					case 'textarea':
+						?>
+						<div class="wpdf-field-row">
+							<div class="wpdf-col wpdf-col__full">
+								<label for="" class="wpdf-label">Default Value</label>
+								<textarea class="wpdf-input" name="field[][default]"></textarea>
+							</div>
+						</div>
+						<?php
+						break;
+					case 'dropdown':
+					case 'radio':
+					case 'checkbox':
+						?>
+						<div class="wpdf-field-row">
+							<div class="wpdf-col wpdf-col__full">
+
+								<strong>Values</strong>
+
+								<table width="100%">
+									<tr>
+										<th>Name</th>
+										<th>Value</th>
+										<th>Default?</th>
+										<th>_</th>
+									</tr>
+									<tr>
+										<td><input type="text" class="wpdf-input" name="field[][value_labels][]"></td>
+										<td><input type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+										<td><input type="checkbox" name="field[][value_default][]"></td>
+										<td>
+											<a href="#">+</a>
+											<a href="#">-</a>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+						</div>
+						<?php
+						break;
+				endswitch;
+				// add-on fields
+				?>
+				<div class="wpdf-clear"></div>
+			</div>
+		</div>
 		<?php
 	}
 }
