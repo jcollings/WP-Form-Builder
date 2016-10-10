@@ -14,11 +14,13 @@ class WPDF_Admin{
 		add_action( 'admin_menu', array($this, 'wpdf_register_pages'));
 		add_action('admin_init', array( $this, 'init'));
 		add_action('init', array($this, 'update_check'));
+		add_action('init', array($this, 'register_form_post_type'));
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
 	}
 
 	function enqueue_scripts(){
-		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/main.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), WPDF()->get_version());
+		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), WPDF()->get_version());
+		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), WPDF()->get_version());
 	}
 
 	function wpdf_register_pages(){
@@ -47,6 +49,16 @@ class WPDF_Admin{
 			wp_redirect($url);
 			exit();
 		}
+
+		if(isset($_POST['wpdf-action'])){
+
+			switch($_POST['wpdf-action']){
+				case 'edit-form':
+
+					// process data
+					break;
+			}
+		}
 	}
 
 	function update_check(){
@@ -64,6 +76,19 @@ class WPDF_Admin{
 			'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
 		);
 		new WP_GitHub_Updater($config);
+	}
+
+	function register_form_post_type(){
+		$args = array(
+			'public' => false,
+			'supports' => array(
+				'title',
+				'editor',
+				'author',
+				'revisions'
+			)
+		);
+		register_post_type( 'wpdf_form', $args );
 	}
 
 	function wpdf_form_page(){
@@ -220,15 +245,24 @@ class WPDF_Admin{
 		$wpdf_forms_table->display();
 	}
 
-	private function display_manage_form($form = false){
+	/**
+	 * @param string $form
+	 */
+	private function display_manage_form($form = null){
 
 		$available_fields = array('text', 'textarea', 'dropdown', 'checkbox', 'radio');
 
 		?>
+		<form action="" method="post">
+
+			<input type="hidden" name="wpdf-action" value="edit-form" />
+			<input type="hidden" name="wpdf-form" value="<?php echo $form; ?>" />
 		<div class="wpdf-form-manager">
 
 			<div class="wpdf-header">
-
+				<div class="wpdf-form-actions">
+					<input type="submit" value="Update" />
+				</div>
 			</div>
 			<div class="wpdf-cols">
 				<div class="wpdf-left">
@@ -238,9 +272,8 @@ class WPDF_Admin{
 <!--								<li class="placeholder">Drop field here to add to the form</li>-->
 
 								<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
-									<?php $this->display_field_panel('text', true); ?>
+									<?php $this->display_field_panel('dropdown', true); ?>
 								</li>
-
 
 							</ul>
 						</div>
@@ -268,6 +301,7 @@ class WPDF_Admin{
 
 			<div class="wpdf-clear"></div>
 		</div>
+		</form>
 
 		<div id="field-placeholder" style="display:none;">
 			<?php
@@ -276,202 +310,6 @@ class WPDF_Admin{
 			}
 			?>
 		</div>
-
-		<style>
-			.wpdf-form-manager{
-				border:1px solid #dedede;
-			}
-			.wpdf-header{
-				height: 70px;
-				background: #FFF;
-				width: 100%;
-				border-bottom:1px solid #dedede;
-			}
-			.wpdf-clear{
-				clear:both;
-			}
-			.wpdf-cols{
-				display: table;
-				width: 100%;
-			}
-			.wpdf-left, .wpdf-right{
-				/*float:left;*/
-				min-height: 500px;
-				display: table-cell;
-				vertical-align: top;
-			}
-			.wpdf-left{
-				background: #f7f7f7;
-				width: 70%;
-			}
-			.wpdf-right{
-				background: #ececec;
-				width: 30%;
-			}
-
-			/**/
-			.wpdf-panel{
-				background: #f7f7f7;
-			}
-			.wpdf-panel--active .wpdf-panel__content{
-				display: block;
-			}
-			.wpdf-panel__header{
-				padding:15px;
-				border-bottom:1px solid #ececec;
-			}
-			.wpdf-panel__title{
-				font-size:14px;
-				margin: 0;
-				padding: 0;
-			}
-			.wpdf-panel__content{
-				display: none;
-				margin: 7px;
-			}
-
-			.wpdf-right__inside, .wpdf-left__inside{
-				margin: 20px;
-			}
-
-			.wpdf-field-list{
-				margin: 0 0 7px;
-				padding:0;
-				list-style: none;
-				overflow: hidden;
-			}
-			.wpdf-field-list li{
-				margin: 0;
-				padding: 0;
-				width: 50%;
-				float:left;
-			}
-			.wpdf-field-list a{
-				background: #ececec;
-				padding: 15px 0;
-				margin: 7px;
-				display: block;
-				text-align: center;
-				text-decoration: none;
-				color: #444444;
-			}
-
-			/**/
-
-			#sortable {
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-				min-height: 50px;
-			}
-			#sortable li {
-				margin:5px 0;
-			}
-			/*.ui-state-default{
-				background: #999;
-				width: 100%;
-				position: relative;
-			}*/
-			/*.wpdf-fields .ui-state-highlight {
-				background: #999999;
-				height: 20px;
-				width: 100%;
-			}*/
-			
-			/**
-			**/
-			.wpdf-fields .wpdf-panel{
-				background: #ffffff;
-			}
-			.wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
-				border: 1px solid #ececec;
-			}
-			.wpdf-fields .wpdf-panel--active .wpdf-panel__header{
-				border-left: none;
-				border-top: none;
-				border-right: none;
-			}
-			.wpdf-fields .wpdf-panel__content{
-				margin: 15px;
-			}
-			/*.wpdf-fields .placeholder{
-				border: 1px dashed #999999;
-				padding: 15px;
-			}*/
-
-			/*The element used to show the future position of the item currently being sorted.*/
-			/*.ui-sortable-placeholder{
-				margin: 10px;
-				background: red;
-			}*/
-
-			/*The element shown while dragging a sortable item. The element actually used depends on the*/
-			.ui-sortable-helper{
-				background: yellow;
-				padding: 0;
-				margin:0;
-			}
-
-
-			/*The handle of each sortable item, specified using the handle option. By default, each sortable item itself is also the handle.*/
-			/*.ui-sortable-handle{
-				margin: 10px;
-				background: green;
-			}*/
-
-			/*The sortable element.*/
-			.ui-sortable{
-				margin: 10px;
-				background: none;
-			}
-
-			/*.wpdf-dropped-item{
-				margin: 10px;
-				background: cyan;
-			}*/
-
-			.sortable-placeholder{
-				height: 30px;
-				border: 1px dashed #b4b9be;
-			}
-
-			/**
-			 * Form Fields
-			 */
-			.wpdf-field-row{
-				width: 104%;
-				clear:both;
-				margin: 0 -2%;
-			}
-
-			.wpdf-field-row .wpdf-col{
-				float: left;
-				margin-bottom:10px;
-			}
-
-			.wpdf-col.wpdf-col__half{
-				width: 46%;
-				margin-left: 2%;
-				margin-right: 2%;
-			}
-
-			.wpdf-col.wpdf-col__full{
-				width: 96%;
-				margin-left: 2%;
-				margin-right: 2%;
-			}
-
-			.wpdf-col .wpdf-label{
-				width: 100%;
-				display: block;
-			}
-
-			.wpdf-col .wpdf-input{
-				width: 100%;
-				box-sizing: border-box;
-			}
-
-		</style>
 		<?php
 	}
 
@@ -543,21 +381,25 @@ class WPDF_Admin{
 								<strong>Values</strong>
 
 								<table width="100%">
+									<thead>
 									<tr>
 										<th>Name</th>
 										<th>Value</th>
 										<th>Default?</th>
 										<th>_</th>
 									</tr>
-									<tr>
-										<td><input type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-										<td><input type="text" class="wpdf-input" name="field[][value_keys][]"></td>
-										<td><input type="checkbox" name="field[][value_default][]"></td>
+									</thead>
+									<tbody class="wpdf-repeater" data-template-name="field_value_repeater">
+									<tr class="wpdf-repeater-row wpdf-repeater__template">
+										<td><input title="Name" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
+										<td><input title="Value" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+										<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
 										<td>
-											<a href="#">+</a>
-											<a href="#">-</a>
+											<a href="#" class="wpdf-add-row button">+</a>
+											<a href="#" class="wpdf-del-row button">-</a>
 										</td>
 									</tr>
+									</tbody>
 								</table>
 
 							</div>

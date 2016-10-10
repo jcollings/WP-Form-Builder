@@ -1,0 +1,202 @@
+.wpdf-form-manager{
+    border:1px solid #dedede;
+}
+.wpdf-header{
+    height: 70px;
+    background: #FFF;
+    width: 100%;
+    border-bottom:1px solid #dedede;
+}
+.wpdf-clear{
+    clear:both;
+}
+.wpdf-cols{
+    display: table;
+    width: 100%;
+}
+.wpdf-left, .wpdf-right{
+    /*float:left;*/
+    min-height: 500px;
+    display: table-cell;
+    vertical-align: top;
+}
+.wpdf-left{
+    background: #f7f7f7;
+    width: 70%;
+}
+.wpdf-right{
+    background: #ececec;
+    width: 30%;
+}
+
+/**/
+.wpdf-panel{
+    background: #f7f7f7;
+}
+.wpdf-panel--active .wpdf-panel__content{
+    display: block;
+}
+.wpdf-panel__header{
+    padding:15px;
+    border-bottom:1px solid #ececec;
+}
+.wpdf-panel__title{
+    font-size:14px;
+    margin: 0;
+    padding: 0;
+}
+.wpdf-panel__content{
+    display: none;
+    margin: 7px;
+}
+
+.wpdf-right__inside, .wpdf-left__inside{
+    margin: 20px;
+}
+
+.wpdf-field-list{
+    margin: 0 0 7px;
+    padding:0;
+    list-style: none;
+    overflow: hidden;
+}
+.wpdf-field-list li{
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    float:left;
+}
+.wpdf-field-list a{
+    background: #ececec;
+    padding: 15px 0;
+    margin: 7px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #444444;
+}
+
+/**/
+
+#sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    min-height: 50px;
+}
+#sortable li {
+    margin:5px 0;
+}
+/*.ui-state-default{
+    background: #999;
+    width: 100%;
+    position: relative;
+}*/
+/*.wpdf-fields .ui-state-highlight {
+    background: #999999;
+    height: 20px;
+    width: 100%;
+}*/
+
+/**
+**/
+.wpdf-fields .wpdf-panel{
+    background: #ffffff;
+}
+.wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
+    border: 1px solid #ececec;
+}
+.wpdf-fields .wpdf-panel--active .wpdf-panel__header{
+    border-left: none;
+    border-top: none;
+    border-right: none;
+}
+.wpdf-fields .wpdf-panel__content{
+    margin: 15px;
+}
+/*.wpdf-fields .placeholder{
+    border: 1px dashed #999999;
+    padding: 15px;
+}*/
+
+/*The element used to show the future position of the item currently being sorted.*/
+/*.ui-sortable-placeholder{
+    margin: 10px;
+    background: red;
+}*/
+
+/*The element shown while dragging a sortable item. The element actually used depends on the*/
+.ui-sortable-helper{
+    background: yellow;
+    padding: 0;
+    margin:0;
+}
+
+
+/*The handle of each sortable item, specified using the handle option. By default, each sortable item itself is also the handle.*/
+/*.ui-sortable-handle{
+    margin: 10px;
+    background: green;
+}*/
+
+/*The sortable element.*/
+.ui-sortable{
+    margin: 10px;
+    background: none;
+}
+
+/*.wpdf-dropped-item{
+    margin: 10px;
+    background: cyan;
+}*/
+
+.sortable-placeholder{
+    height: 30px;
+    border: 1px dashed #b4b9be;
+}
+
+/**
+ * Form Fields
+ */
+.wpdf-field-row{
+    width: 104%;
+    clear:both;
+    margin: 0 -2%;
+}
+
+.wpdf-field-row .wpdf-col{
+    float: left;
+    margin-bottom:10px;
+}
+
+.wpdf-col.wpdf-col__half{
+    width: 46%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.wpdf-col.wpdf-col__full{
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.wpdf-col .wpdf-label{
+    width: 100%;
+    display: block;
+}
+
+.wpdf-col .wpdf-input{
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/**
+ * Repeater value field
+ */
+.wpdf-repeater .wpdf-repeater-row .wpdf-del-row{
+    display: none;
+}
+.wpdf-repeater .wpdf-repeater-row + .wpdf-repeater-row .wpdf-del-row{
+    display: inline-block;
+}
