@@ -96,6 +96,7 @@ class WPDF_DeveloperForms {
 	public function includes(){
 
 		include_once 'libs/class-wpdf-form.php';
+		include_once 'libs/class-wpdf-db-form.php';
 		include_once 'libs/class-wpdf-form-data.php';
 		include_once 'libs/class-wpdf-form-field.php';
 		include_once 'libs/class-wpdf-validation.php';

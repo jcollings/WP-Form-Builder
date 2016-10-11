@@ -13,6 +13,8 @@ class WPDF_FormField{
 	protected $_label;
 	protected $_args;
 	protected $_default;
+	protected $_placeholder;
+	protected $_options;
 
 	public function __construct($name, $type, $args = array()) {
 		$this->_name = $name;
@@ -26,6 +28,8 @@ class WPDF_FormField{
 		}
 
 		$this->_default = isset($args['default']) ? $args['default'] : false;
+		$this->_placeholder = isset($args['placeholder']) ? $args['placeholder'] : false;
+		$this->_options = isset($args['options']) && is_array($args['options']) ? $args['options'] : false;
 	}
 
 	/**
@@ -173,6 +177,14 @@ class WPDF_FormField{
 	 */
 	public function getName() {
 		return $this->_name;
+	}
+
+	public function getPlaceholder(){
+		return $this->_placeholder;
+	}
+
+	public function getOptions(){
+		return $this->_options;
 	}
 
 	public function getId(){

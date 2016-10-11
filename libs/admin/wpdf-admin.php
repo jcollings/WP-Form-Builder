@@ -55,6 +55,8 @@ class WPDF_Admin{
 			switch($_POST['wpdf-action']){
 				case 'edit-form':
 
+					$this->save_form();
+
 					// process data
 					break;
 			}
@@ -96,12 +98,18 @@ class WPDF_Admin{
 		echo '<div class="wrap wpdf">';
 
 		$form = isset($_GET['form']) ? wpdf_get_form($_GET['form']) : false;
+		$form_id = isset($_GET['form_id']) ? intval($_GET['form_id']) : false;
 		$submission_id = isset($_GET['submission']) ? $_GET['submission'] : false;
 		$action = isset($_GET['action']) ? $_GET['action'] : false;
 
-		if( $action == 'new' || ( $action == 'manage' && $form ) ){
+		if( $action == 'new' ) {
 
-			$this->display_manage_form($form);
+			$this->display_manage_form( $form );
+
+		}elseif ( $action == 'manage' && $form_id ){
+
+			$form = new WPDF_DB_Form($form_id);
+			$this->display_manage_form( $form );
 
 		}elseif($form) {
 
@@ -246,17 +254,23 @@ class WPDF_Admin{
 	}
 
 	/**
-	 * @param string $form
+	 * @param WPDF_DB_Form $form
 	 */
-	private function display_manage_form($form = null){
+	private function display_manage_form($form = false){
 
-		$available_fields = array('text', 'textarea', 'dropdown', 'checkbox', 'radio');
+		$available_fields = array('text', 'textarea', 'select', 'checkbox', 'radio');
+		$form_id = '';
+		$fields = array();
+		if($form !== false){
+			$form_id = $form->getDbId();
+			$fields = $form->getFields();
+		}
 
 		?>
 		<form action="" method="post">
 
 			<input type="hidden" name="wpdf-action" value="edit-form" />
-			<input type="hidden" name="wpdf-form" value="<?php echo $form; ?>" />
+			<input type="hidden" name="wpdf-form" value="<?php echo $form_id; ?>" />
 		<div class="wpdf-form-manager">
 
 			<div class="wpdf-header">
@@ -269,11 +283,25 @@ class WPDF_Admin{
 					<div class="wpdf-left__inside">
 						<div class="wpdf-fields">
 							<ul id="sortable">
-<!--								<li class="placeholder">Drop field here to add to the form</li>-->
+								<?php if(empty($fields)): ?>
+									<li class="placeholder">Drop field here to add to the form</li>
+								<?php else: ?>
 
-								<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
-									<?php $this->display_field_panel('dropdown', true); ?>
-								</li>
+									<?php
+									foreach($fields as $field):
+										?>
+										<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
+											<?php $this->display_field_panel($field); ?>
+										</li>
+										<?php
+									endforeach;
+									?>
+
+
+
+								<?php endif; ?>
+
+
 
 							</ul>
 						</div>
@@ -313,44 +341,48 @@ class WPDF_Admin{
 		<?php
 	}
 
+	/**
+	 * @param WPDF_FormField|string $field
+	 * @param bool $active
+	 */
 	private function display_field_panel($field, $active = false){
+
+		if(is_string($field)){
+			$field = new WPDF_FormField('', $field);
+		}
+
+		$field_type = $field->getType();
+
 		?>
-		<div class="wpdf-panel <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field; ?>">
+		<div class="wpdf-panel <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 			<div class="wpdf-panel__header">
-				Field: <?php echo ucfirst($field); ?>
+				Field: <?php echo ucfirst($field_type); ?>
+				 - <a href="#delete" class="wpdf-del-field">Delete</a>
 			</div>
 			<div class="wpdf-panel__content">
+
+				<?php
+				// hidden fields
+				?>
+				<input type="hidden" name="field[][type]" value="<?php echo $field_type; ?>" />
 
 				<?php
 				// general fields
 				?>
 				<div class="wpdf-field-row">
 					<div class="wpdf-col wpdf-col__half">
-						<label for="" class="wpdf-label">Name</label>
-						<input type="text" class="wpdf-input" name="field[][name]">
-					</div>
-				</div>
-				<div class="wpdf-field-row">
-					<div class="wpdf-col wpdf-col__half">
 						<label for="" class="wpdf-label">Label</label>
-						<input type="text" class="wpdf-input" name="field[][label]">
+						<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->getLabel(); ?>">
 					</div>
 					<div class="wpdf-col wpdf-col__half">
 						<label for="" class="wpdf-label">Placeholder</label>
-						<input type="text" class="wpdf-input" name="field[][placeholder]">
-					</div>
-				</div>
-
-				<div class="wpdf-field-row">
-					<div class="wpdf-col wpdf-col__half">
-						<label for="" class="wpdf-label">Order</label>
-						<input type="text" class="wpdf-input" name="field[][order]">
+						<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->getPlaceholder(); ?>">
 					</div>
 				</div>
 
 				<?php
 				// specific fields based on field type
-				switch($field):
+				switch($field_type):
 					case 'text':
 						?>
 				<div class="wpdf-field-row">
@@ -371,7 +403,7 @@ class WPDF_Admin{
 						</div>
 						<?php
 						break;
-					case 'dropdown':
+					case 'select':
 					case 'radio':
 					case 'checkbox':
 						?>
@@ -383,22 +415,53 @@ class WPDF_Admin{
 								<table width="100%">
 									<thead>
 									<tr>
-										<th>Name</th>
-										<th>Value</th>
+										<th>Label</th>
+										<th>Key</th>
 										<th>Default?</th>
 										<th>_</th>
 									</tr>
 									</thead>
 									<tbody class="wpdf-repeater" data-template-name="field_value_repeater">
-									<tr class="wpdf-repeater-row wpdf-repeater__template">
-										<td><input title="Name" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-										<td><input title="Value" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
-										<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
-										<td>
-											<a href="#" class="wpdf-add-row button">+</a>
-											<a href="#" class="wpdf-del-row button">-</a>
-										</td>
-									</tr>
+									<?php
+									$options = $field->getOptions();
+									if(!empty($options)) {
+										foreach ( $options as $key => $option ) {
+											?>
+											<tr class="wpdf-repeater-row wpdf-repeater__template">
+												<td><input title="Label" type="text" class="wpdf-input"
+												           name="field[][value_labels][]" value="<?php echo $option; ?>" /></td>
+												<td><input title="Key" type="text" class="wpdf-input"
+												           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
+												<td><input title="Default?" type="checkbox"
+												           name="field[][value_default][]" <?php
+													$default = $field->getDefaultValue();
+													if(is_array($default)){
+														checked(in_array($key, $default), true, true);
+													}else{
+														checked($key, $default, true);
+													}
+													?> /></td>
+												<td>
+													<a href="#" class="wpdf-add-row button">+</a>
+													<a href="#" class="wpdf-del-row button">-</a>
+												</td>
+											</tr>
+											<?php
+										}
+									}else{
+										?>
+										<tr class="wpdf-repeater-row wpdf-repeater__template">
+											<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
+											<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+											<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
+											<td>
+												<a href="#" class="wpdf-add-row button">+</a>
+												<a href="#" class="wpdf-del-row button">-</a>
+											</td>
+										</tr>
+										<?php
+									}
+									?>
 									</tbody>
 								</table>
 
@@ -414,6 +477,86 @@ class WPDF_Admin{
 		</div>
 		<?php
 	}
+
+	private function save_form(){
+
+		$form_id = null;
+		$old_form = null;
+
+		if(intval($_POST['wpdf-form']) > 0){
+			$form_id = intval($_POST['wpdf-form']);
+			$type = get_post_type($form_id);
+			if($type !== 'wpdf_form'){
+				wp_redirect(admin_url('admin.php?page=wpdf-forms&action=new'));
+				exit();
+			}
+		}
+
+		$fields = array();
+
+		foreach($_POST['field'] as $field){
+			$fields[] = $this->save_field($field);
+		}
+
+		$postarr = array(
+			'post_type' => 'wpdf_form',
+			'post_status' => 'publish'
+		);
+
+		// update existing post
+		if(!is_null($form_id)){
+			$postarr['ID'] = $form_id;
+			$postarr['post_author'] = get_current_user_id();
+		}
+
+		$postarr['post_content'] = json_encode(array(
+			'fields' => $fields
+		));
+
+		$post = wp_insert_post($postarr, true);
+		if(!is_wp_error($post)){
+			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $post));
+			exit();
+		}
+
+		die();
+	}
+
+	private function save_field($field){
+
+		$data = array(
+			'type' => $field['type'],
+			'label' => $field['label'],
+			'placeholder' => isset($field['placeholder']) ? $field['placeholder'] : '',
+			'default' => isset($field['default']) ? $field['default'] : ''
+		);
+
+		switch($field['type']){
+			case 'select':
+			case 'radio':
+			case 'checkbox':
+
+				$options = array();
+				$defaults = array();
+				foreach($field['value_labels'] as $arr_id => $label){
+					$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
+					$options[$option_key] = $label;
+
+					if(isset($field['value_default'][$arr_id])){
+						$defaults[] = $option_key;
+					}
+				}
+
+				$data['options'] = $options;
+				$data['default'] = $defaults;
+
+				break;
+		}
+
+		return $data;
+	}
+
+
 }
 
 new WPDF_Admin();
