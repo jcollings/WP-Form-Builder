@@ -51,6 +51,8 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		return ob_get_clean();
 	}
 
+	#region text field
+
 	public function testTextField(){
 
 		$form = new WPDF_Form("TestForm", array(
@@ -69,4 +71,30 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		$data = new WPDF_FormData($form, array($field->getInputName() => 'test value', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => 'test value')));
 	}
+
+	public function testTextFieldDefault(){
+
+		$form = new WPDF_Form("TestForm", array(
+			'fname' => array(
+				'type' => 'text',
+				'default' => 'asd'
+			)
+		));
+
+		$field = $form->getField('fname');
+
+		// default value displayed for non submitted form
+		$data = new WPDF_FormData($form, array(), array());
+		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => 'asd')));
+
+		// default value is not forced for submitted form without value
+		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
+		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => '')));
+
+		// default value is not forced for submitted form with value
+		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm', $field->getInputName() => 'test-value'), array());
+		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array('type' => 'text', 'name' => $field->getInputName(), 'value' => 'test-value')));
+	}
+
+	#endregion
 }
