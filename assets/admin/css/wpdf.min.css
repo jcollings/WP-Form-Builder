@@ -29,6 +29,32 @@
     width: 30%;
 }
 
+/**
+ * Settings Header
+ */
+.wpdf-header{
+    position: relative;
+}
+.wpdf-header__links{
+    list-style: none;
+    margin: 0;
+    padding:0 200px 0 0;
+}
+.wpdf-header__links li{
+    display: inline-block;
+    padding: 26px 30px;
+    margin: 0;
+}
+.wpdf-header__actions{
+    position: absolute;
+    right: 20px;
+    top:50%;
+    margin-top: -20px;
+}
+.wpdf-header__actions input, .wpdf-header__actions button{
+    height: 40px;
+}
+
 /**/
 .wpdf-panel{
     background: #f7f7f7;

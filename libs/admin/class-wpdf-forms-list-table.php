@@ -48,7 +48,9 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 			foreach ( $forms as $form_id => $form ) {
 
 				$row            = new stdClass();
-				$row->form_name = $form_id;
+				$row->form_name = $form->getName();
+
+				$row->ID = $form->getId();
 
 				$count             = $db->get_form_count( $form_id );
 				$row->form_entries = $count[0];
@@ -83,13 +85,39 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 		foreach($this->items as $item){
 
+			$formParam = '&form=' . $item->form_name;
+			if(isset($item->ID)){
+				$formParam = '&form_id=' . $item->ID;
+			}
+
 			echo '<tr>';
 
 			foreach($columns as $column_name => $column_display_name){
 
 				switch($column_name){
 					case 'col_form_name':
-						echo '<td><strong><a href="'.admin_url('admin.php?page=wpdf-forms&form=' . $item->form_name).'">' . $item->form_name . '</a></strong></td>';
+
+
+						$link = admin_url('admin.php?page=wpdf-forms&action=entries' . $formParam );
+						$entry_str = '<strong><a href="'. $link .'">' . $item->form_name . '</a></strong>';
+						$del_link = admin_url('admin.php?page=wpdf-forms&action=delete' . $formParam );
+
+						$links = array();
+
+						if(isset($item->ID)){
+							$links[] = '<span class="edit"><a href="'.admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $item->ID).'" aria-label="View">Edit</a></span>';
+							$links[] = '<span class="edit"><a href="'.admin_url('admin.php?page=wpdf-forms&action=settings&form_id=' . $item->ID).'" aria-label="Settings">Settings</a></span>';
+							$links[] = '<span class="edit"><a href="'.admin_url('admin.php?page=wpdf-forms&action=notifications&form_id=' . $item->ID).'" aria-label="Notifications">Notifications</a></span>';
+							$links[] = '<span class="edit"><a href="'.$link.'" aria-label="View">View</a></span>';
+							$links[] = '<span class="delete"><a href="'.$del_link.'" aria-label="Delete">Delete</a></span>';
+						}
+
+						echo '<td>';
+						echo $entry_str;
+						if(!empty($links)){
+							echo '<div class="row-actions">' . implode( ' | ', $links ) .'</div>';
+						}
+						echo '</td>';
 						break;
 					case 'col_form_entries':
 						echo sprintf('<td>%d <strong>(%d unread)</strong></td>', $item->form_entries, $item->unread_count);

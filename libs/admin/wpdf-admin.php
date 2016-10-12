@@ -53,11 +53,15 @@ class WPDF_Admin{
 		if(isset($_POST['wpdf-action'])){
 
 			switch($_POST['wpdf-action']){
-				case 'edit-form':
+				case 'edit-form-fields':
 
-					$this->save_form();
-
+					$this->save_form_fields();
 					// process data
+					break;
+				case 'edit-form-notifications':
+				case 'edit-form-settings':
+					var_dump($_POST);
+					die();
 					break;
 			}
 		}
@@ -110,6 +114,16 @@ class WPDF_Admin{
 
 			$form = new WPDF_DB_Form($form_id);
 			$this->display_manage_form( $form );
+
+		}elseif ( $action == 'notifications' && $form_id ){
+
+			$form = new WPDF_DB_Form($form_id);
+			$this->display_notifications_form( $form );
+
+		}elseif ( $action == 'settings' && $form_id ){
+
+			$form = new WPDF_DB_Form($form_id);
+			$this->display_settings_form( $form );
 
 		}elseif($form) {
 
@@ -254,94 +268,50 @@ class WPDF_Admin{
 	}
 
 	/**
-	 * @param WPDF_DB_Form $form
+	 * Display forms edit header
+	 *
+	 * @param string $active
+	 * @param WPDF_Form $form
 	 */
-	private function display_manage_form($form = false){
+	private function display_form_header($active = 'fields', $form){
 
-		$available_fields = array('text', 'textarea', 'select', 'checkbox', 'radio');
-		$form_id = '';
-		$fields = array();
-		if($form !== false){
-			$form_id = $form->getDbId();
-			$fields = $form->getFields();
-		}
-
-		?>
-		<form action="" method="post">
-
-			<input type="hidden" name="wpdf-action" value="edit-form" />
-			<input type="hidden" name="wpdf-form" value="<?php echo $form_id; ?>" />
-		<div class="wpdf-form-manager">
-
-			<div class="wpdf-header">
-				<div class="wpdf-form-actions">
-					<input type="submit" value="Update" />
-				</div>
-			</div>
-			<div class="wpdf-cols">
-				<div class="wpdf-left">
-					<div class="wpdf-left__inside">
-						<div class="wpdf-fields">
-							<ul id="sortable">
-								<?php if(empty($fields)): ?>
-									<li class="placeholder">Drop field here to add to the form</li>
-								<?php else: ?>
-
-									<?php
-									foreach($fields as $field):
-										?>
-										<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
-											<?php $this->display_field_panel($field); ?>
-										</li>
-										<?php
-									endforeach;
-									?>
-
-
-
-								<?php endif; ?>
-
-
-
-							</ul>
-						</div>
-					</div>
-
-				</div>
-				<div class="wpdf-right">
-					<div class="wpdf-right__inside">
-						<div class="wpdf-panel wpdf-panel--active">
-							<div class="wpdf-panel__header">
-								<p class="wpdf-panel__title">Available Fields</p>
-							</div>
-							<div class="wpdf-panel__content">
-								<ul class="wpdf-field-list">
-									<?php foreach($available_fields as $field): ?>
-									<li class="draggable ui-state-highlight" data-field="<?php echo $field; ?>"><a href="#"><?php echo ucfirst($field); ?></a></li>
-									<?php endforeach; ?>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-			<div class="wpdf-clear"></div>
-		</div>
-		</form>
-
-		<div id="field-placeholder" style="display:none;">
-			<?php
-			foreach($available_fields as $field){
-				$this->display_field_panel($field);
-			}
-			?>
-		</div>
-		<?php
+		require WPDF()->get_plugin_dir() . 'templates/admin/settings-header.php';
 	}
 
 	/**
+	 * Display form notifications page
+	 *
+	 * @param WPDF_DB_Form|bool $form
+	 */
+	private function display_notifications_form($form = false){
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-notifications.php';
+	}
+
+	/**
+	 * Display form settings page
+	 *
+	 * @param WPDF_DB_Form|bool $form
+	 */
+	private function display_settings_form($form = false){
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-settings.php';
+
+	}
+
+	/**
+	 * Display form fields page
+	 *
+	 * @param WPDF_DB_Form|bool $form
+	 */
+	private function display_manage_form($form = false){
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-fields.php';
+	}
+
+	/**
+	 * Display form field panel
+	 *
 	 * @param WPDF_FormField|string $field
 	 * @param bool $active
 	 */
@@ -351,133 +321,10 @@ class WPDF_Admin{
 			$field = new WPDF_FormField('', $field);
 		}
 
-		$field_type = $field->getType();
-
-		?>
-		<div class="wpdf-panel <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
-			<div class="wpdf-panel__header">
-				Field: <?php echo ucfirst($field_type); ?>
-				 - <a href="#delete" class="wpdf-del-field">Delete</a>
-			</div>
-			<div class="wpdf-panel__content">
-
-				<?php
-				// hidden fields
-				?>
-				<input type="hidden" name="field[][type]" value="<?php echo $field_type; ?>" />
-
-				<?php
-				// general fields
-				?>
-				<div class="wpdf-field-row">
-					<div class="wpdf-col wpdf-col__half">
-						<label for="" class="wpdf-label">Label</label>
-						<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->getLabel(); ?>">
-					</div>
-					<div class="wpdf-col wpdf-col__half">
-						<label for="" class="wpdf-label">Placeholder</label>
-						<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->getPlaceholder(); ?>">
-					</div>
-				</div>
-
-				<?php
-				// specific fields based on field type
-				switch($field_type):
-					case 'text':
-						?>
-				<div class="wpdf-field-row">
-					<div class="wpdf-col wpdf-col__half">
-						<label for="" class="wpdf-label">Default Value</label>
-						<input type="text" class="wpdf-input" name="field[][default]">
-					</div>
-				</div>
-						<?php
-						break;
-					case 'textarea':
-						?>
-						<div class="wpdf-field-row">
-							<div class="wpdf-col wpdf-col__full">
-								<label for="" class="wpdf-label">Default Value</label>
-								<textarea class="wpdf-input" name="field[][default]"></textarea>
-							</div>
-						</div>
-						<?php
-						break;
-					case 'select':
-					case 'radio':
-					case 'checkbox':
-						?>
-						<div class="wpdf-field-row">
-							<div class="wpdf-col wpdf-col__full">
-
-								<strong>Values</strong>
-
-								<table width="100%">
-									<thead>
-									<tr>
-										<th>Label</th>
-										<th>Key</th>
-										<th>Default?</th>
-										<th>_</th>
-									</tr>
-									</thead>
-									<tbody class="wpdf-repeater" data-template-name="field_value_repeater">
-									<script type="text/html" class="wpdf-repeater-template">
-										<tr class="wpdf-repeater-row wpdf-repeater__template">
-											<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-											<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
-											<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
-											<td>
-												<a href="#" class="wpdf-add-row button">+</a>
-												<a href="#" class="wpdf-del-row button">-</a>
-											</td>
-										</tr>
-									</script>
-									<?php
-									$options = $field->getOptions();
-									if(!empty($options)) {
-										foreach ( $options as $key => $option ) {
-											?>
-											<tr class="wpdf-repeater-row wpdf-repeater__template">
-												<td><input title="Label" type="text" class="wpdf-input"
-												           name="field[][value_labels][]" value="<?php echo $option; ?>" /></td>
-												<td><input title="Key" type="text" class="wpdf-input"
-												           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
-												<td><input title="Default?" type="checkbox"
-												           name="field[][value_default][]" <?php
-													$default = $field->getDefaultValue();
-													if(is_array($default)){
-														checked(in_array($key, $default), true, true);
-													}else{
-														checked($key, $default, true);
-													}
-													?> /></td>
-												<td>
-													<a href="#" class="wpdf-add-row button">+</a>
-													<a href="#" class="wpdf-del-row button">-</a>
-												</td>
-											</tr>
-											<?php
-										}
-									}
-									?>
-									</tbody>
-								</table>
-
-							</div>
-						</div>
-						<?php
-						break;
-				endswitch;
-				// add-on fields
-				?>
-				<div class="wpdf-clear"></div>
-			</div>
-		</div>
-		<?php
+		require WPDF()->get_plugin_dir() . 'templates/admin/field-panel.php';
 	}
 
-	private function save_form(){
+	private function save_form_fields(){
 
 		$form_id = null;
 		$old_form = null;

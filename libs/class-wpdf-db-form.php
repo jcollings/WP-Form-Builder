@@ -8,8 +8,6 @@
 
 class WPDF_DB_Form extends WPDF_Form {
 
-	protected $ID = null;
-
 	public function __construct( $form_id = null ) {
 
 		$form_id = intval($form_id);
@@ -22,6 +20,6 @@ class WPDF_DB_Form extends WPDF_Form {
 	}
 
 	public function getDbId(){
-		return $this->ID;
+		return $this->getId();
 	}
 }

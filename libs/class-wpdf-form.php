@@ -9,6 +9,9 @@ class WPDF_Form{
 	 * @var WPDF_FormData
 	 */
 	protected $_data = null;
+
+	protected $ID = null;
+
 	protected $_name = null;
 
 	// field errors
@@ -537,6 +540,10 @@ class WPDF_Form{
 	 */
 	public function getName() {
 		return $this->_name;
+	}
+
+	public function getId(){
+		return $this->ID;
 	}
 
 	public function getFieldLabel($field, $fallback = null){

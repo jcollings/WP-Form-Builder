@@ -85,6 +85,7 @@ class WPDF_DeveloperForms {
 		// not in init so function can be called from theme functions file
 		$this->init();
 
+		add_action( 'wp_loaded', array( $this, 'load_db_forms' ), 9 );
 		add_action( 'wp_loaded', array( $this, 'process_form' ) );
 		//add_action( 'init', array( $this, 'init' ) );
 
@@ -245,6 +246,22 @@ class WPDF_DeveloperForms {
 
 	public function get_forms(){
 		return $this->_forms;
+	}
+
+	public function load_db_forms(){
+
+		$query = new WP_Query(array(
+			'post_type' => 'wpdf_form',
+			'posts_per_page' => -1,
+			'fields' => 'ids'
+		));
+
+		if($query->have_posts()){
+			foreach($query->posts as $id){
+				$this->_forms[] = new WPDF_DB_Form($id);
+			}
+		}
+
 	}
 }
 
