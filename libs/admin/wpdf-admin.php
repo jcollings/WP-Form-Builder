@@ -422,6 +422,17 @@ class WPDF_Admin{
 									</tr>
 									</thead>
 									<tbody class="wpdf-repeater" data-template-name="field_value_repeater">
+									<script type="text/html" class="wpdf-repeater-template">
+										<tr class="wpdf-repeater-row wpdf-repeater__template">
+											<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
+											<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+											<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
+											<td>
+												<a href="#" class="wpdf-add-row button">+</a>
+												<a href="#" class="wpdf-del-row button">-</a>
+											</td>
+										</tr>
+									</script>
 									<?php
 									$options = $field->getOptions();
 									if(!empty($options)) {
@@ -448,18 +459,6 @@ class WPDF_Admin{
 											</tr>
 											<?php
 										}
-									}else{
-										?>
-										<tr class="wpdf-repeater-row wpdf-repeater__template">
-											<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-											<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
-											<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
-											<td>
-												<a href="#" class="wpdf-add-row button">+</a>
-												<a href="#" class="wpdf-del-row button">-</a>
-											</td>
-										</tr>
-										<?php
 									}
 									?>
 									</tbody>
