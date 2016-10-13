@@ -21,14 +21,16 @@ function wpdf_shortcode_form( $atts, $content = null ){
 		// ...etc
 	), $atts );
 
-	$form = wpdf_get_form($a['form']);
+	$form_key = $a['form'];
+
+	$form = wpdf_get_form($form_key);
 	if(!$form){
 		return sprintf('<p>%s</p>', __( "Shortcode Error: Form could not be displayed!", "wpdf"));
 	}
 
 	// output form
 	ob_start();
-	wpdf_display_form($a['form']);
+	wpdf_display_form($form_key);
 	return ob_get_clean();
 }
 add_shortcode('wp_form', 'wpdf_shortcode_form');

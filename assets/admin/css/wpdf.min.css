@@ -226,3 +226,17 @@
 .wpdf-repeater .wpdf-repeater-row + .wpdf-repeater-row .wpdf-del-row{
     display: inline-block;
 }
+
+/**
+ * Settings Page
+ */
+
+.wpdf-form-table td{
+    vertical-align: top;
+    padding-left:10px;
+    padding-right:10px;
+}
+.wpdf-form-table input, .wpdf-form-table textarea{
+    width: 100%;
+    max-width: 300px;
+}

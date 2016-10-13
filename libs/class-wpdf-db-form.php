@@ -16,10 +16,45 @@ class WPDF_DB_Form extends WPDF_Form {
 			$this->ID = $form_id;
 			$form = json_decode($post->post_content, true);
 			parent::__construct("Form " . $form_id, $form['fields']);
+
+			// load settings
+			if(isset($form['settings']) && isset($form['settings']['labels']) && isset($form['settings']['labels']['submit'])){
+				$this->settings($form['settings']);
+			}
+
+			// load confirmations
+			if(isset($form['confirmations'])){
+
+				foreach($form['confirmations'] as $confirmation){
+
+					if($confirmation['type'] == 'message'){
+						$this->add_confirmation('message', $confirmation['message']);
+					}elseif($confirmation['type'] == 'redirect'){
+						$this->add_confirmation('redirect', $confirmation['redirect_url']);
+					}
+				}
+			}
 		}
 	}
 
 	public function getDbId(){
 		return $this->getId();
+	}
+
+	public function getName() {
+		return 'WPDF_FORM_' . $this->ID;
+	}
+
+	public function export(){
+
+		if(is_admin()) {
+			$post = get_post( $this->ID );
+			if ( $post && $post->post_type == 'wpdf_form' ) {
+				return json_decode( $post->post_content, true );
+			}
+		}
+
+		return false;
+
 	}
 }

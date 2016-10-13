@@ -170,7 +170,7 @@ class WPDF_Form{
 
 	public function process(){
 
-		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->_name )){
+		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->getName() )){
 			$this->_error = __("An Error occurred when submitting the form, please retry.", "wpdf");
 //			return;
 		}
@@ -458,10 +458,10 @@ class WPDF_Form{
 	 */
 	public function end(){
 
-		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->_name );
+		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->getName() );
 
 		// hidden fields
-		echo '<input type="hidden" name="wpdf_action" value="' . $this->_name .'" />';
+		echo '<input type="hidden" name="wpdf_action" value="' . $this->getName() .'" />';
 		echo '<input type="hidden" name="wpdf_nonce" value="'.$nonce.'" />';
 
 		echo '</form>';
@@ -518,6 +518,7 @@ class WPDF_Form{
 			$this->getConfirmationMessage();
 			return true;
 		}
+
 		return false;
 	}
 

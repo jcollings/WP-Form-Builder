@@ -258,7 +258,7 @@ class WPDF_DeveloperForms {
 
 		if($query->have_posts()){
 			foreach($query->posts as $id){
-				$this->_forms[] = new WPDF_DB_Form($id);
+				$this->_forms['WPDF_FORM_'.$id] = new WPDF_DB_Form($id);
 			}
 		}
 

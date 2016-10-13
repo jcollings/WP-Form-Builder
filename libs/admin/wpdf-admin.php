@@ -56,12 +56,14 @@ class WPDF_Admin{
 				case 'edit-form-fields':
 
 					$this->save_form_fields();
-					// process data
 					break;
 				case 'edit-form-notifications':
+
+					$this->save_form_notifications();
+					break;
 				case 'edit-form-settings':
-					var_dump($_POST);
-					die();
+
+					$this->save_form_settings();
 					break;
 			}
 		}
@@ -324,6 +326,56 @@ class WPDF_Admin{
 		require WPDF()->get_plugin_dir() . 'templates/admin/field-panel.php';
 	}
 
+	private function save_form_settings(){
+
+		$form_id = $_POST['wpdf-form'];
+		$form = get_post($form_id);
+		$form_data = json_decode($form->post_content, true);
+
+		$settings = $_POST['wpdf_settings'];
+
+		// save form settings array
+		if(!isset($form_data['settings'])){
+			$form_data['settings'] = array();
+		}
+
+		$form_data['settings'] = array(
+			'labels' => array(
+				'submit' => $settings['submit_label']
+			)
+		);
+
+		// save form confirmations array
+		if(!isset($form_data['confirmations'])){
+			$form_data['confirmations'] = array();
+		}
+
+		$form_data['confirmations'] = array(
+			array(
+				'type' => $settings['confirmation_type'],
+				'redirect_url' => $settings['confirmation_redirect'],
+				'message' => $settings['confirmation_message']
+			)
+		);
+
+		$post = wp_update_post(array(
+			'ID' => $form_id,
+			'post_content' => json_encode($form_data)
+		));
+
+		if(!is_wp_error($post)){
+			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id));
+			exit();
+		}
+
+		die();
+	}
+
+	private function save_form_notifications(){
+		var_dump('save_form_notifications');
+		die();
+	}
+
 	private function save_form_fields(){
 
 		$form_id = null;
@@ -340,8 +392,10 @@ class WPDF_Admin{
 
 		$fields = array();
 
+		$c = 0;
 		foreach($_POST['field'] as $field){
-			$fields[] = $this->save_field($field);
+			$fields['field_' . $c ] = $this->save_field($field);
+			$c++;
 		}
 
 		$postarr = array(
@@ -353,11 +407,20 @@ class WPDF_Admin{
 		if(!is_null($form_id)){
 			$postarr['ID'] = $form_id;
 			$postarr['post_author'] = get_current_user_id();
+
+			$form = get_post($form_id);
+			$form_data = json_decode($form->post_content, true);
+			$form_data['fields'] = $fields;
+			$post_content = $form_data;
+
+		}else{
+			$post_content = array(
+				'fields' => $fields
+			);
 		}
 
-		$postarr['post_content'] = json_encode(array(
-			'fields' => $fields
-		));
+		// encode data to store
+		$postarr['post_content'] = json_encode($post_content);
 
 		$post = wp_insert_post($postarr, true);
 		if(!is_wp_error($post)){

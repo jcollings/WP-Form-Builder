@@ -85,9 +85,10 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 		foreach($this->items as $item){
 
-			$formParam = '&form=' . $item->form_name;
+			$linkParam = $formParam = '&form=' . $item->form_name;
 			if(isset($item->ID)){
 				$formParam = '&form_id=' . $item->ID;
+				$linkParam = '&form=WPDF_FORM_' . $item->ID;
 			}
 
 			echo '<tr>';
@@ -98,7 +99,7 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 					case 'col_form_name':
 
 
-						$link = admin_url('admin.php?page=wpdf-forms&action=entries' . $formParam );
+						$link = admin_url('admin.php?page=wpdf-forms&action=entries' . $linkParam );
 						$entry_str = '<strong><a href="'. $link .'">' . $item->form_name . '</a></strong>';
 						$del_link = admin_url('admin.php?page=wpdf-forms&action=delete' . $formParam );
 
