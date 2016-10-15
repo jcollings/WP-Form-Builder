@@ -330,7 +330,7 @@ class WPDF_Admin{
 
 		$form_id = $_POST['wpdf-form'];
 		$form = get_post($form_id);
-		$form_data = json_decode($form->post_content, true);
+		$form_data = maybe_unserialize($form->post_content);
 
 		$settings = $_POST['wpdf_settings'];
 
@@ -360,7 +360,7 @@ class WPDF_Admin{
 
 		$post = wp_update_post(array(
 			'ID' => $form_id,
-			'post_content' => json_encode($form_data)
+			'post_content' => serialize($form_data)
 		));
 
 		if(!is_wp_error($post)){
@@ -375,7 +375,7 @@ class WPDF_Admin{
 
 		$form_id = $_POST['wpdf-form'];
 		$form = get_post($form_id);
-		$form_data = json_decode($form->post_content, true);
+		$form_data = maybe_unserialize($form->post_content);
 
 		$form_data['notifications'] = array();
 		foreach($_POST['notification'] as $i => $notification){
@@ -391,7 +391,7 @@ class WPDF_Admin{
 
 		$post = wp_update_post(array(
 			'ID' => $form_id,
-			'post_content' => json_encode($form_data)
+			'post_content' => serialize($form_data)
 		));
 
 		if(!is_wp_error($post)){
@@ -418,10 +418,12 @@ class WPDF_Admin{
 
 		$fields = array();
 
-		$c = 0;
-		foreach($_POST['field'] as $field){
-			$fields['field_' . $c ] = $this->save_field($field);
-			$c++;
+		if( isset($_POST['field']) && !empty($_POST['field']) ) {
+			$c = 0;
+			foreach ( $_POST['field'] as $field ) {
+				$fields[ 'field_' . $c ] = $this->save_field( $field );
+				$c ++;
+			}
 		}
 
 		$postarr = array(
@@ -435,7 +437,12 @@ class WPDF_Admin{
 			$postarr['post_author'] = get_current_user_id();
 
 			$form = get_post($form_id);
-			$form_data = json_decode($form->post_content, true);
+			$form_data = maybe_unserialize($form->post_content);
+
+			if(!is_array($form_data)){
+				$form_data = array();
+			}
+
 			$form_data['fields'] = $fields;
 			$post_content = $form_data;
 
@@ -446,7 +453,7 @@ class WPDF_Admin{
 		}
 
 		// encode data to store
-		$postarr['post_content'] = json_encode($post_content);
+		$postarr['post_content'] = serialize($post_content);
 
 		$post = wp_insert_post($postarr, true);
 		if(!is_wp_error($post)){

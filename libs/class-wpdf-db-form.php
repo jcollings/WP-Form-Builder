@@ -14,7 +14,13 @@ class WPDF_DB_Form extends WPDF_Form {
 		$post = get_post($form_id);
 		if($post && $post->post_type == 'wpdf_form'){
 			$this->ID = $form_id;
-			$form = json_decode($post->post_content, true);
+			$form = is_serialized($post->post_content) ? unserialize($post->post_content) : array();
+
+			// escape due to no data
+			if(!isset($form['fields'])){
+				return;
+			}
+
 			parent::__construct("Form " . $form_id, $form['fields']);
 
 			// load settings
@@ -76,7 +82,7 @@ class WPDF_DB_Form extends WPDF_Form {
 		if(is_admin()) {
 			$post = get_post( $this->ID );
 			if ( $post && $post->post_type == 'wpdf_form' ) {
-				return json_decode( $post->post_content, true );
+				return maybe_unserialize($post->post_content);
 			}
 		}
 
