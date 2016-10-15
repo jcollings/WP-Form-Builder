@@ -8,7 +8,7 @@
 
 $field_type = $field->getType();
 ?>
-<div class="wpdf-panel <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
+<div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
 		Field: <?php echo ucfirst($field_type); ?>
 		- <a href="#delete" class="wpdf-del-field">Delete</a>
@@ -75,7 +75,7 @@ $field_type = $field->getType();
 								<th>_</th>
 							</tr>
 							</thead>
-							<tbody class="wpdf-repeater" data-template-name="field_value_repeater">
+							<tbody class="wpdf-repeater" data-min="1" data-template-name="field_value_repeater">
 							<script type="text/html" class="wpdf-repeater-template">
 								<tr class="wpdf-repeater-row wpdf-repeater__template">
 									<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>

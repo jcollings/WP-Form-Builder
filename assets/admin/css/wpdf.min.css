@@ -55,7 +55,9 @@
     height: 40px;
 }
 
-/**/
+/**
+ * WPDF Panel
+ */
 .wpdf-panel{
     background: #f7f7f7;
 }
@@ -74,6 +76,20 @@
 .wpdf-panel__content{
     display: none;
     margin: 7px;
+}
+.wpdf-panel--white{
+    background: #ffffff;
+}
+.wpdf-panel--white .wpdf-panel__header, .wpdf-panel--white.wpdf-panel--active{
+    border: 1px solid #ececec;
+}
+.wpdf-panel--white.wpdf-panel--active .wpdf-panel__header{
+    border-left: none;
+    border-top: none;
+    border-right: none;
+}
+.wpdf-panel--white .wpdf-panel__content{
+    margin: 15px;
 }
 
 .wpdf-right__inside, .wpdf-left__inside{
@@ -126,7 +142,7 @@
 
 /**
 **/
-.wpdf-fields .wpdf-panel{
+/*.wpdf-fields .wpdf-panel{
     background: #ffffff;
 }
 .wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
@@ -139,7 +155,7 @@
 }
 .wpdf-fields .wpdf-panel__content{
     margin: 15px;
-}
+}*/
 /*.wpdf-fields .placeholder{
     border: 1px dashed #999999;
     padding: 15px;
@@ -221,9 +237,6 @@
  * Repeater value field
  */
 .wpdf-repeater .wpdf-repeater-row .wpdf-del-row{
-    display: none;
-}
-.wpdf-repeater .wpdf-repeater-row + .wpdf-repeater-row .wpdf-del-row{
     display: inline-block;
 }
 
@@ -240,3 +253,7 @@
     width: 100%;
     max-width: 300px;
 }
+
+/**
+ * Notifications Page
+ */

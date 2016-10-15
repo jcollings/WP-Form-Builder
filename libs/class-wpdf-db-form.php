@@ -34,6 +34,32 @@ class WPDF_DB_Form extends WPDF_Form {
 					}
 				}
 			}
+
+			// load notifications
+			if(isset($form['notifications']) && !empty($form['notifications'])){
+
+				foreach($form['notifications'] as $notification){
+
+					if(empty($notification['to'])){
+						continue;
+					}
+
+					$args = array();
+					if( isset($notification['from']) && !empty($notification['from']) ){
+						$args['from'] = $notification['from'];
+					}
+					if( isset($notification['cc']) && !empty($notification['cc']) ){
+						$args['cc'] = $notification['cc'];
+					}
+					if( isset($notification['bcc']) && !empty($notification['bcc']) ){
+						$args['bcc'] = $notification['bcc'];
+					}
+
+					$this->add_notification($notification['to'], $notification['subject'], $notification['message'], $args);
+
+				}
+
+			}
 		}
 	}
 

@@ -372,7 +372,33 @@ class WPDF_Admin{
 	}
 
 	private function save_form_notifications(){
-		var_dump('save_form_notifications');
+
+		$form_id = $_POST['wpdf-form'];
+		$form = get_post($form_id);
+		$form_data = json_decode($form->post_content, true);
+
+		$form_data['notifications'] = array();
+		foreach($_POST['notification'] as $i => $notification){
+			$form_data['notifications'][ $i ] = array(
+				'to'      => $notification['to'],
+				'subject' => $notification['subject'],
+				'message' => $notification['message'],
+				'from'    => $notification['from'],
+				'cc'      => $notification['cc'],
+				'bcc'     => $notification['bcc'],
+			);
+		}
+
+		$post = wp_update_post(array(
+			'ID' => $form_id,
+			'post_content' => json_encode($form_data)
+		));
+
+		if(!is_wp_error($post)){
+			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id));
+			exit();
+		}
+
 		die();
 	}
 

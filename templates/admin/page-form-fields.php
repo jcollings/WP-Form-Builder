@@ -3,6 +3,7 @@
  * Form fields page
  *
  * @var WPDF_Form $form
+ * @var WPDF_Admin $this
  */
 
 $available_fields = array('text', 'textarea', 'select', 'checkbox', 'radio');
