@@ -66,7 +66,7 @@ $field_type = $field->getType();
 
 						<strong>Values</strong>
 
-						<table width="100%">
+						<table width="100%" class="wpdf-repeater" data-min="1" data-template-name="field_value_repeater">
 							<thead>
 							<tr>
 								<th>Label</th>
@@ -75,7 +75,7 @@ $field_type = $field->getType();
 								<th>_</th>
 							</tr>
 							</thead>
-							<tbody class="wpdf-repeater" data-min="1" data-template-name="field_value_repeater">
+							<tbody class="wpdf-repeater-container">
 							<script type="text/html" class="wpdf-repeater-template">
 								<tr class="wpdf-repeater-row wpdf-repeater__template">
 									<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
@@ -113,6 +113,18 @@ $field_type = $field->getType();
 									</tr>
 									<?php
 								}
+							}else{
+								?>
+								<tr class="wpdf-repeater-row wpdf-repeater__template">
+									<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
+									<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+									<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
+									<td>
+										<a href="#" class="wpdf-add-row button">+</a>
+										<a href="#" class="wpdf-del-row button">-</a>
+									</td>
+								</tr>
+								<?php
 							}
 							?>
 							</tbody>

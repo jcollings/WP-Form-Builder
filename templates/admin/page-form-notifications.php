@@ -31,9 +31,9 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 		<div class="wpdf-cols">
 
 			<div class="wpdf-left">
-				<div class="wpdf-left__inside">
+				<div class="wpdf-left__inside  wpdf-repeater" data-min="0" data-template-name="notification_repeater" data-template-index="notification\[[0-9]*\]" data-template-prefix="notification">
 
-					<ul class="wpdf-notifications wpdf-repeater" data-min="0" data-template-name="notification_repeater" data-template-index="notification\[[0-9]*\]" data-template-prefix="notification">
+					<ul class="wpdf-notifications wpdf-repeater-container">
 						<script type="text/html" class="wpdf-repeater-template">
 							<li class="wpdf-notification wpdf-repeater-row">
 								<div class="wpdf-panel wpdf-panel--white wpdf-panel--active">
@@ -116,10 +116,9 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 							</div>
 						</li>
 						<?php endforeach; ?>
-						<li>
-							<a href="#" class="wpdf-add-row button button-primary">Add Notification</a>
-						</li>
 					</ul>
+
+					<a href="#" class="wpdf-add-row button button-primary">Add Notification</a>
 					&nbsp;
 				</div>
 			</div>
