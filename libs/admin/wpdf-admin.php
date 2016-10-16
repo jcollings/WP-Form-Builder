@@ -25,17 +25,9 @@ class WPDF_Admin{
 
 	function wpdf_register_pages(){
 
-		$forms = WPDF()->get_forms();
-
 		$admin_slug = "wpdf-forms";
 		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
 		add_submenu_page( $admin_slug, 'New Form', 'Add Form', 'manage_options', 'admin.php?page=wpdf-forms&action=new');
-
-		if(!empty($forms)) {
-			foreach ( $forms as $form_id => $form ) {
-				add_submenu_page( $admin_slug, $form->getName(), $form->getName(), "manage_options", 'admin.php?page=wpdf-forms&form=' . $form_id );
-			}
-		}
 	}
 
 	function init(){
@@ -47,6 +39,18 @@ class WPDF_Admin{
 
 			$url = remove_query_arg('delete_submission');
 			wp_redirect($url);
+			exit();
+		}
+
+		$delete_form = isset($_GET['action']) && $_GET['action'] == 'delete-form' && isset($_GET['form_id']) ? intval($_GET['form_id']) : 0;
+		if($delete_form > 0){
+
+			$deleted = wp_delete_post($delete_form);
+			if(!$deleted){
+				//todo: Alert user form was not deleted
+			}
+
+			wp_redirect(admin_url('admin.php?page=wpdf-forms'));
 			exit();
 		}
 
@@ -122,9 +126,9 @@ class WPDF_Admin{
 			$form = new WPDF_DB_Form($form_id);
 			$this->display_notifications_form( $form );
 
-		}elseif ( $action == 'settings' && $form_id ){
+		}elseif ( $action == 'settings' && $form_id ) {
 
-			$form = new WPDF_DB_Form($form_id);
+			$form = new WPDF_DB_Form( $form_id );
 			$this->display_settings_form( $form );
 
 		}elseif($form) {

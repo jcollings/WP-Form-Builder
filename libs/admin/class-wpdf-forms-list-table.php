@@ -101,7 +101,7 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 						$link = admin_url('admin.php?page=wpdf-forms&action=entries' . $linkParam );
 						$entry_str = '<strong><a href="'. $link .'">' . $item->form_name . '</a></strong>';
-						$del_link = admin_url('admin.php?page=wpdf-forms&action=delete' . $formParam );
+						$del_link = admin_url('admin.php?page=wpdf-forms&action=delete-form' . $formParam );
 
 						$links = array();
 

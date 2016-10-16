@@ -90,7 +90,7 @@ function display_submission_field($content, $field_id){
 		case 'user_id':
 			$user = get_user_by('id', $content);
 			if($user){
-				$content = sprintf('Registered user: <a href="http://wordpress.dev/wp-admin/user-edit.php?user_id=%d">%s</a>', $content, $user->data->user_login);
+				$content = sprintf('Registered user: <a href="'.admin_url('user-edit.php?user_id=').'%d">%s</a>', $content, $user->data->user_login);
 			}
 			break;
 	}
