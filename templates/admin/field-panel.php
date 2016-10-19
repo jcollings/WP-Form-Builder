@@ -135,6 +135,28 @@ $field_type = $field->getType();
 				<?php
 				break;
 		endswitch;
+		// validation fields
+		?>
+		<div class="wpdf-clear"></div>
+		<div class="wpdf-repeater wpdf-validation-repeater" data-min="0" data-template-name="validation_repeater">
+			<p>Validation</p>
+			<div class="wpdf-repeater-container">
+				<script type="text/html" class="wpdf-repeater-template">
+					<div class="wpdf-validation-row">
+						<select name="field[][validation_type][]" class="validation_type">
+							<option value="">Choose Validation Type</option>
+							<option value="required">Required</option>
+							<option value="email">Email</option>
+							<option value="unique">Unique</option>
+							<option value="min_length">Min Length</option>
+							<option value="max_length">Max Length</option>
+						</select>
+					</div>
+				</script>
+			</div>
+			<a href="#" class="wpdf-add-row button button-primary">Add Validation Rule</a>
+		</div>
+		<?php
 		// add-on fields
 		?>
 		<div class="wpdf-clear"></div>
