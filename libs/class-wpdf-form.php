@@ -400,6 +400,10 @@ class WPDF_Form{
 		return $default;
 	}
 
+	public function getValidationRules(){
+		return $this->_rules;
+	}
+
 	/**
 	 * Display form field
 	 *

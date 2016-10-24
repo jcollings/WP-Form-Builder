@@ -321,7 +321,7 @@ class WPDF_Admin{
 	 * @param WPDF_FormField|string $field
 	 * @param bool $active
 	 */
-	private function display_field_panel($field, $active = false){
+	private function display_field_panel($field, $form = null, $active = false){
 
 		if(is_string($field)){
 			$field = new WPDF_FormField('', $field);
@@ -497,6 +497,30 @@ class WPDF_Admin{
 				$data['default'] = $defaults;
 
 				break;
+		}
+
+		$data['validation'] = array(
+			array('type' => 'required'),
+			array('type' => 'email')
+		);
+
+		$rules = array();
+		$data['validation'] = array();
+		if(isset($field['validation_type']) && !empty($field['validation_type'])) {
+			foreach ( $field['validation_type'] as $rule ) {
+
+				// skip if empty value
+				if(empty($rule)){
+					continue;
+				}
+
+				$rules[] = array(
+					'type' => $rule
+				);
+			}
+		}
+		if(!empty($rules)){
+			$data['validation'] = $rules;
 		}
 
 		return $data;

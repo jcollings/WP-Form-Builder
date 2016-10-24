@@ -34,7 +34,7 @@ if($form !== false){
 								foreach($fields as $field):
 									?>
 									<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
-										<?php $this->display_field_panel($field); ?>
+										<?php $this->display_field_panel($field, $form); ?>
 									</li>
 									<?php
 								endforeach;

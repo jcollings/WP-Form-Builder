@@ -2,10 +2,10 @@
 /**
  * Display form field panel
  *
- * @@var WPDF_FormField|string $field
+ * @var WPDF_FormField|string $field
+ * @var WPDF_Form $form
  * @var bool $active
  */
-
 $field_type = $field->getType();
 ?>
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
@@ -148,11 +148,30 @@ $field_type = $field->getType();
 							<option value="required">Required</option>
 							<option value="email">Email</option>
 							<option value="unique">Unique</option>
-							<option value="min_length">Min Length</option>
-							<option value="max_length">Max Length</option>
 						</select>
 					</div>
 				</script>
+				<?php
+				// load saved validation rules
+				if($form){
+					$rules = $form->getValidationRules();
+					if(isset($rules[$field->getName()]) && !empty($rules[$field->getName()])){
+						foreach($rules[$field->getName()] as $rule){
+							$type = $rule['type'];
+							?>
+							<div class="wpdf-validation-row">
+								<select name="field[][validation_type][]" class="validation_type">
+									<option value="">Choose Validation Type</option>
+									<option value="required" <?php selected('required', $type, true); ?>>Required</option>
+									<option value="email" <?php selected('email', $type, true); ?>>Email</option>
+									<option value="unique" <?php selected('unique', $type, true) ;?>>Unique</option>
+								</select>
+							</div>
+							<?php
+						}
+					}
+				}
+				?>
 			</div>
 			<a href="#" class="wpdf-add-row button button-primary">Add Validation Rule</a>
 		</div>
