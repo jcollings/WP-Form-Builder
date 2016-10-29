@@ -10,8 +10,7 @@ $field_type = $field->getType();
 ?>
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
-		Field: <?php echo ucfirst($field_type); ?>
-		- <a href="#delete" class="wpdf-del-field">Delete</a>
+		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?> - <a href="#delete" class="wpdf-del-field">Delete</a>
 	</div>
 	<div class="wpdf-panel__content">
 
@@ -19,6 +18,7 @@ $field_type = $field->getType();
 		// hidden fields
 		?>
 		<input type="hidden" name="field[][type]" value="<?php echo $field_type; ?>" />
+		<input type="hidden" name="field[][id]" value="<?php echo $field->getName(); ?>" />
 
 		<?php
 		// general fields
@@ -142,13 +142,14 @@ $field_type = $field->getType();
 			<p>Validation</p>
 			<div class="wpdf-repeater-container">
 				<script type="text/html" class="wpdf-repeater-template">
-					<div class="wpdf-validation-row">
+					<div class="wpdf-validation-row wpdf-repeater-row">
 						<select name="field[][validation_type][]" class="validation_type">
 							<option value="">Choose Validation Type</option>
 							<option value="required">Required</option>
 							<option value="email">Email</option>
 							<option value="unique">Unique</option>
 						</select>
+						<a href="#" class="wpdf-del-row">Remove</a>
 					</div>
 				</script>
 				<?php
@@ -159,13 +160,14 @@ $field_type = $field->getType();
 						foreach($rules[$field->getName()] as $rule){
 							$type = $rule['type'];
 							?>
-							<div class="wpdf-validation-row">
+							<div class="wpdf-validation-row wpdf-repeater-row">
 								<select name="field[][validation_type][]" class="validation_type">
 									<option value="">Choose Validation Type</option>
 									<option value="required" <?php selected('required', $type, true); ?>>Required</option>
 									<option value="email" <?php selected('email', $type, true); ?>>Email</option>
 									<option value="unique" <?php selected('unique', $type, true) ;?>>Unique</option>
 								</select>
+								<a href="#" class="wpdf-del-row">Remove</a>
 							</div>
 							<?php
 						}

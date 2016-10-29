@@ -423,10 +423,27 @@ class WPDF_Admin{
 		$fields = array();
 
 		if( isset($_POST['field']) && !empty($_POST['field']) ) {
-			$c = 0;
+
+			// fetch list of existing field ids
+			$field_ids = array();
+			foreach($_POST['field'] as $arr){
+				if(isset($arr['id']) && !empty($arr['id'])){
+					$field_ids[] = $arr['id'];
+				}
+			}
+
 			foreach ( $_POST['field'] as $field ) {
-				$fields[ 'field_' . $c ] = $this->save_field( $field );
-				$c ++;
+
+				// get or randomly generate field id, should only generate on creating field
+				$field_id = isset($field['id']) && !empty($field['id']) ? $field['id'] : false;
+				if(!$field_id){
+					do{
+						$field_id = 'field_' . wp_generate_password(6, false);
+					}while(in_array($field_id, $field_ids));
+					$field_ids[] = $field_id;
+				}
+
+				$fields[ $field_id ] = $this->save_field( $field );
 			}
 		}
 

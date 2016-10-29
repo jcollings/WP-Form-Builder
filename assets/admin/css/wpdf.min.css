@@ -257,3 +257,10 @@
 /**
  * Notifications Page
  */
+
+/**
+ * Field Validation
+ */
+.wpdf-repeater-container{
+    margin-bottom:10px;
+}
