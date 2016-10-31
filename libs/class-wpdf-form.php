@@ -74,7 +74,7 @@ class WPDF_Form{
 		);
 
 		// load default settings
-		$this->_settings = $this->_settings_default;
+		$this->_settings = apply_filters('wpdf/form_settings', $this->_settings_default, $this->getId() );
 
 		// setup fields
 		if(!empty($fields)) {
