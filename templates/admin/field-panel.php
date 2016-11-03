@@ -36,9 +36,10 @@ $field_type = $field->getType();
 
 		<?php
 		// specific fields based on field type
-		switch($field_type):
+		$field->displaySettings();
+		/*switch($field_type):
 			case 'text':
-				?>
+				*/?><!--
 				<div class="wpdf-field-row">
 					<div class="wpdf-col wpdf-col__half">
 						<label for="" class="wpdf-label">Default Value</label>
@@ -46,9 +47,9 @@ $field_type = $field->getType();
 					</div>
 				</div>
 				<?php
-				break;
+/*				break;
 			case 'textarea':
-				?>
+				*/?>
 				<div class="wpdf-field-row">
 					<div class="wpdf-col wpdf-col__full">
 						<label for="" class="wpdf-label">Default Value</label>
@@ -56,11 +57,11 @@ $field_type = $field->getType();
 					</div>
 				</div>
 				<?php
-				break;
+/*				break;
 			case 'select':
 			case 'radio':
 			case 'checkbox':
-				?>
+				*/?>
 				<div class="wpdf-field-row">
 					<div class="wpdf-col wpdf-col__full">
 
@@ -88,33 +89,33 @@ $field_type = $field->getType();
 								</tr>
 							</script>
 							<?php
-							$options = $field->getOptions();
+/*							$options = $field->getOptions();
 							if(!empty($options)) {
 								foreach ( $options as $key => $option ) {
-									?>
+									*/?>
 									<tr class="wpdf-repeater-row wpdf-repeater__template">
 										<td><input title="Label" type="text" class="wpdf-input"
-										           name="field[][value_labels][]" value="<?php echo $option; ?>" /></td>
+										           name="field[][value_labels][]" value="<?php /*echo $option; */?>" /></td>
 										<td><input title="Key" type="text" class="wpdf-input"
-										           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
+										           name="field[][value_keys][]" value="<?php /*echo $key; */?>" /></td>
 										<td><input title="Default?" type="checkbox"
 										           name="field[][value_default][]" <?php
-											$default = $field->getDefaultValue();
+/*											$default = $field->getDefaultValue();
 											if(is_array($default)){
 												checked(in_array($key, $default), true, true);
 											}else{
 												checked($key, $default, true);
 											}
-											?> /></td>
+											*/?> /></td>
 										<td>
 											<a href="#" class="wpdf-add-row button">+</a>
 											<a href="#" class="wpdf-del-row button">-</a>
 										</td>
 									</tr>
 									<?php
-								}
+/*								}
 							}else{
-								?>
+								*/?>
 								<tr class="wpdf-repeater-row wpdf-repeater__template">
 									<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
 									<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
@@ -125,16 +126,16 @@ $field_type = $field->getType();
 									</td>
 								</tr>
 								<?php
-							}
-							?>
+/*							}
+							*/?>
 							</tbody>
 						</table>
 
 					</div>
 				</div>
-				<?php
-				break;
-		endswitch;
+				--><?php
+/*				break;
+		endswitch;*/
 		// validation fields
 		?>
 		<div class="wpdf-clear"></div>

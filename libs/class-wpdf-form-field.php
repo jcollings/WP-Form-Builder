@@ -33,10 +33,19 @@ class WPDF_FormField{
 	}
 
 	/**
+	 * Output field on the frontend
+	 *
 	 * @param $form_data WPDF_FormData
 	 */
 	public function output($form_data){
 
+	}
+
+	/**
+	 * Display field settings in form editor
+	 */
+	public function displaySettings(){
+		require WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php';
 	}
 
 	/**
