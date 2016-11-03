@@ -90,6 +90,8 @@ class WPDF_FormField{
 						$name .= '[]';
 					}
 
+					echo '<div class="wpdf-choices">';
+
 					foreach($this->_args['options'] as $key => $option){
 
 						if(is_array($value)){
@@ -102,6 +104,8 @@ class WPDF_FormField{
 						echo '<input type="'.$this->getType().'" name="'.$name.'"'.$checked.' value="'.$key.'" >' . $option;
 						echo '</label>';
 					}
+
+					echo '</div>';
 				}
 
 				break;

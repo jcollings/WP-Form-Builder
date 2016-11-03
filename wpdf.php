@@ -179,6 +179,7 @@ class WPDF_DeveloperForms {
 
 	public function enqueue_scripts(){
 		wp_enqueue_script('wpdf-main', $this->get_plugin_url() . '/assets/public/js/main.js', array('jquery'), $this->get_version(), true);
+		wp_enqueue_style('wpdf-main', $this->get_plugin_url() . '/assets/public/css/main.css', array(), $this->get_version());
 	}
 
 	public function on_activation(){

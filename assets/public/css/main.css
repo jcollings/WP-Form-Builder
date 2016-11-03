@@ -1,0 +1,12 @@
+.wpdf-form{
+
+}
+
+.wpdf-form .form-row{
+    margin-bottom: 1em;
+}
+
+.wpdf-choices label{
+    margin-right: 1em;
+    display: inline-block;
+}

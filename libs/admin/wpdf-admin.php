@@ -469,7 +469,25 @@ class WPDF_Admin{
 
 		}else{
 			$post_content = array(
-				'fields' => $fields
+				'fields' => $fields,
+				'settings' => array(
+					'labels' => array(
+						'submit' => 'Submit'
+					)
+				),
+				'confirmations' => array(
+					array(
+						'type' => 'message',
+						'message' => 'The form has been submitted successfully'
+					)
+				),
+				'notifications' => array(
+					array(
+						'to' => '{{admin_email}}',
+						'subject' => 'New Form Submission',
+						'message' => 'New Form Submission: {{fields}}'
+					)
+				),
 			);
 		}
 
