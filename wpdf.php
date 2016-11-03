@@ -99,7 +99,15 @@ class WPDF_DeveloperForms {
 		include_once 'libs/class-wpdf-form.php';
 		include_once 'libs/class-wpdf-db-form.php';
 		include_once 'libs/class-wpdf-form-data.php';
+
 		include_once 'libs/class-wpdf-form-field.php';
+		include_once 'libs/fields/class-wpdf-text-field.php';
+		include_once 'libs/fields/class-wpdf-textarea-field.php';
+		include_once 'libs/fields/class-wpdf-select-field.php';
+		include_once 'libs/fields/class-wpdf-radio-field.php';
+		include_once 'libs/fields/class-wpdf-checkbox-field.php';
+		include_once 'libs/fields/class-wpdf-file-field.php';
+
 		include_once 'libs/class-wpdf-validation.php';
 		include_once 'libs/class-wpdf-notification.php';
 		include_once 'libs/class-wpdf-email-manager.php';

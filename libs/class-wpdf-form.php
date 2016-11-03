@@ -81,7 +81,27 @@ class WPDF_Form{
 			foreach ( $fields as $field_id => $field ) {
 
 				$type                       = $field['type'];
-				$this->_fields[ $field_id ] = new WPDF_FormField( $field_id, $type, $field );
+				switch($type){
+					case 'text':
+						$this->_fields[ $field_id ] = new WPDF_TextField( $field_id, $type, $field );
+						break;
+					case 'textarea':
+						$this->_fields[ $field_id ] = new WPDF_TextareaField( $field_id, $type, $field );
+						break;
+					case 'select':
+						$this->_fields[ $field_id ] = new WPDF_SelectField( $field_id, $type, $field );
+						break;
+					case 'radio':
+						$this->_fields[ $field_id ] = new WPDF_RadioField( $field_id, $type, $field );
+						break;
+					case 'checkbox':
+						$this->_fields[ $field_id ] = new WPDF_CheckboxField( $field_id, $type, $field );
+						break;
+					case 'file':
+						$this->_fields[ $field_id ] = new WPDF_FileField( $field_id, $type, $field );
+						break;
+				}
+				//$this->_fields[ $field_id ] = new WPDF_FormField( $field_id, $type, $field );
 
 				if ( $type == 'file' ) {
 					$this->_has_file_field = true;
