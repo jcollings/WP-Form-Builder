@@ -567,6 +567,10 @@ class WPDF_Form{
 		return $this->_name;
 	}
 
+	public function getLabel(){
+		return $this->_name;
+	}
+
 	public function getId(){
 		return $this->ID;
 	}

@@ -13,9 +13,14 @@ if(!class_exists('WP_List_Table')){
 class WPDF_Submissions_List_Table extends WP_List_Table{
 
 	/**
-	 * @var String form id
+	 * @var int form id
 	 */
 	protected $form_id = null;
+
+	/**
+	 * @var String form name
+	 */
+	protected $form_name = null;
 
 	/**
 	 * @var WPDF_Form
@@ -29,7 +34,8 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 	 */
 	public function __construct($form) {
 
-		$this->form_id = $form->getName();
+		$this->form_name = $form->getName();
+		$this->form_id = $form->getId();
 		$this->form = $form;
 
 		parent::__construct( array(
@@ -50,7 +56,7 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 		$screen = get_current_screen();
 		$db = new WPDF_DatabaseManager();
-		$count = $db->get_form_count($this->form_id, $s);
+		$count = $db->get_form_count($this->form_name, $s);
 
 		$totalitems = intval($count[0]);
 		$perpage = 10;
@@ -58,7 +64,7 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 		$paged = isset($_GET['paged']) ? intval($_GET['paged']) : 1;
 
-		$submissions = $db->get_form_submissions($this->form_id, $paged, $perpage, $orderby, $order, $s);
+		$submissions = $db->get_form_submissions($this->form_name, $paged, $perpage, $orderby, $order, $s);
 
 		$this->set_pagination_args( array(
 			"total_items" => $totalitems,
@@ -109,8 +115,14 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 
 				switch($column_name){
 					case 'col_entry_id':
-						$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form='.$this->form_id);
-						$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form='.$this->form_id);
+
+						if($this->form_name){
+							$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form='.$this->form_name);
+							$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form='.$this->form_name);
+						}else{
+							$link = admin_url('admin.php?page=wpdf-forms&submission=' . $item->id . '&form_id='.$this->form_id);
+							$del_link = admin_url('admin.php?page=wpdf-forms&delete_submission=' . $item->id . '&form_id='.$this->form_id);
+						}
 
 						// visualize unread state
 						$entry_str = sprintf('<strong><a href="%s">Entry: %s</a> - unread</strong>', $link, $item->id);

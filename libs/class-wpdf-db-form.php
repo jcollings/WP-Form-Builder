@@ -8,6 +8,12 @@
 
 class WPDF_DB_Form extends WPDF_Form {
 
+	/**
+	 * Form Label
+	 * @var string
+	 */
+	private $_label = null;
+
 	public function __construct( $form_id = null ) {
 
 		$form_id = intval($form_id);
@@ -26,6 +32,12 @@ class WPDF_DB_Form extends WPDF_Form {
 			// load settings
 			if(isset($form['settings']) && isset($form['settings']['labels']) && isset($form['settings']['labels']['submit'])){
 				$this->settings($form['settings']);
+			}
+
+			if(isset($form['form_label'])){
+				$this->_label = $form['form_label'];
+			}else{
+				$this->_label = sprintf('WPDF_FORM_%d', $this->ID);
 			}
 
 			// load confirmations
@@ -75,6 +87,10 @@ class WPDF_DB_Form extends WPDF_Form {
 
 	public function getName() {
 		return 'WPDF_FORM_' . $this->ID;
+	}
+
+	public function getLabel(){
+		return $this->_label;
 	}
 
 	public function export(){

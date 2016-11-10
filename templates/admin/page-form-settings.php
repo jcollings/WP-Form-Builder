@@ -44,6 +44,10 @@ if($settings){
 
 					<table class="wpdf-form-table">
 						<tr>
+							<td><label for="submit_label">Form Label</label></td>
+							<td><input id="submit_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
+						</tr>
+						<tr>
 							<td><label for="submit_label">Submit Button Text</label></td>
 							<td><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
 						</tr>

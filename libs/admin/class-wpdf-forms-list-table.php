@@ -48,7 +48,7 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 			foreach ( $forms as $form_id => $form ) {
 
 				$row            = new stdClass();
-				$row->form_name = $form->getName();
+				$row->form_name = $form->getLabel();
 
 				$row->ID = $form->getId();
 
@@ -87,8 +87,8 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 
 			$linkParam = $formParam = '&form=' . $item->form_name;
 			if(isset($item->ID)){
-				$formParam = '&form_id=' . $item->ID;
-				$linkParam = '&form=WPDF_FORM_' . $item->ID;
+				$linkParam = $formParam = '&form_id=' . $item->ID;
+//				$linkParam = '&form=WPDF_FORM_' . $item->ID;
 			}
 
 			echo '<tr>';

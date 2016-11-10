@@ -10,6 +10,12 @@ if($form !== false){
 	$form_id = $form->getId();
 }
 
+$fields = $form->getFields();
+$fieldKeys = array();
+foreach($fields as $field_id => $field){
+	$fieldKeys[] = sprintf('%s <code>{{field_%s}}</code>', $field->getLabel(), $field_id);
+}
+
 $settings = $form->export();
 $notifications = isset($settings['notifications']) && !empty($settings['notifications']) ? $settings['notifications'] : array(array(
 	'to' => '',
@@ -46,26 +52,32 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 											<tr>
 												<td><label for="to">Send To</label></td>
 												<td><input id="to" type="text" name="notification[][to]" value="" /></td>
+												<td></td>
 											</tr>
 											<tr>
 												<td><label for="subject">Subject</label></td>
 												<td><input id="subject" type="text" name="notification[][subject]" value="" /></td>
+												<td></td>
 											</tr>
 											<tr>
 												<td><label for="message">Message</label></td>
 												<td><textarea name="notification[][message]" id="message" cols="30" rows="10"></textarea></td>
+												<td></td>
 											</tr>
 											<tr>
 												<td><label for="from">From</label></td>
 												<td><input id="from" type="text" name="notification[][from]" value="" /></td>
+												<td></td>
 											</tr>
 											<tr>
 												<td><label for="cc">Cc</label></td>
 												<td><input id="cc" type="text" name="notification[][cc]" value="" /></td>
+												<td></td>
 											</tr>
 											<tr>
 												<td><label for="bcc">Bcc</label></td>
 												<td><input id="bcc" type="text" name="notification[][bcc]" value="" /></td>
+												<td></td>
 											</tr>
 
 
@@ -87,26 +99,36 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 										<tr>
 											<td><label for="to">Send To</label></td>
 											<td><input id="to" type="text" name="notification[<?php echo $i; ?>][to]" value="<?php echo $notification['to']; ?>" /></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td><label for="subject">Subject</label></td>
 											<td><input id="subject" type="text" name="notification[<?php echo $i; ?>][subject]" value="<?php echo $notification['subject']; ?>" /></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td><label for="message">Message</label></td>
 											<td><textarea name="notification[<?php echo $i; ?>][message]" id="message" cols="30" rows="10"><?php echo $notification['message']; ?></textarea></td>
+											<td>
+												Form data can be displayed in the message using merge tags, to display all fields <code>{{fields}}</code>, to display individual fields you can use the following merge tags: <?php
+												echo '<br />' . implode(',<br /> ', $fieldKeys);
+												?>
+											</td>
 										</tr>
 										<tr>
 											<td><label for="from">From</label></td>
 											<td><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo $notification['from']; ?>" /></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td><label for="cc">Cc</label></td>
 											<td><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo $notification['cc']; ?>" /></td>
+											<td></td>
 										</tr>
 										<tr>
 											<td><label for="bcc">Bcc</label></td>
 											<td><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo $notification['bcc']; ?>" /></td>
+											<td></td>
 										</tr>
 
 
