@@ -12,8 +12,10 @@ if($form !== false){
 
 $fields = $form->getFields();
 $fieldKeys = array();
-foreach($fields as $field_id => $field){
-	$fieldKeys[] = sprintf('%s <code>{{field_%s}}</code>', $field->getLabel(), $field_id);
+if(!empty($fields)) {
+	foreach ( $fields as $field_id => $field ) {
+		$fieldKeys[] = sprintf( '%s <code>{{field_%s}}</code>', $field->getLabel(), $field_id );
+	}
 }
 
 $settings = $form->export();

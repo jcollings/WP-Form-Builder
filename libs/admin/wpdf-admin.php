@@ -451,7 +451,7 @@ class WPDF_Admin{
 				$field_id = isset($field['id']) && !empty($field['id']) ? $field['id'] : false;
 				if(!$field_id){
 					do{
-						$field_id = 'field_' . wp_generate_password(6, false);
+						$field_id = wp_generate_password(6, false);
 					}while(in_array($field_id, $field_ids));
 					$field_ids[] = $field_id;
 				}
