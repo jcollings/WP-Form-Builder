@@ -16,11 +16,25 @@ class WPDF_Admin{
 		add_action('init', array($this, 'update_check'));
 		add_action('init', array($this, 'register_form_post_type'));
 		add_action('admin_enqueue_scripts', array($this, 'enqueue_scripts'));
+
+		// mce editor
+		add_filter('mce_external_plugins', array($this, 'enqueue_mce_scripts'));
+		add_filter('mce_buttons', array($this, 'register_mce_buttons'));
 	}
 
 	function enqueue_scripts(){
 		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), WPDF()->get_version());
 		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), WPDF()->get_version());
+	}
+
+	function register_mce_buttons($buttons){
+		$buttons[] = 'wpdf';
+		return $buttons;
+	}
+
+	function enqueue_mce_scripts($plugins){
+		$plugins['wpdf_form_btn'] = WPDF()->get_plugin_url() . 'assets/admin/js/editor_shortcode.js';
+		return $plugins;
 	}
 
 	function wpdf_register_pages(){
