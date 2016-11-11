@@ -348,7 +348,30 @@ class WPDF_Admin{
 	private function display_field_panel($field, $form = null, $active = false){
 
 		if(is_string($field)){
-			$field = new WPDF_FormField('', $field);
+
+			switch($field){
+				case 'text':
+					$field = new WPDF_TextField( '', $field);
+					break;
+				case 'textarea':
+					$field = new WPDF_TextareaField( '', $field);
+					break;
+				case 'select':
+					$field = new WPDF_SelectField( '', $field);
+					break;
+				case 'radio':
+					$field = new WPDF_RadioField( '', $field);
+					break;
+				case 'checkbox':
+					$field = new WPDF_CheckboxField( '', $field);
+					break;
+				case 'file':
+					$field = new WPDF_FileField( '', $field);
+					break;
+				default:
+					$field = new WPDF_FormField('', $field);
+					break;
+			}
 		}
 
 		require WPDF()->get_plugin_dir() . 'templates/admin/field-panel.php';
@@ -541,6 +564,13 @@ class WPDF_Admin{
 
 		switch($field['type']){
 			case 'select':
+
+				if(isset($field['empty_text']) && !empty($field['empty_text'])){
+					$data['empty'] = esc_attr($field['empty_text']);
+				}else{
+					$data['empty'] = false;
+				}
+
 			case 'radio':
 			case 'checkbox':
 

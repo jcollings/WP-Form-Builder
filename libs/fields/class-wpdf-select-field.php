@@ -8,6 +8,14 @@
 
 class WPDF_SelectField extends WPDF_FormField {
 
+	protected $_empty;
+
+	public function __construct( $name, $type, $args = array() ) {
+		parent::__construct( $name, $type, $args );
+
+		$this->_empty = isset($args['empty']) ? $args['empty'] : 'Please select an option';
+	}
+
 	/**
 	 * @param $form_data WPDF_FormData
 	 */
@@ -39,5 +47,12 @@ class WPDF_SelectField extends WPDF_FormField {
 		}
 
 		echo '</select>';
+	}
+
+	/**
+	 * @return mixed|string
+	 */
+	public function getEmpty() {
+		return $this->_empty;
 	}
 }

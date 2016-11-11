@@ -1,3 +1,14 @@
+<?php
+/**
+ * @var WPDF_SelectField $this
+ */
+?>
+<div class="wpdf-field-row">
+	<div class="wpdf-col wpdf-col__half">
+		<label for="" class="wpdf-label">Display Empty Text (leave blank to not show)</label>
+		<input type="text" class="wpdf-input" name="field[][empty_text]" value="<?php echo $this->getEmpty(); ?>">
+	</div>
+</div>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">
 

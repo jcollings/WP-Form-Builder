@@ -4,7 +4,7 @@
 Plugin Name: WordPress Developer Forms
 Plugin URI: https://www.wordpressdeveloperforms.com/
 Description: Simple WordPress forms library
-Version: 0.2.2
+Version: 0.2.3
 Author: James Collings
 Author URI: https://www.jclabs.co.uk
 License: GPLv2 or later
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WPDF_DeveloperForms {
 
-	protected $version = '0.2.2';
+	protected $version = '0.2.3';
 	public $plugin_dir = false;
 	public $plugin_url = false;
 	protected $plugin_slug = false;

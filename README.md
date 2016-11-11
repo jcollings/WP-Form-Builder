@@ -1,6 +1,6 @@
 # WordPress Developer Forms
 Author: James Collings  
-Version: 0.2.2  
+Version: 0.2.3  
 Created: 05/08/2016  
 Updated: 07/08/2016  
 License: GPLv2 or later  
