@@ -27,7 +27,13 @@ class WPDF_SelectField extends WPDF_FormField {
 
 		if(isset($this->_args['options']) && !empty($this->_args['options'])){
 			foreach($this->_args['options'] as $key => $option){
-				$selected = "".$key === $value ? 'selected="selected"' : '';
+
+				$selected = '';
+				if(is_array($value) && in_array($key, $value)){
+					$selected = 'selected="selected"';
+				}elseif(!is_array($value) && !empty($value) && $key === $value){
+					$selected = 'selected="selected"';
+				}
 				echo '<option value="'.$key.'"'.$selected.'>'.$option.'</option>';
 			}
 		}
