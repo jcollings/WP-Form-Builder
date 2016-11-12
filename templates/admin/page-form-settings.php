@@ -39,7 +39,7 @@ if($settings){
 		<?php $this->display_form_header('settings', $form); ?>
 		<div class="wpdf-cols">
 
-			<div class="wpdf-left">
+			<div class="wpdf-full">
 				<div class="wpdf-left__inside">
 
 					<table class="wpdf-form-table">
@@ -70,8 +70,6 @@ if($settings){
 					&nbsp;
 				</div>
 			</div>
-
-			<div class="wpdf-right"></div>
 
 		</div>
 

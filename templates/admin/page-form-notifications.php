@@ -38,7 +38,7 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 
 		<div class="wpdf-cols">
 
-			<div class="wpdf-left">
+			<div class="wpdf-full">
 				<div class="wpdf-left__inside  wpdf-repeater" data-min="0" data-template-name="notification_repeater" data-template-index="notification\[[0-9]*\]" data-template-prefix="notification">
 
 					<ul class="wpdf-notifications wpdf-repeater-container">
@@ -53,32 +53,32 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 										<table class="wpdf-form-table">
 											<tr>
 												<td><label for="to">Send To</label></td>
-												<td><input id="to" type="text" name="notification[][to]" value="" /></td>
+												<td class="notification__input"><input id="to" type="text" name="notification[][to]" value="" /></td>
 												<td></td>
 											</tr>
 											<tr>
 												<td><label for="subject">Subject</label></td>
-												<td><input id="subject" type="text" name="notification[][subject]" value="" /></td>
+												<td class="notification__input"><input id="subject" type="text" name="notification[][subject]" value="" /></td>
 												<td></td>
 											</tr>
 											<tr>
 												<td><label for="message">Message</label></td>
-												<td><textarea name="notification[][message]" id="message" cols="30" rows="10"></textarea></td>
+												<td class="notification__input"><textarea name="notification[][message]" id="message" cols="30" rows="10"></textarea></td>
 												<td></td>
 											</tr>
 											<tr>
 												<td><label for="from">From</label></td>
-												<td><input id="from" type="text" name="notification[][from]" value="" /></td>
+												<td class="notification__input"><input id="from" type="text" name="notification[][from]" value="" /></td>
 												<td></td>
 											</tr>
 											<tr>
 												<td><label for="cc">Cc</label></td>
-												<td><input id="cc" type="text" name="notification[][cc]" value="" /></td>
+												<td class="notification__input"><input id="cc" type="text" name="notification[][cc]" value="" /></td>
 												<td></td>
 											</tr>
 											<tr>
 												<td><label for="bcc">Bcc</label></td>
-												<td><input id="bcc" type="text" name="notification[][bcc]" value="" /></td>
+												<td class="notification__input"><input id="bcc" type="text" name="notification[][bcc]" value="" /></td>
 												<td></td>
 											</tr>
 
@@ -100,17 +100,17 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 									<table class="wpdf-form-table">
 										<tr>
 											<td><label for="to">Send To</label></td>
-											<td><input id="to" type="text" name="notification[<?php echo $i; ?>][to]" value="<?php echo $notification['to']; ?>" /></td>
+											<td class="notification__input"><input id="to" type="text" name="notification[<?php echo $i; ?>][to]" value="<?php echo $notification['to']; ?>" /></td>
 											<td></td>
 										</tr>
 										<tr>
 											<td><label for="subject">Subject</label></td>
-											<td><input id="subject" type="text" name="notification[<?php echo $i; ?>][subject]" value="<?php echo $notification['subject']; ?>" /></td>
+											<td class="notification__input"><input id="subject" type="text" name="notification[<?php echo $i; ?>][subject]" value="<?php echo $notification['subject']; ?>" /></td>
 											<td></td>
 										</tr>
 										<tr>
 											<td><label for="message">Message</label></td>
-											<td><textarea name="notification[<?php echo $i; ?>][message]" id="message" cols="30" rows="10"><?php echo $notification['message']; ?></textarea></td>
+											<td class="notification__input"><textarea name="notification[<?php echo $i; ?>][message]" id="message" cols="30" rows="10"><?php echo $notification['message']; ?></textarea></td>
 											<td>
 												Form data can be displayed in the message using merge tags, to display all fields <code>{{fields}}</code>, to display individual fields you can use the following merge tags: <?php
 												echo '<br />' . implode(',<br /> ', $fieldKeys);
@@ -119,17 +119,17 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 										</tr>
 										<tr>
 											<td><label for="from">From</label></td>
-											<td><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo $notification['from']; ?>" /></td>
+											<td class="notification__input"><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo $notification['from']; ?>" /></td>
 											<td></td>
 										</tr>
 										<tr>
 											<td><label for="cc">Cc</label></td>
-											<td><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo $notification['cc']; ?>" /></td>
+											<td class="notification__input"><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo $notification['cc']; ?>" /></td>
 											<td></td>
 										</tr>
 										<tr>
 											<td><label for="bcc">Bcc</label></td>
-											<td><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo $notification['bcc']; ?>" /></td>
+											<td class="notification__input"><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo $notification['bcc']; ?>" /></td>
 											<td></td>
 										</tr>
 
@@ -146,8 +146,6 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 					&nbsp;
 				</div>
 			</div>
-
-			<div class="wpdf-right"></div>
 
 		</div>
 

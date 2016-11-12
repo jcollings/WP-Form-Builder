@@ -28,6 +28,10 @@
     background: #ececec;
     width: 30%;
 }
+.wpdf-full{
+    background: #f7f7f7;
+    overflow: hidden;
+}
 
 /**
  * Settings Header
@@ -35,15 +39,51 @@
 .wpdf-header{
     position: relative;
 }
+.wpdf-header__logo{
+    height: 70px;
+    width: 150px;
+    position: absolute;
+    left: 0;
+    top:0;
+    bottom:0;
+}
+.wpdf-header__logo h1{
+    font-size:13px;
+    padding: 0;
+    margin: 0;
+    line-height: 70px;
+    text-align: center;
+    font-weight: bold;
+}
 .wpdf-header__links{
     list-style: none;
-    margin: 0;
-    padding:0 200px 0 0;
+    padding: 0;
+    margin:0 200px 0 150px;
+    border-left:1px solid #dedede;
+    overflow: hidden;
 }
 .wpdf-header__links li{
-    display: inline-block;
-    padding: 26px 30px;
+    display: block;
+    float:left;
     margin: 0;
+    border-right:1px solid #dedede;
+}
+.wpdf-header__links li a{
+    color: #333333;
+    text-decoration: none;
+    padding: 26px 30px;
+    display: block;
+    background: #ffffff;
+}
+.wpdf-header__links li.active a{
+    background: #ececec;
+    color: #000000;
+}
+.wpdf-header__links a:focus{
+    outline: none;
+}
+.wpdf-header__links a:hover{
+    background: #f7f7f7;
 }
 .wpdf-header__actions{
     position: absolute;
@@ -53,6 +93,24 @@
 }
 .wpdf-header__actions input, .wpdf-header__actions button{
     height: 40px;
+    line-height: 40px;
+    font-size: 13px;
+    padding: 0 10px;
+    background: #0085ba;
+    border: 1px solid #0073aa;
+    display: inline-block;
+    -webkit-box-shadow: 0 1px 0 #006799;
+    box-shadow: 0 1px 0 #006799;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+}
+
+.wpdf-header__actions button:hover, .wpdf-header__actions input:hover{
+    background: #008ec2;
+    border-color: #006799;
+    color: #fff;
+    cursor: pointer;
 }
 
 /**
@@ -258,6 +316,10 @@
  * Notifications Page
  */
 
+.notification__input{
+    min-width: 320px;
+}
+
 /**
  * Field Validation
  */
@@ -279,4 +341,18 @@ i.mce-i-wpdf{
 }
 i.mce-i-wpdf:before {
     content: "\f175";
+}
+
+/**
+ * Table Archive
+ */
+.wpdf-table-archive{
+    padding:20px;
+}
+
+@media (max-width: 1023px){
+    .wpdf-header__links li a{
+        padding-right:20px;
+        padding-left: 20px;
+    }
 }

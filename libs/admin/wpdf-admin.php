@@ -264,23 +264,42 @@ class WPDF_Admin{
 		echo '<input type="hidden" name="page" value="wpdf-forms" />';
 		echo '<input type="hidden" name="form" value="'.$form->getName().'" />';
 
-		$btn = '';
-		if($form->getId()){
-			$btn = sprintf('<a href="%s" class="button">Edit Form</a>', admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $form->getId()));
-		}
+		?>
 
-		echo '<h1 style="display: block; float:left;">' . $form->getLabel() . ' Submissions '.$btn.'</h1>';
+			<div class="wpdf-form-manager">
 
-		require 'class-wpdf-submissions-list-table.php';
-		$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
-		$wpdf_submissions_table->prepare_items();
+				<?php $this->display_form_header('submissions', $form); ?>
 
-		echo $wpdf_submissions_table->search_box('Search Entries', 'wpdf-search');
+				<div class="wpdf-cols">
 
-		echo '<div style="clear:both"></div>';
+					<div class="wpdf-full">
+
+						<div class="wpdf-table-archive">
+
+						<?php
+						echo '<h1 style="display: block; float:left;">' . $form->getLabel() . ' Submissions</h1>';
+						require 'class-wpdf-submissions-list-table.php';
+						$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
+						$wpdf_submissions_table->prepare_items();
+
+						echo $wpdf_submissions_table->search_box('Search Entries', 'wpdf-search');
+
+						echo '<div style="clear:both"></div>';
+
+
+						$wpdf_submissions_table->display();
+						?>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="wpdf-clear"></div>
+			</div>
+		<?php
+
 		echo '</form>';
-
-		$wpdf_submissions_table->display();
 	}
 
 	/**
