@@ -183,76 +183,88 @@ class WPDF_Admin{
 	private function display_submission_page($form, $submission_id){
 
 		?>
-		<h1><?php echo $form->getLabel(); ?> Submission</h1>
-		<?php echo '<a href="'. admin_url('admin.php?page=wpdf-forms&form='.$form->getName()).'" class="button">Back</a>'; ?>
 
-		<div id="poststuff">
-			<div id="post-body" class="metabox-holder columns-2">
+		<div class="wpdf-form-manager">
 
-				<div id="post-body-content">
+			<?php $this->display_form_header('submissions', $form); ?>
 
-					<div class="postbox">
-						<div class="inside">
-							<?php
-							$db = new WPDF_DatabaseManager();
-							$submissions = $db->get_submission($submission_id);
-							$db->mark_as_read($submission_id);
+			<div class="wpdf-cols">
 
-							// get user name
-							$user_id = isset($submissions[0]->user_id) ? $submissions[0]->user_id : 'N/A';
-							$user = 'Guest';
-							if(intval($user_id) > 0){
-								$user = get_user_by('id', intval($user_id));
-								if($user){
-									$user = $user->data->user_login;
+				<div class="wpdf-left">
+					<div class="wpdf-left__inside">
+						<?php
+
+						$db = new WPDF_DatabaseManager();
+						$submissions = $db->get_submission($submission_id);
+						$db->mark_as_read($submission_id);
+
+						// get user name
+						$user_id = isset($submissions[0]->user_id) ? $submissions[0]->user_id : 'N/A';
+						$user = 'Guest';
+						if(intval($user_id) > 0){
+							$user = get_user_by('id', intval($user_id));
+							if($user){
+								$user = $user->data->user_login;
+							}
+						}
+
+						// get ip
+						$ip = isset($submissions[0]->ip) ? $submissions[0]->ip : 'N/A';
+
+						// date
+						$date = isset($submissions[0]->created) ? $submissions[0]->created : false;
+						if($date){
+							$date = date( 'M j, Y @ H:i', strtotime($date));
+						}
+
+						if(!empty($submissions)) {
+
+							foreach ( $submissions as $submission ) {
+
+								if ( $submission->field_type == 'virtual' ) {
+									$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
+								} else {
+									$content = esc_html( $submission->content );
 								}
+								echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
 							}
+						}
 
-							// get ip
-							$ip = isset($submissions[0]->ip) ? $submissions[0]->ip : 'N/A';
+						$url = 'form=' .$form->getName();
+						if($form->getId()){
+							$url = 'form_id=' .$form->getId();
+						}
 
-							// date
-							$date = isset($submissions[0]->created) ? $submissions[0]->created : false;
-							if($date){
-								$date = date( 'M j, Y @ H:i', strtotime($date));
-							}
-
-							if(!empty($submissions)) {
-
-								foreach ( $submissions as $submission ) {
-
-									if ( $submission->field_type == 'virtual' ) {
-										$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
-									} else {
-										$content = esc_html( $submission->content );
-									}
-									echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
-								}
-							}
-							?>
-						</div>
+						echo '<a href="'. admin_url('admin.php?page=wpdf-forms&'.$url).'" class="button">Back</a>';
+						?>
 					</div>
 				</div>
+				<div class="wpdf-right">
 
-				<div id="postbox-container-1" class="postbox-container">
-					<div class="postbox">
-						<h2 class="hndle"><span>Information</span></h2>
-						<div class="inside">
-							<?php if($date): ?>
-								<div class="misc-pub-section curtime misc-pub-curtime">
-									<span id="timestamp">Submitted on: <b><?php echo $date; ?></b></span>
+					<div class="wpdf-right__inside">
+						<div class="wpdf-panel wpdf-panel--active">
+							<div class="wpdf-panel__header">
+								<p class="wpdf-panel__title">Information</p>
+							</div>
+							<div class="wpdf-panel__content">
+								<?php if($date): ?>
+									<div class="misc-pub-section curtime misc-pub-curtime">
+										<span id="timestamp">Submitted on: <b><?php echo $date; ?></b></span>
+									</div>
+								<?php endif; ?>
+
+								<div class="misc-pub-section misc-pub-visibility" id="visibility">
+									From: <span id="post-visibility-display"><?php echo $user; ?> (<?php echo $ip; ?>)</span>
 								</div>
-							<?php endif; ?>
-
-							<div class="misc-pub-section misc-pub-visibility" id="visibility">
-								From: <span id="post-visibility-display"><?php echo $user; ?> (<?php echo $ip; ?>)</span>
 							</div>
 						</div>
 					</div>
+
 				</div>
 
-			</div><!-- /post-body -->
-			<br class="clear">
+			</div>
+
+			<div class="wpdf-clear"></div>
 		</div>
 		<?php
 	}
