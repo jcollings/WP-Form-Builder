@@ -29,3 +29,11 @@
 		<?php endif; ?>
 	</div>
 </div>
+<div class="wpdf-subheader">
+	<div class="wpdf-subheader__left">
+		<p><?php echo $form->getLabel(); ?></p>
+	</div>
+	<div class="wpdf-subheader__right">
+
+	</div>
+</div>

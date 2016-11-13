@@ -23,8 +23,13 @@ class WPDF_Admin{
 	}
 
 	function enqueue_scripts(){
-		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), WPDF()->get_version());
-		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), WPDF()->get_version());
+		$version = WPDF()->get_version();
+		if(defined('WP_DEBUG') && WP_DEBUG){
+			$version = time();
+		}
+
+		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), $version);
+		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), $version);
 	}
 
 	function register_mce_buttons($buttons){
@@ -277,7 +282,7 @@ class WPDF_Admin{
 						<div class="wpdf-table-archive">
 
 						<?php
-						echo '<h1 style="display: block; float:left;">' . $form->getLabel() . ' Submissions</h1>';
+						//echo '<h1 style="display: block; float:left;">' . $form->getLabel() . ' Submissions</h1>';
 						require 'class-wpdf-submissions-list-table.php';
 						$wpdf_submissions_table = new WPDF_Submissions_List_Table( $form );
 						$wpdf_submissions_table->prepare_items();

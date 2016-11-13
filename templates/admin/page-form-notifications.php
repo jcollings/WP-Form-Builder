@@ -47,6 +47,7 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 								<div class="wpdf-panel wpdf-panel--white wpdf-panel--active">
 									<div class="wpdf-panel__header">
 										Notification - <a href="#" class="wpdf-del-row">Delete</a>
+										<a href="#" class="wpdf-panel__toggle"></a>
 									</div>
 									<div class="wpdf-panel__content">
 
@@ -94,6 +95,7 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 							<div class="wpdf-panel wpdf-panel--white wpdf-panel--active">
 								<div class="wpdf-panel__header">
 									Notification - <a href="#" class="wpdf-del-row">Delete</a>
+									<a href="#" class="wpdf-panel__toggle"></a>
 								</div>
 								<div class="wpdf-panel__content">
 

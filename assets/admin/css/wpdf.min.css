@@ -114,6 +114,25 @@
 }
 
 /**
+ * Sub Header
+ */
+.wpdf-subheader{
+    overflow: hidden;
+    padding: 10px 20px;
+    border-bottom: 1px solid #dedede;
+}
+.wpdf-subheader p{
+    margin: 0;
+    padding: 0;
+}
+.wpdf-subheader__left{
+    float: left;
+}
+.wpdf-subheader__right{
+    float: right;
+}
+
+/**
  * WPDF Panel
  */
 .wpdf-panel{
@@ -125,6 +144,7 @@
 .wpdf-panel__header{
     padding:15px;
     border-bottom:1px solid #ececec;
+    position: relative;
 }
 .wpdf-panel__title{
     font-size:14px;
@@ -174,6 +194,44 @@
     text-align: center;
     text-decoration: none;
     color: #444444;
+}
+
+.wpdf-panel__toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    width: 48px;
+    margin-right: 0 !important;
+    text-indent: 100%;
+    outline: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #a0a5aa;
+    text-decoration: none; }
+
+.wpdf-panel__toggle:before {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    right: 0;
+    content: "\f140";
+    border: none;
+    background: 0 0;
+    font: 400 20px/1 dashicons;
+    speak: none;
+    display: block;
+    padding: 0;
+    text-indent: 0;
+    text-align: center;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: none !important;
+    line-height:48px;
+}
+.wpdf-panel--active .wpdf-panel__toggle:before{
+    content: "\f142";
 }
 
 /**/
@@ -350,7 +408,7 @@ i.mce-i-wpdf:before {
     padding:20px;
 }
 
-@media (max-width: 1023px){
+@media (max-width: 1039px){
     .wpdf-header__links li a{
         padding-right:20px;
         padding-left: 20px;

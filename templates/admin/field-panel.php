@@ -11,6 +11,7 @@ $field_type = $field->getType();
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
 		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?> - <a href="#delete" class="wpdf-del-field">Delete</a>
+		<a href="#" class="wpdf-panel__toggle"></a>
 	</div>
 	<div class="wpdf-panel__content">
 

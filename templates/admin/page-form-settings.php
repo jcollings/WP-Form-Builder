@@ -45,26 +45,26 @@ if($settings){
 					<table class="wpdf-form-table">
 						<tr>
 							<td><label for="submit_label">Form Label</label></td>
-							<td><input id="submit_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
+							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
 						</tr>
 						<tr>
 							<td><label for="submit_label">Submit Button Text</label></td>
-							<td><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
+							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
 						</tr>
 						<tr>
 							<td><label for="confirmation_type">Confirmation Type</label></td>
-							<td><select name="wpdf_settings[confirmation_type]" id="confirmation_type">
+							<td class="notification__input"><select name="wpdf_settings[confirmation_type]" id="confirmation_type">
 									<option value="message" <?php selected($confirmation_type, 'message', true); ?>>Message</option>
 									<option value="redirect" <?php selected($confirmation_type, 'redirect', true); ?>>Redirect</option>
 								</select></td>
 						</tr>
 						<tr>
 							<td><label for="confirmation_message">Confirmation Message</label></td>
-							<td><textarea name="wpdf_settings[confirmation_message]" id="confirmation_message" cols="30" rows="10"><?php echo $confirmation_message; ?></textarea></td>
+							<td class="notification__input"><textarea name="wpdf_settings[confirmation_message]" id="confirmation_message" cols="30" rows="10"><?php echo $confirmation_message; ?></textarea></td>
 						</tr>
 						<tr>
 							<td><label for="confirmation_redirect">Confirmation Redirect</label></td>
-							<td><input name="wpdf_settings[confirmation_redirect]" id="confirmation_redirect" type="text" value="<?php echo $confirmation_redirect; ?>" /></td>
+							<td class="notification__input"><input name="wpdf_settings[confirmation_redirect]" id="confirmation_redirect" type="text" value="<?php echo $confirmation_redirect; ?>" /></td>
 						</tr>
 					</table>
 					&nbsp;
