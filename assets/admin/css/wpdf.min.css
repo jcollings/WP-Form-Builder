@@ -131,6 +131,9 @@
 .wpdf-subheader__right{
     float: right;
 }
+.wpdf-subheader__form{
+    font-weight: bold;
+}
 
 /**
  * WPDF Panel
