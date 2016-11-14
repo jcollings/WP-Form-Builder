@@ -11,6 +11,7 @@
 		<h1>WP Form Builder</h1>
 	</div>
 
+	<?php if($form): ?>
 	<ul class="wpdf-header__links">
 		<?php if($form->getId()): ?>
 		<li class="<?php echo $active == 'fields' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $form->getId()); ?>">Fields</a></li>
@@ -22,15 +23,20 @@
 		<?php endif; ?>
 
 	</ul>
+	<?php endif; ?>
 
 	<div class="wpdf-header__actions">
-		<?php if($form->getId()): ?>
+		<?php if(!$form || $form->getId()): ?>
 		<input type="submit" value="Update" class="" />
 		<?php endif; ?>
 	</div>
 </div>
 <div class="wpdf-subheader">
 	<div class="wpdf-subheader__left">
+		<?php if($form): ?>
 		<p class="wpdf-subheader__form"><?php echo $form->getLabel(); ?></p>
+		<?php else: ?>
+			<p class="wpdf-subheader__form">New Form</p>
+		<?php endif; ?>
 	</div>
 </div>
