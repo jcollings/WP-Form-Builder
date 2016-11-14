@@ -523,9 +523,14 @@ class WPDF_Admin{
 				// get or randomly generate field id, should only generate on creating field
 				$field_id = isset($field['id']) && !empty($field['id']) ? $field['id'] : false;
 				if(!$field_id){
-					do{
-						$field_id = wp_generate_password(6, false);
-					}while(in_array($field_id, $field_ids));
+
+					// generate field id from label
+					$field_id = $base_name = sanitize_title($field['label']);
+					$c = 1;
+					while(empty($field_id) || in_array($field_id, $field_ids)){
+						$field_id = sprintf( '%s-%d', $base_name, $c);
+						$c++;
+					}
 					$field_ids[] = $field_id;
 				}
 
