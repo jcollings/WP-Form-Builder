@@ -485,8 +485,9 @@ class WPDF_Form{
 		$nonce = wp_create_nonce( 'wpdf_submit_form_' . $this->getName() );
 
 		// hidden fields
+		wp_nonce_field( 'wpdf_submit_form_' . $this->getName(), 'wpdf_nonce' );
 		echo '<input type="hidden" name="wpdf_action" value="' . $this->getName() .'" />';
-		echo '<input type="hidden" name="wpdf_nonce" value="'.$nonce.'" />';
+//		echo '<input type="hidden" name="wpdf_nonce" value="'.$nonce.'" />';
 
 		echo '</form>';
 	}
