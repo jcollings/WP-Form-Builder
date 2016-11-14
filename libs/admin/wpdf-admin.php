@@ -634,17 +634,23 @@ class WPDF_Admin{
 
 		$rules = array();
 		$data['validation'] = array();
-		if(isset($field['validation_type']) && !empty($field['validation_type'])) {
-			foreach ( $field['validation_type'] as $rule ) {
+		if(isset($field['validation']) && !empty($field['validation'])) {
+			foreach ( $field['validation'] as $rule ) {
 
 				// skip if empty value
 				if(empty($rule)){
 					continue;
 				}
 
-				$rules[] = array(
-					'type' => $rule
+				$rule_arr = array(
+					'type' => $rule['type'],
 				);
+
+				if( isset($rule['msg']) && !empty($rule['msg']) ){
+					$rule_arr['msg'] = $rule['msg'];
+				}
+
+				$rules[] = $rule_arr;
 			}
 		}
 		if(!empty($rules)){

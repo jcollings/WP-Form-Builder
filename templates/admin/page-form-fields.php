@@ -76,3 +76,10 @@ if($form !== false){
 	}
 	?>
 </div>
+<?php
+$rules = wpdf_getValidationRules();
+foreach($rules as $rule_id => $rule_label): ?>
+<script type="text/html" class="wpdf-validation__rule" data-rule="<?php echo $rule_id; ?>">
+	<?php wpdf_displayValidationBlockSection($rule_id); ?>
+</script>
+<?php endforeach; ?>

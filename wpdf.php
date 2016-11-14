@@ -121,6 +121,7 @@ class WPDF_DeveloperForms {
 
 		if ( is_admin() ) {
 			include_once 'libs/admin/class-wp-github-updater.php';
+			include_once 'libs/admin/wpdf-functions.php';
 			include_once 'libs/admin/wpdf-admin.php';
 		}
 	}

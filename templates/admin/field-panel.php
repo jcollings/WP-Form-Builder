@@ -38,6 +38,7 @@ $field_type = $field->getType();
 		<?php
 		// specific fields based on field type
 		$field->displaySettings();
+
 		// validation fields
 		?>
 		<div class="wpdf-clear"></div>
@@ -45,15 +46,7 @@ $field_type = $field->getType();
 			<p>Validation</p>
 			<div class="wpdf-repeater-container">
 				<script type="text/html" class="wpdf-repeater-template">
-					<div class="wpdf-validation-row wpdf-repeater-row">
-						<select name="field[][validation_type][]" class="validation_type">
-							<option value="">Choose Validation Type</option>
-							<option value="required">Required</option>
-							<option value="email">Email</option>
-							<option value="unique">Unique</option>
-						</select>
-						<a href="#" class="wpdf-del-row">Remove</a>
-					</div>
+					<?php wpdf_displayValidationBlock(); ?>
 				</script>
 				<?php
 				// load saved validation rules
@@ -62,17 +55,7 @@ $field_type = $field->getType();
 					if(isset($rules[$field->getName()]) && !empty($rules[$field->getName()])){
 						foreach($rules[$field->getName()] as $rule){
 							$type = $rule['type'];
-							?>
-							<div class="wpdf-validation-row wpdf-repeater-row">
-								<select name="field[][validation_type][]" class="validation_type">
-									<option value="">Choose Validation Type</option>
-									<option value="required" <?php selected('required', $type, true); ?>>Required</option>
-									<option value="email" <?php selected('email', $type, true); ?>>Email</option>
-									<option value="unique" <?php selected('unique', $type, true) ;?>>Unique</option>
-								</select>
-								<a href="#" class="wpdf-del-row">Remove</a>
-							</div>
-							<?php
+							wpdf_displayValidationBlock($type, $rule);
 						}
 					}
 				}
