@@ -19,6 +19,7 @@ class WPDF_Validation{
 		$this->_validation_msgs = array(
 			'required' => __('This field is required', "wpdf"),
 			'email' => __('Please enter a valid email address', "wpdf"),
+			'unique' => __('This value has already been previously entered', "wpdf"),
 			'min_length' => __('Please enter a value longer than %d', "wpdf"),
 			'max_length' => __('Please enter a value shorter than %d', "wpdf")
 		);
