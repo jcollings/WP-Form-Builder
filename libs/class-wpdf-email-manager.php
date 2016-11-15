@@ -89,6 +89,9 @@ class WPDF_EmailManager{
 			}
 		}
 
+		// add admin_email merge tag to both raw and html tags
+		$raw_template_tags[$this->setup_merge_tag('admin_email')] = $template_tags[$this->setup_merge_tag('admin_email')] = get_option('admin_email');
+
 		$template_tags[$this->setup_merge_tag('fields')] = $all;
 		$template_tags = array_reverse($template_tags, true);
 		$this->_tags = array_keys($template_tags);
