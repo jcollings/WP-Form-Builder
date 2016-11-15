@@ -23,6 +23,7 @@ class WPDF_Form{
 	protected $_validation = null;
 	protected $_rules = null;
 	protected $_submitted = false;
+	protected $_token = false;
 
 	protected $_settings = null;
 	protected $_settings_default = array();
@@ -192,16 +193,22 @@ class WPDF_Form{
 
 		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->getName() )){
 			$this->_error = __("An Error occurred when submitting the form, please retry.", "wpdf");
-//			return;
 		}
 
 		if( intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0 ){
 			$this->_error = __("An Error occurred: PHP discarded POST data because of request exceeding post_max_size.", "wpdf");
 		}
 
+
 		// clear data array
 		$this->_submitted = true;
 		$this->_validation = new WPDF_Validation($this->_rules);
+
+		// make sure valid token is present
+		$token = $this->getToken(false);
+		if(!isset($token) || !$this->verifyToken($token)){
+			$this->_error = __("Your session has expired", "wpdf");
+		}
 
 		// load modules
 		// todo: modules should be loaded after form has been registered with all settings
@@ -252,6 +259,7 @@ class WPDF_Form{
 				exit;
 			}
 
+			$this->clearToken();
 			// on form complete
 			do_action('wpdf/form_complete', $this, $this->_data);
 		}
@@ -485,6 +493,7 @@ class WPDF_Form{
 		// hidden fields
 		wp_nonce_field( 'wpdf_submit_form_' . $this->getName(), 'wpdf_nonce' );
 		echo '<input type="hidden" name="wpdf_action" value="' . $this->getName() .'" />';
+		echo '<input type="hidden" name="wpdf_token" value="' . $this->getToken() .'" />';
 
 		echo '</form>';
 	}
@@ -596,5 +605,68 @@ class WPDF_Form{
 	 */
 	public function getField($field){
 		return isset($this->_fields[$field]) ? $this->_fields[$field] : false;
+	}
+
+	/**
+	 * Get current form token
+	 *
+	 * @param bool $generate flag to allow token generation
+	 *
+	 * @return string
+	 */
+	public function getToken($generate = true){
+
+		// form has not been submitted
+		if($generate && !$this->_submitted && !$this->_token){
+
+			// generate fresh token
+			do{
+				$this->_token = wp_generate_password(12, false);
+			}while(get_transient('wpdf_token_' .$this->_token) !== false);
+
+			// store transient token
+			set_transient('wpdf_token_' . $this->_token, array(
+				'ip' => wpdf_getIp(),
+				'time' => time()
+			));
+		}elseif($this->_submitted && isset($_REQUEST['wpdf_token'])){
+			$this->_token = $_REQUEST['wpdf_token'];
+		}
+
+		return $this->_token;
+	}
+
+	/**
+	 * Make sure token is valid
+	 *
+	 * @param string $token
+	 *
+	 * @return bool
+	 */
+	public function verifyToken($token){
+
+		if($token && !empty($token)){
+
+			$transient = get_transient('wpdf_token_' . $token);
+			if($transient){
+				if(isset($transient['ip']) && $transient['ip'] == wpdf_getIp()){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Clear active token
+	 *
+	 * @return bool
+	 */
+	public function clearToken(){
+		if($this->verifyToken($this->_token)){
+			return delete_transient('wpdf_token_' . $this->_token);
+		}
+		return false;
 	}
 }
