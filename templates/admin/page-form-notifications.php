@@ -19,14 +19,15 @@ if(!empty($fields)) {
 }
 
 $settings = $form->export();
-$notifications = isset($settings['notifications']) && !empty($settings['notifications']) ? $settings['notifications'] : array(array(
+$blankNotification = array(
 	'to' => '',
 	'subject' => '',
 	'message' => '',
 	'from' => '',
 	'cc' => '',
 	'bcc' => '',
-));
+);
+$notifications = isset($settings['notifications']) && !empty($settings['notifications']) ? $settings['notifications'] : array($blankNotification);
 ?>
 <form action="" method="post">
 
@@ -43,104 +44,10 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 
 					<ul class="wpdf-notifications wpdf-repeater-container">
 						<script type="text/html" class="wpdf-repeater-template">
-							<li class="wpdf-notification wpdf-repeater-row">
-								<div class="wpdf-panel wpdf-panel--white wpdf-panel--active">
-									<div class="wpdf-panel__header">
-										Notification - <a href="#" class="wpdf-del-row">Delete</a>
-										<a href="#" class="wpdf-panel__toggle"></a>
-									</div>
-									<div class="wpdf-panel__content">
-
-										<table class="wpdf-form-table">
-											<tr>
-												<td><label for="to">Send To</label></td>
-												<td class="notification__input"><input id="to" type="text" name="notification[][to]" value="" /></td>
-												<td></td>
-											</tr>
-											<tr>
-												<td><label for="subject">Subject</label></td>
-												<td class="notification__input"><input id="subject" type="text" name="notification[][subject]" value="" /></td>
-												<td></td>
-											</tr>
-											<tr>
-												<td><label for="message">Message</label></td>
-												<td class="notification__input"><textarea name="notification[][message]" id="message" cols="30" rows="10"></textarea></td>
-												<td></td>
-											</tr>
-											<tr>
-												<td><label for="from">From</label></td>
-												<td class="notification__input"><input id="from" type="text" name="notification[][from]" value="" /></td>
-												<td></td>
-											</tr>
-											<tr>
-												<td><label for="cc">Cc</label></td>
-												<td class="notification__input"><input id="cc" type="text" name="notification[][cc]" value="" /></td>
-												<td></td>
-											</tr>
-											<tr>
-												<td><label for="bcc">Bcc</label></td>
-												<td class="notification__input"><input id="bcc" type="text" name="notification[][bcc]" value="" /></td>
-												<td></td>
-											</tr>
-
-
-										</table>
-
-									</div>
-								</div>
-							</li>
+							<?php wpdf_displayNotificationSettings($blankNotification, '', $fieldKeys); ?>
 						</script>
 						<?php foreach($notifications as $i => $notification): ?>
-						<li class="wpdf-notification wpdf-repeater-row">
-							<div class="wpdf-panel wpdf-panel--white wpdf-panel--active">
-								<div class="wpdf-panel__header">
-									Notification - <a href="#" class="wpdf-del-row">Delete</a>
-									<a href="#" class="wpdf-panel__toggle"></a>
-								</div>
-								<div class="wpdf-panel__content">
-
-									<table class="wpdf-form-table">
-										<tr>
-											<td><label for="to">Send To</label></td>
-											<td class="notification__input"><input id="to" type="text" name="notification[<?php echo $i; ?>][to]" value="<?php echo $notification['to']; ?>" /></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td><label for="subject">Subject</label></td>
-											<td class="notification__input"><input id="subject" type="text" name="notification[<?php echo $i; ?>][subject]" value="<?php echo $notification['subject']; ?>" /></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td><label for="message">Message</label></td>
-											<td class="notification__input"><textarea name="notification[<?php echo $i; ?>][message]" id="message" cols="30" rows="10"><?php echo $notification['message']; ?></textarea></td>
-											<td>
-												Form data can be displayed in the message using merge tags, to display all fields <code>{{fields}}</code>, to display individual fields you can use the following merge tags: <?php
-												echo '<br />' . implode(',<br /> ', $fieldKeys);
-												?>
-											</td>
-										</tr>
-										<tr>
-											<td><label for="from">From</label></td>
-											<td class="notification__input"><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo $notification['from']; ?>" /></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td><label for="cc">Cc</label></td>
-											<td class="notification__input"><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo $notification['cc']; ?>" /></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td><label for="bcc">Bcc</label></td>
-											<td class="notification__input"><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo $notification['bcc']; ?>" /></td>
-											<td></td>
-										</tr>
-
-
-									</table>
-
-								</div>
-							</div>
-						</li>
+							<?php wpdf_displayNotificationSettings($notification, $i, $fieldKeys); ?>
 						<?php endforeach; ?>
 					</ul>
 

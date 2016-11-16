@@ -44,6 +44,10 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 			<div class="wpdf-full">
 				<div class="wpdf-left__inside">
 
+					<h2 class="wpdf-settings__header">
+						General Settings
+					</h2>
+
 					<table class="wpdf-form-table">
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
@@ -59,6 +63,13 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							</td>
 							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
 						</tr>
+					</table>
+
+					<h2 class="wpdf-settings__header">
+						Form Confirmation <span class="wpdf-tooltip wpdf-tooltip__inline" title="Set what happens when the form is successfully submitted.">?</span>
+					</h2>
+
+					<table class="wpdf-form-table">
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
 								<label for="confirmation_type">Confirmation Type</label>
@@ -83,16 +94,27 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[confirmation_redirect]" id="confirmation_redirect" type="text" value="<?php echo $confirmation_redirect; ?>" /></td>
 						</tr>
+					</table>
+
+					<h2 class="wpdf-settings__header">
+						ReCAPTCHA Settings <span class="wpdf-tooltip wpdf-tooltip__inline" title="reCAPTCHA is a free service that protects your website from spam and abuse">?</span>
+					</h2>
+
+					<div class="wpdf-settings__desc">
+						<p>To generate or get your ReCAPTCHA details goto: <a target="_blank" href="https://www.google.com/recaptcha/intro/index.html">https://www.google.com/recaptcha/intro/index.html</a> and follow their instructions to generate an api key (you will need both site key and secret key).</p>
+					</div>
+
+					<table class="wpdf-form-table">
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
-								<label for="recaptcha_public">ReCAPTCHA Public Key</label>
+								<label for="recaptcha_public">ReCAPTCHA Site Key</label>
 								<span class="wpdf-tooltip" title="Enter your ReCAPTCHA Site key">?</span>
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[recaptcha_public]" id="recaptcha_public" type="text" value="<?php echo $recaptcha_public; ?>" /></td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
-								<label for="recaptcha_private">ReCAPTCHA Private Key</label>
+								<label for="recaptcha_private">ReCAPTCHA Public Key</label>
 								<span class="wpdf-tooltip" title="Enter your ReCAPTCHA Secret key">?</span>
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[recaptcha_private]" id="recaptcha_private" type="text" value="<?php echo $recaptcha_private; ?>" /></td>

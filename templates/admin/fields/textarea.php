@@ -1,6 +1,6 @@
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">
-		<label for="" class="wpdf-label">Default Value</label>
+		<label for="" class="wpdf-label">Default Value <span class="wpdf-tooltip wpdf-tooltip__inline" title="Default value shown when the form is loaded">?</span></label>
 		<textarea class="wpdf-input" name="field[][default]"></textarea>
 	</div>
 </div>

@@ -46,7 +46,7 @@ class WPDF_Admin{
 	function wpdf_register_pages(){
 
 		$admin_slug = "wpdf-forms";
-		add_menu_page("WP Form", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
+		add_menu_page("WP Form Builder", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
 		add_submenu_page( $admin_slug, 'New Form', 'Add Form', 'manage_options', 'admin.php?page=wpdf-forms&action=new');
 	}
 

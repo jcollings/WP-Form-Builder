@@ -237,6 +237,27 @@
     content: "\f142";
 }
 
+.wpdf-panel__delete{
+    position: absolute;
+    top: 50%;
+    right: 48px;
+    bottom: 0;
+    display: block;
+    width: auto !important;
+    margin-right: 0 !important;
+    margin-top: -8px;
+    text-indent: 0;
+    outline: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #a0a5aa;
+    text-decoration: none;
+    background: none !important;
+    -webkit-border-radius:none !important;
+    -moz-border-radius:none !important;
+    border-radius:none !important;
+}
+
 /**/
 
 #sortable {
@@ -345,11 +366,16 @@
 .wpdf-col .wpdf-label{
     width: 100%;
     display: block;
+    margin-bottom: 5px;
 }
 
 .wpdf-col .wpdf-input{
     width: 100%;
     box-sizing: border-box;
+}
+
+.wpdf-field__values{
+    background: #f7f7f7;
 }
 
 /**
@@ -373,6 +399,10 @@
     max-width: 300px;
 }
 
+.wpdf-settings__header, .wpdf-settings__desc {
+    margin-left: 10px;
+}
+
 /**
  * Notifications Page
  */
@@ -380,12 +410,32 @@
 .notification__input{
     min-width: 320px;
 }
+.notification__label {
+    min-width: 90px;
+}
 
 /**
  * Field Validation
  */
 .wpdf-repeater-container{
     margin-bottom:10px;
+}
+
+.wpdf-validation-row{
+    border-bottom: 1px solid #FFFFFF;
+    background: #f7f7f7;
+    padding: 5px;
+}
+
+.wpdf-validation__selector{
+    margin-bottom:5px;
+}
+
+.field-values__header {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 5px;
+    padding-top: 10px;
 }
 
 /**
@@ -431,10 +481,18 @@ i.mce-i-wpdf:before {
     display: inline-block;
     line-height: 16px;
     text-align: center;
+    font-weight: normal;
+    font-size: 12px;
+}
+.wpdf-tooltip__inline{
+    margin-left:5px;
+}
+.wpdf-tooltip__wrapper .wpdf-tooltip{
     position: absolute;
     right:0;
     top: 4px;
 }
+
 .wpdf-tooltip:hover{
     cursor: pointer;
 }

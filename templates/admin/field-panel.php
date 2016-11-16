@@ -10,8 +10,9 @@ $field_type = $field->getType();
 ?>
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
-		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?> - <a href="#delete" class="wpdf-del-field">Delete</a>
-		<a href="#" class="wpdf-panel__toggle"></a>
+		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?>
+		<a class="wpdf-tooltip wpdf-panel__delete wpdf-del-field" title="Delete field from form">Delete</a>
+		<a href="#" class="wpdf-panel__toggle wpdf-tooltip-blank" title="Toggle display of field settings"></a>
 	</div>
 	<div class="wpdf-panel__content">
 
@@ -26,11 +27,18 @@ $field_type = $field->getType();
 		?>
 		<div class="wpdf-field-row">
 			<div class="wpdf-col wpdf-col__half">
-				<label for="" class="wpdf-label">Label</label>
+				<label for="" class="wpdf-label">
+					Label
+					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed before the field on the form">?</span>
+				</label>
+
 				<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->getLabel(); ?>">
 			</div>
 			<div class="wpdf-col wpdf-col__half">
-				<label for="" class="wpdf-label">Placeholder</label>
+				<label for="" class="wpdf-label">
+					Placeholder
+					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed in the field when no value is entered">?</span>
+				</label>
 				<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->getPlaceholder(); ?>">
 			</div>
 		</div>
@@ -43,7 +51,9 @@ $field_type = $field->getType();
 		?>
 		<div class="wpdf-clear"></div>
 		<div class="wpdf-repeater wpdf-validation-repeater" data-min="0" data-template-name="validation_repeater">
-			<p>Validation</p>
+			<div class="field-values__header">
+			<strong>Validation Rules <span class="wpdf-tooltip wpdf-tooltip__inline" title="Add rules to validate data entered">?</span></strong>
+			</div>
 			<div class="wpdf-repeater-container">
 				<script type="text/html" class="wpdf-repeater-template">
 					<?php wpdf_displayValidationBlock(); ?>

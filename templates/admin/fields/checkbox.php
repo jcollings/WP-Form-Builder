@@ -1,14 +1,16 @@
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">
 
-		<strong>Values</strong>
+		<div class="field-values__header">
+			<strong>Values <span class="wpdf-tooltip wpdf-tooltip__inline" title="List of available options">?</span></strong>
+		</div>
 
-		<table width="100%" class="wpdf-repeater" data-min="1" data-template-name="field_value_repeater">
+		<table width="100%" class="wpdf-repeater wpdf-field__values" data-min="1" data-template-name="field_value_repeater">
 			<thead>
 			<tr>
-				<th>Label</th>
-				<th>Key</th>
-				<th>Default?</th>
+				<th>Label <span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed in dropdown">?</span></th>
+				<th>Value <span class="wpdf-tooltip wpdf-tooltip__inline" title="Value stored in when selected, leave blank to auto generate from label">?</span></th>
+				<th>Default <span class="wpdf-tooltip wpdf-tooltip__inline" title="Check value to make default when form is loaded">?</span></th>
 				<th>_</th>
 			</tr>
 			</thead>

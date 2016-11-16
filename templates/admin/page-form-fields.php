@@ -50,7 +50,7 @@ if($form !== false){
 				<div class="wpdf-right__inside">
 					<div class="wpdf-panel wpdf-panel--active">
 						<div class="wpdf-panel__header">
-							<p class="wpdf-panel__title">Available Fields</p>
+							<p class="wpdf-panel__title">Available Fields <span class="wpdf-tooltip wpdf-tooltip__inline" title="Hover over the type of field you want to add and drag into the left dropzone.">?</span></p>
 						</div>
 						<div class="wpdf-panel__content">
 							<ul class="wpdf-field-list">
