@@ -709,7 +709,7 @@ class WPDF_Form{
 			return;
 		}
 
-		$secretKey =  $this->get_setting('recaptcha_private'); // 6LcVEAwUAAAAAHh-rShXD-EipONhYCjZvI89TUox
+		$secretKey =  $this->get_setting('recaptcha_private');
 		$captcha = $_POST['g-recaptcha-response'];
 		$response= json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
 		if( isset($response['success']) && $response['success'] === true){
@@ -729,7 +729,7 @@ class WPDF_Form{
 			return;
 		}
 
-		$publicKey = $this->get_setting('recaptcha_public'); // 6LcVEAwUAAAAADFeNgYkxZdbjDujDidi0q6VA3sD
+		$publicKey = $this->get_setting('recaptcha_public');
 		?>
 		<div class="form-row input-captcha">
 			<div class="g-recaptcha" data-sitekey="<?php echo $publicKey; ?>"></div>

@@ -28,7 +28,8 @@ class WPDF_Admin{
 			$version = time();
 		}
 
-		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable'), $version);
+		wp_enqueue_script('tiptip', WPDF()->get_plugin_url() . 'assets/admin/js/jquery.tipTip.minified.js', array(), '1.3');
+		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable', 'tiptip'), $version);
 		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), $version);
 	}
 
