@@ -236,6 +236,12 @@ class WPDF_Form{
 
 		if(!$this->has_errors()){
 
+			// validate reCaptcha
+			if( !$this->verifyRecaptcha()){
+				$this->_error = "The reCAPTCHA wasn't entered correctly. Go back and try it again.";
+				return;
+			}
+
 			$submit = apply_filters( 'wpdf/process_form', true, $this, $this->_data );
 			if(!$submit){
 				return;
@@ -479,6 +485,9 @@ class WPDF_Form{
 	 */
 	public function submit($label = false, $args = array()){
 
+		// output recaptcha
+		$this->outputRecaptcha();
+
 		if(empty($label)){
 			$label = $this->_settings['labels']['submit'];
 		}
@@ -607,6 +616,8 @@ class WPDF_Form{
 		return isset($this->_fields[$field]) ? $this->_fields[$field] : false;
 	}
 
+	#region Session Token
+
 	/**
 	 * Get current form token
 	 *
@@ -669,4 +680,62 @@ class WPDF_Form{
 		}
 		return false;
 	}
+
+	#endregion
+
+	#region reCaptcha Validation
+
+	/**
+	 * Check to see if recaptcha has been setup form the form
+	 *
+	 * @return bool
+	 */
+	public function recaptchaSetup(){
+		if( $this->get_setting('recaptcha_private') && $this->get_setting('recaptcha_public') ){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check to see if recaptcha is a valid response
+	 *
+	 * @return bool
+	 */
+	public function verifyRecaptcha(){
+
+		// escape if recaptcha is not setup
+		if(!$this->recaptchaSetup()){
+			return;
+		}
+
+		$secretKey =  $this->get_setting('recaptcha_private'); // 6LcVEAwUAAAAAHh-rShXD-EipONhYCjZvI89TUox
+		$captcha = $_POST['g-recaptcha-response'];
+		$response= json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
+		if( isset($response['success']) && $response['success'] === true){
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Display recaptcha field
+	 */
+	public function outputRecaptcha(){
+
+		// escape if recaptcha is not setup
+		if(!$this->recaptchaSetup()){
+			return;
+		}
+
+		$publicKey = $this->get_setting('recaptcha_public'); // 6LcVEAwUAAAAADFeNgYkxZdbjDujDidi0q6VA3sD
+		?>
+		<div class="form-row input-captcha">
+			<div class="g-recaptcha" data-sitekey="<?php echo $publicKey; ?>"></div>
+		</div>
+		<?php
+	}
+
+	#endregion
 }

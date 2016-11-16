@@ -29,6 +29,8 @@ if($settings){
 	}
 }
 
+$recaptcha_private = $form->get_setting('recaptcha_private');
+$recaptcha_public = $form->get_setting('recaptcha_public');
 ?>
 <form action="" method="post">
 
@@ -65,6 +67,14 @@ if($settings){
 						<tr>
 							<td><label for="confirmation_redirect">Confirmation Redirect</label></td>
 							<td class="notification__input"><input name="wpdf_settings[confirmation_redirect]" id="confirmation_redirect" type="text" value="<?php echo $confirmation_redirect; ?>" /></td>
+						</tr>
+						<tr>
+							<td><label for="recaptcha_public">ReCAPTCHA Public Key</label></td>
+							<td class="notification__input"><input name="wpdf_settings[recaptcha_public]" id="recaptcha_public" type="text" value="<?php echo $recaptcha_public; ?>" /></td>
+						</tr>
+						<tr>
+							<td><label for="recaptcha_private">ReCAPTCHA Private Key</label></td>
+							<td class="notification__input"><input name="wpdf_settings[recaptcha_private]" id="recaptcha_private" type="text" value="<?php echo $recaptcha_private; ?>" /></td>
 						</tr>
 					</table>
 					&nbsp;

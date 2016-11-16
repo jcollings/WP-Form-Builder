@@ -448,6 +448,14 @@ class WPDF_Admin{
 			$form_data['form_label'] = $settings['form_label'];
 		}
 
+		// save recaptcha settings
+		if(isset($settings['recaptcha_public'])){
+			$form_data['settings']['recaptcha_public'] = $settings['recaptcha_public'];
+		}
+		if(isset($settings['recaptcha_private'])){
+			$form_data['settings']['recaptcha_private'] = $settings['recaptcha_private'];
+		}
+
 		$post = wp_update_post(array(
 			'ID' => $form_id,
 			'post_content' => serialize($form_data)

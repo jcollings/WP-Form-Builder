@@ -187,6 +187,10 @@ class WPDF_DeveloperForms {
 	}
 
 	public function enqueue_scripts(){
+
+		// todo: check if viewing form and that form has recaptcha enabled, then output scripts in head
+		wp_enqueue_script('wpdf-recaptcha', '//www.google.com/recaptcha/api.js');
+
 		wp_enqueue_script('wpdf-main', $this->get_plugin_url() . '/assets/public/js/main.js', array('jquery'), $this->get_version(), true);
 		wp_enqueue_style('wpdf-main', $this->get_plugin_url() . '/assets/public/css/main.css', array(), $this->get_version());
 	}
