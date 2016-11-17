@@ -53,8 +53,8 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 					<table class="wpdf-form-table">
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
-								<label for="form_label">Form Label</label>
-								<span class="wpdf-tooltip" title="Used as the form name and only to help identify the form.">?</span>
+								<label for="form_label">Form Name</label>
+								<span class="wpdf-tooltip" title="Name of form, displayed when outputting form.">?</span>
 							</td>
 							<td class="notification__input"><input id="form_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
 						</tr>
