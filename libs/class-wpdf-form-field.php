@@ -122,7 +122,7 @@ class WPDF_FormField{
 	}
 
 	public function getClasses(){
-		return '';
+		return 'wpdf-field';
 	}
 
 	/**

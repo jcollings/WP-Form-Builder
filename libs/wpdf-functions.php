@@ -57,14 +57,14 @@ function wpdf_display_form($name){
 
 	$form = wpdf_get_form($name);
 
+	$form->start();
+
 	if($form->is_complete()) {
 
 		// display successful message
 		wpdf_display_confirmation($form);
 
 	}else{
-		// output the form tag <form>
-		$form->start();
 
 		// display form errors if any
 		if($form->has_errors()){
@@ -77,11 +77,9 @@ function wpdf_display_form($name){
 		}
 
 		$form->submit();
-
-		// close </form>
-		$form->end();
 	}
 
+	$form->end();
 }
 
 /**
@@ -89,10 +87,15 @@ function wpdf_display_form($name){
  * @param $field_id string
  */
 function wpdf_display_field($form, $field_id){
+
+	if(!$form->hasValidToken()){
+		return;
+	}
+
 	?>
-	<div class="form-row <?php $form->classes($field_id, 'validation'); ?> <?php $form->classes($field_id, 'type'); ?>">
-		<div class="label"><?php $form->label( $field_id ); ?></div>
-		<div class="input"><?php $form->input( $field_id ); ?></div>
+	<div class="wpdf-form-row <?php $form->classes($field_id, 'validation'); ?> <?php $form->classes($field_id, 'type'); ?>">
+		<div class="wpdf-label"><?php $form->label( $field_id ); ?></div>
+		<div class="wpdf-input"><?php $form->input( $field_id ); ?></div>
 		<?php $form->error( $field_id ); ?>
 	</div>
 	<?php
@@ -103,7 +106,7 @@ function wpdf_display_field($form, $field_id){
  */
 function wpdf_display_confirmation($form){
 	?>
-	<div class="form-confirmation">
+	<div class="wpdf-form-confirmation">
 		<p><?php echo $form->getConfirmationMessage(); ?></p>
 	</div>
 	<?php

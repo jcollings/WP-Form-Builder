@@ -13,6 +13,7 @@ class WPDF_Form{
 	protected $ID = null;
 
 	protected $_name = null;
+	protected $_content = null;
 
 	// field errors
 	protected $_errors = null;
@@ -33,6 +34,7 @@ class WPDF_Form{
 	 * @var array
 	 */
 	protected $_confirmation = array();
+	protected $_confirmation_location = 'after';
 
 	protected $_has_file_field = false;
 
@@ -192,11 +194,11 @@ class WPDF_Form{
 	public function process(){
 
 		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->getName() )){
-			$this->_error = __("An Error occurred when submitting the form, please retry.", "wpdf");
+			$this->setError( __("An Error occurred when submitting the form, please retry.", "wpdf") );
 		}
 
 		if( intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0 ){
-			$this->_error = __("An Error occurred: PHP discarded POST data because of request exceeding post_max_size.", "wpdf");
+			$this->setError( __("An Error occurred: PHP discarded POST data because of request exceeding post_max_size.", "wpdf") );
 		}
 
 
@@ -207,7 +209,7 @@ class WPDF_Form{
 		// make sure valid token is present
 		$token = $this->getToken(false);
 		if(!isset($token) || !$this->verifyToken($token)){
-			$this->_error = __("Your session has expired", "wpdf");
+			$this->setError( __("Your session has expired", "wpdf") );
 		}
 
 		// load modules
@@ -238,7 +240,7 @@ class WPDF_Form{
 
 			// validate reCaptcha
 			if( !$this->verifyRecaptcha()){
-				$this->_error = "The reCAPTCHA wasn't entered correctly. Go back and try it again.";
+				$this->setError( __("The reCAPTCHA wasn't entered correctly. Go back and try it again.", 'wpdf') );
 				return;
 			}
 
@@ -291,18 +293,6 @@ class WPDF_Form{
 	}
 
 	public function settings($settings){
-
-		// database setting (yes/no)
-		/*if(isset($settings['database']) && $settings['database'] == 'no'){
-			$this->_settings['database'] = 'no';
-		}
-
-		if(isset($settings['submit_label']) && !empty($settings['submit_label'])){
-			$this->_settings['labels']['submit'] = $settings['submit_label'];
-		}*/
-
-		//var_dump($settings);
-//		var_dump($this->_settings);
 
 		$this->_settings = array_replace_recursive($this->_settings, $settings);
 	}
@@ -412,6 +402,14 @@ class WPDF_Form{
 		}
 
 		echo "<form {$attrs}>";
+		?>
+		<div class="wpdf-form-title">
+			<h1><?php echo $this->getLabel(); ?></h1>
+		</div>
+		<div class="wpdf-form-copy">
+			<?php echo $this->getContent(); ?>
+		</div>
+		<?php
 	}
 
 	public function getFieldName($field_id){
@@ -461,19 +459,23 @@ class WPDF_Form{
 			case 'validation':
 
 				if(isset($this->_errors[$field_id])){
-					echo 'has-error';
+					echo 'wpdf-has-error';
 				}
 				break;
 			case 'type':
-				echo sprintf('input-%s', $this->_fields[$field_id]->getType());
+				echo sprintf('wpdf-input-%s', $this->_fields[$field_id]->getType());
 				break;
 		}
 
 	}
 
 	public function error($field_id){
+
+		$beforeError = '<span class="wpdf-field-error">';
+		$afterError = '</span>';
+
 		if(isset($this->_errors[$field_id])){
-			echo $this->_errors[$field_id];
+			echo $beforeError . $this->_errors[$field_id] . $afterError;
 		}
 	}
 
@@ -484,6 +486,10 @@ class WPDF_Form{
 	 * @param array $args
 	 */
 	public function submit($label = false, $args = array()){
+
+		if(!$this->hasValidToken()){
+			return;
+		}
 
 		// output recaptcha
 		$this->outputRecaptcha();
@@ -512,6 +518,22 @@ class WPDF_Form{
 	#region Form Errors
 
 	/**
+	 * Set form error
+	 * @param $error
+	 */
+	public function setError($error){
+		$this->_error = $error;
+	}
+
+	/**
+	 * Add form error
+	 * @param $error
+	 */
+	public function addError($error){
+		$this->_errors[] = $error;
+	}
+
+	/**
 	 * Check to see if form has errors
 	 * @return bool
 	 */
@@ -525,22 +547,39 @@ class WPDF_Form{
 	}
 
 	/**
+	 * Check to see if form has valid token
+	 *
+	 * @return bool
+	 */
+	public function hasValidToken(){
+
+		$token = $this->getToken(false);
+		if(!$this->_submitted || $this->verifyToken($token)){
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Display form error message
 	 */
 	public function errors(){
+
+		echo '<div class="wpdf-form-error">';
 
 		if($this->_error){
 			echo "<p>".$this->_error."</p>";
 			return;
 		}
 
-
 		echo sprintf("<p>%s</p>", __("Please make sure you have corrected any errors below before resubmitting the form.", "wpdf"));
-		echo '<ul>';
+		echo '<ul class="wpdf-form-errors">';
 		foreach($this->_errors as $field_id => $error){
 			echo '<li>' . $this->_fields[$field_id]->getLabel() . ' - ' . $error . '</li>';
 		}
 		echo '</ul>';
+		echo '</div>';
 	}
 
 	#endregion
@@ -587,6 +626,21 @@ class WPDF_Form{
 		return $this->_name;
 	}
 
+	/**
+	 * Get form content
+	 *
+	 * @return null|string
+	 */
+	public function getContent(){
+
+		// don't show form content if confirmation location is set to replace
+		if($this->_submitted && $this->getConfirmationLocation() == 'replace'){
+			return '';
+		}
+
+		return $this->_content;
+	}
+
 	public function getId(){
 		return $this->ID;
 	}
@@ -614,6 +668,10 @@ class WPDF_Form{
 	 */
 	public function getField($field){
 		return isset($this->_fields[$field]) ? $this->_fields[$field] : false;
+	}
+
+	protected function getConfirmationLocation(){
+		return $this->_confirmation_location;
 	}
 
 	#region Session Token
@@ -731,7 +789,7 @@ class WPDF_Form{
 
 		$publicKey = $this->get_setting('recaptcha_public');
 		?>
-		<div class="form-row input-captcha">
+		<div class="wpdf-form-row wpdf-input-captcha">
 			<div class="g-recaptcha" data-sitekey="<?php echo $publicKey; ?>"></div>
 		</div>
 		<?php

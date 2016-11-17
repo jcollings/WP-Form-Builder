@@ -33,7 +33,7 @@ class WPDF_CheckboxField extends WPDF_FormField {
 				}
 
 				echo '<label>';
-				echo '<input type="'.$this->getType().'" name="'.$name.'"'.$checked.' value="'.$key.'" >' . $option;
+				echo '<input type="'.$this->getType().'" name="'.$name.'"'.$checked.' value="'.$key.'" class="wpdf-field">' . $option;
 				echo '</label>';
 			}
 

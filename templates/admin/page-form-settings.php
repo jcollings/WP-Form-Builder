@@ -11,7 +11,7 @@ if($form !== false){
 }
 
 $settings = $form->export();
-$confirmation_redirect = $confirmation_message = $confirmation_type = $submit_label = '';
+$confirmation_location = $confirmation_redirect = $confirmation_message = $confirmation_type = $submit_label = '';
 if($settings){
 
 	if(isset($settings['confirmations'])) {
@@ -20,6 +20,8 @@ if($settings){
 		$confirmation_message = $confirmation['message'];
 		$confirmation_redirect = $confirmation['redirect_url'];
 	}
+
+	$confirmation_location = isset($settings['confirmation_location']) ? $settings['confirmation_location'] : 'after';
 
 	if(isset($settings['settings'])){
 
@@ -51,10 +53,17 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 					<table class="wpdf-form-table">
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
-								<label for="submit_label">Form Label</label>
+								<label for="form_label">Form Label</label>
 								<span class="wpdf-tooltip" title="Used as the form name and only to help identify the form.">?</span>
 							</td>
-							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
+							<td class="notification__input"><input id="form_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
+						</tr>
+						<tr>
+							<td class="wpdf-tooltip__wrapper">
+								<label for="form_content">Form Content</label>
+								<span class="wpdf-tooltip" title="Content displayed on the form before the fields">?</span>
+							</td>
+							<td class="notification__input"><textarea name="wpdf_settings[form_content]" id="form_content" cols="30" rows="10"><?php echo $form->getContent(); ?></textarea></td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
@@ -78,6 +87,16 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							<td class="notification__input"><select name="wpdf_settings[confirmation_type]" id="confirmation_type">
 									<option value="message" <?php selected($confirmation_type, 'message', true); ?>>Message</option>
 									<option value="redirect" <?php selected($confirmation_type, 'redirect', true); ?>>Redirect</option>
+								</select></td>
+						</tr>
+						<tr>
+							<td class="wpdf-tooltip__wrapper">
+								<label for="confirmation_location">Confirmation Location</label>
+								<span class="wpdf-tooltip" title="Choose where the confirmation message is displayed.">?</span>
+							</td>
+							<td class="notification__input"><select name="wpdf_settings[confirmation_location]" id="confirmation_location">
+									<option value="after" <?php selected($confirmation_location, 'after', true); ?>>After Form Content</option>
+									<option value="replace" <?php selected($confirmation_location, 'replace', true); ?>>Replace Form Content</option>
 								</select></td>
 						</tr>
 						<tr>

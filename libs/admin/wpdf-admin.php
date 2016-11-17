@@ -427,6 +427,8 @@ class WPDF_Admin{
 			$form_data['settings'] = array();
 		}
 
+		$form_data['content'] = isset($settings['form_content']) ? $settings['form_content'] : '';
+
 		$form_data['settings'] = array(
 			'labels' => array(
 				'submit' => $settings['submit_label']
@@ -445,6 +447,9 @@ class WPDF_Admin{
 				'message' => $settings['confirmation_message']
 			)
 		);
+		// save how confirmation should display
+		$form_data['confirmation_location'] = isset($settings['confirmation_location']) && in_array($settings['confirmation_location'], array('replace', 'after')) ? $settings['confirmation_location'] : 'after';
+
 		if(!empty($settings['form_label'])){
 			$form_data['form_label'] = $settings['form_label'];
 		}

@@ -34,6 +34,10 @@ class WPDF_DB_Form extends WPDF_Form {
 				$this->settings($form['settings']);
 			}
 
+			// load form content
+			$this->_content = isset($form['content']) ? $form['content'] : '';
+			$this->_confirmation_location = isset($form['confirmation_location']) ? $form['confirmation_location'] : 'after';
+
 			if(isset($form['form_label'])){
 				$this->_label = $form['form_label'];
 			}else{
