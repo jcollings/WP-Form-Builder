@@ -24,13 +24,15 @@ class WPDF_Admin{
 
 	function enqueue_scripts(){
 		$version = WPDF()->get_version();
+		$ext = '.min';
 		if(defined('WP_DEBUG') && WP_DEBUG){
 			$version = time();
+			$ext = '';
 		}
 
-		wp_enqueue_script('tiptip', WPDF()->get_plugin_url() . 'assets/admin/js/jquery.tipTip.minified.js', array(), '1.3');
-		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf.min.js', array('jquery-ui-draggable', 'jquery-ui-sortable', 'tiptip'), $version);
-		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf.min.css', array(), $version);
+		wp_enqueue_script('tiptip', WPDF()->get_plugin_url() . 'assets/admin/js/jquery-tipTip'.$ext.'.js', array(), '1.3');
+		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf'.$ext.'.js', array('jquery-ui-draggable', 'jquery-ui-sortable', 'tiptip'), $version);
+		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf'.$ext.'.css', array(), $version);
 	}
 
 	function register_mce_buttons($buttons){
@@ -39,7 +41,13 @@ class WPDF_Admin{
 	}
 
 	function enqueue_mce_scripts($plugins){
-		$plugins['wpdf_form_btn'] = WPDF()->get_plugin_url() . 'assets/admin/js/editor_shortcode.js';
+
+		$ext = '.min';
+		if(defined('WP_DEBUG') && WP_DEBUG){
+			$ext = '';
+		}
+
+		$plugins['wpdf_form_btn'] = WPDF()->get_plugin_url() . 'assets/admin/js/editor-shortcode'.$ext.'.js';
 		return $plugins;
 	}
 

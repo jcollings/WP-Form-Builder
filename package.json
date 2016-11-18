@@ -1,5 +1,10 @@
 {
   "name": "wpdf",
+  "title": "WordPress Developer Forms",
+  "url": "https://wordpressdeveloperforms.com",
+  "author": "James Collings",
+  "copyright": "",
+  "license": "",
   "version": "0.2.3",
   "devDependencies": {
     "grunt": "^0.4.5",
