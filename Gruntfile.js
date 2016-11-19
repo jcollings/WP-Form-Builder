@@ -33,14 +33,14 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'assets/admin/css/',
-                        src: ['**/*.scss'],
+                        src: ['{,*/}*.scss'],
                         dest: 'assets/admin/css/',
                         ext: ['.css']
                     },
                     {
                         expand: true,
                         cwd: 'assets/public/css/',
-                        src: ['**/*.scss'],
+                        src: ['{,*/}*.scss'],
                         dest: 'assets/public/css/',
                         ext: ['.css']
                     }

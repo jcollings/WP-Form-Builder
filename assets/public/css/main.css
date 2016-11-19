@@ -2,38 +2,11 @@
   margin-bottom: 1em;
 }
 
-.wpdf-choices label {
+.wpdf-form .wpdf-choices label {
   margin-right: 1em;
   display: inline-block;
 }
 
-/**
- * Base Theme
- */
-/**
- * Theme 01
- */
-.wpdf-form {
-  background: #122449;
-  padding: 20px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.wpdf-form p, .wpdf-form h1, .wpdf-form label {
-  color: #FFFFFF;
-}
-
-.form-row .wpdf-field {
-  border-radius: 0 !important;
-  background: #a2b5da;
-  border: 1px solid #FFFFFF;
-}
-
-.wpdf-form .wpdf-choices label {
-  color: #a2b5da;
-}
-
-/* Form Errors */
 .wpdf-form-error {
   background: indianred;
   padding: 30px 15px;
@@ -68,4 +41,82 @@
 
 .wpdf-form-confirmation p {
   margin-bottom: 10px;
+}
+
+/**
+ * Theme 01
+ */
+.wpdf-form {
+  background: #122449;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #FFFFFF;
+  border: none;
+  margin: 0;
+  padding: 20px;
+}
+
+.wpdf-form .wpdf-form-title h1, .wpdf-form .wpdf-form-title h2, .wpdf-form .wpdf-form-title h3, .wpdf-form .wpdf-form-title h4, .wpdf-form .wpdf-form-title h5, .wpdf-form .wpdf-form-title h6, .wpdf-form .wpdf-form-title p {
+  font-size: 24px;
+}
+
+.wpdf-form, .wpdf-form p, .wpdf-form label {
+  color: #FFFFFF;
+}
+
+.wpdf-form .wpdf-form-row {
+  border-radius: 0;
+  background: none;
+  color: #FFFFFF;
+  border: none;
+  margin: 0 0 30px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.wpdf-form .wpdf-field {
+  border-radius: 0;
+  background: #a2b5da;
+  color: #333333;
+  border: 1px solid #FFFFFF;
+  margin: 0;
+  padding: 15px;
+}
+
+.wpdf-form .wpdf-label label {
+  color: #FFFFFF;
+  margin: 0;
+  padding: 0;
+}
+
+.wpdf-form .wpdf-choices {
+  margin-left: -20px;
+}
+
+.wpdf-form .wpdf-choices input {
+  margin-right: 5px;
+}
+
+.wpdf-form .wpdf-choices label {
+  color: #FFFFFF;
+  margin: 0 0 0 20px;
+  padding: 0;
+}
+
+.wpdf-form .wpdf-input-select .wpdf-field, .wpdf-form .wpdf-input-text .wpdf-field, .wpdf-form .wpdf-input-textarea .wpdf-field {
+  width: 100%;
+}
+
+.wpdf-form .wpdf-button {
+  border: none;
+  border-radius: 0;
+  color: #FFFFFF;
+  background: #a2b5da;
+  margin: 0 0 10px;
+  padding: 15px;
+}
+
+.wpdf-form .wpdf-button:hover {
+  border: none;
+  color: #a2b5da;
+  background: #FFFFFF;
 }

@@ -1,574 +1,629 @@
 .wpdf-form-manager{
-  border:1px solid #dedede;
+    border:1px solid #dedede;
+
+    .wpdf-header {
+        height: 70px;
+        background: #FFF;
+        width: 100%;
+        border-bottom: 1px solid #dedede;
+    }
+
+    .wpdf-clear {
+        clear: both;
+    }
+
+    .wpdf-cols {
+        display: table;
+        width: 100%;
+    }
+
+    .wpdf-left, .wpdf-right {
+        /*float:left;*/
+        min-height: 500px;
+        display: table-cell;
+        vertical-align: top;
+    }
+
+    .wpdf-left {
+        background: #f7f7f7;
+        width: 70%;
+    }
+
+    .wpdf-right {
+        background: #ececec;
+        width: 30%;
+    }
+
+    .wpdf-full {
+        background: #f7f7f7;
+        overflow: hidden;
+    }
+
+    /**
+     * Settings Header
+     */
+    .wpdf-header {
+        position: relative;
+    }
+
+    .wpdf-header__logo {
+        height: 70px;
+        width: 150px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .wpdf-header__logo h1 {
+        font-size: 13px;
+        padding: 0;
+        margin: 0;
+        line-height: 70px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .wpdf-header__links {
+        list-style: none;
+        padding: 0;
+        margin: 0 200px 0 150px;
+        border-left: 1px solid #dedede;
+        overflow: hidden;
+    }
+
+    .wpdf-header__links li {
+        display: block;
+        float: left;
+        margin: 0;
+        border-right: 1px solid #dedede;
+    }
+
+    .wpdf-header__links li a {
+        color: #333333;
+        text-decoration: none;
+        padding: 26px 30px;
+        display: block;
+        background: #ffffff;
+    }
+
+    .wpdf-header__links li.active a {
+        background: #ececec;
+        color: #000000;
+    }
+
+    .wpdf-header__links a:focus {
+        outline: none;
+    }
+
+    .wpdf-header__links a:hover {
+        background: #f7f7f7;
+    }
+
+    .wpdf-header__actions {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        margin-top: -20px;
+    }
+
+    .wpdf-header__actions input, .wpdf-header__actions button {
+        height: 40px;
+        line-height: 40px;
+        font-size: 13px;
+        padding: 0 10px;
+        background: #0085ba;
+        border: 1px solid #0073aa;
+        display: inline-block;
+        -webkit-box-shadow: 0 1px 0 #006799;
+        box-shadow: 0 1px 0 #006799;
+        color: #fff;
+        text-decoration: none;
+        text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+    }
+
+    .wpdf-header__actions button:hover, .wpdf-header__actions input:hover {
+        background: #008ec2;
+        border-color: #006799;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    /**
+     * Sub Header
+     */
+    .wpdf-subheader {
+        overflow: hidden;
+        padding: 10px 20px;
+        border-bottom: 1px solid #dedede;
+    }
+
+    .wpdf-subheader p {
+        margin: 0;
+        padding: 0;
+    }
+
+    .wpdf-subheader__left {
+        float: left;
+    }
+
+    .wpdf-subheader__right {
+        float: right;
+    }
+
+    .wpdf-subheader__form {
+        font-weight: bold;
+    }
+
+    /**
+     * WPDF Panel
+     */
+    .wpdf-panel {
+        background: #f7f7f7;
+    }
+
+    .wpdf-panel--active .wpdf-panel__content {
+        display: block;
+    }
+
+    .wpdf-panel__header {
+        padding: 15px;
+        border-bottom: 1px solid #ececec;
+        position: relative;
+    }
+
+    .wpdf-panel__title {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .wpdf-panel__content {
+        display: none;
+        margin: 7px;
+    }
+
+    .wpdf-panel--white {
+        background: #ffffff;
+    }
+
+    .wpdf-panel--white .wpdf-panel__header, .wpdf-panel--white.wpdf-panel--active {
+        border: 1px solid #ececec;
+    }
+
+    .wpdf-panel--white.wpdf-panel--active .wpdf-panel__header {
+        border-left: none;
+        border-top: none;
+        border-right: none;
+    }
+
+    .wpdf-panel--white .wpdf-panel__content {
+        margin: 15px;
+    }
+
+    .wpdf-right__inside, .wpdf-left__inside {
+        margin: 20px;
+    }
+
+    .wpdf-field-list {
+        margin: 0 0 7px;
+        padding: 0;
+        list-style: none;
+        overflow: hidden;
+    }
+
+    .wpdf-field-list li {
+        margin: 0;
+        padding: 0;
+        width: 50%;
+        float: left;
+    }
+
+    .wpdf-field-list a {
+        background: #ececec;
+        padding: 15px 0;
+        margin: 7px;
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        color: #444444;
+    }
+
+    .wpdf-panel__toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: block;
+        width: 48px;
+        margin-right: 0 !important;
+        text-indent: 100%;
+        outline: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        color: #a0a5aa;
+        text-decoration: none;
+    }
+
+    .wpdf-panel__toggle:before {
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+        right: 0;
+        content: "\f140";
+        border: none;
+        background: 0 0;
+        font: 400 20px/1 dashicons;
+        speak: none;
+        display: block;
+        padding: 0;
+        text-indent: 0;
+        text-align: center;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-decoration: none !important;
+        line-height: 48px;
+    }
+
+    .wpdf-panel--active .wpdf-panel__toggle:before {
+        content: "\f142";
+    }
+
+    .wpdf-panel__delete {
+        position: absolute;
+        top: 50%;
+        right: 48px;
+        bottom: 0;
+        display: block;
+        width: auto !important;
+        margin-right: 0 !important;
+        margin-top: -8px;
+        text-indent: 0;
+        outline: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        color: #a0a5aa;
+        text-decoration: none;
+        background: none !important;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    /**/
+
+    #sortable {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        min-height: 50px;
+    }
+
+    #sortable li {
+        margin: 5px 0;
+    }
+
+    /*.ui-state-default{
+        background: #999;
+        width: 100%;
+        position: relative;
+    }*/
+    /*.wpdf-fields .ui-state-highlight {
+        background: #999999;
+        height: 20px;
+        width: 100%;
+    }*/
+
+    /**
+    **/
+    /*.wpdf-fields .wpdf-panel{
+        background: #ffffff;
+    }
+    .wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
+        border: 1px solid #ececec;
+    }
+    .wpdf-fields .wpdf-panel--active .wpdf-panel__header{
+        border-left: none;
+        border-top: none;
+        border-right: none;
+    }
+    .wpdf-fields .wpdf-panel__content{
+        margin: 15px;
+    }*/
+    /*.wpdf-fields .placeholder{
+        border: 1px dashed #999999;
+        padding: 15px;
+    }*/
+
+    /*The element used to show the future position of the item currently being sorted.*/
+    /*.ui-sortable-placeholder{
+        margin: 10px;
+        background: red;
+    }*/
+
+    /*The element shown while dragging a sortable item. The element actually used depends on the*/
+    .ui-sortable-helper {
+        background: yellow;
+        padding: 0;
+        margin: 0;
+    }
+
+    /*The handle of each sortable item, specified using the handle option. By default, each sortable item itself is also the handle.*/
+    /*.ui-sortable-handle{
+        margin: 10px;
+        background: green;
+    }*/
+
+    /*The sortable element.*/
+    .ui-sortable {
+        margin: 10px;
+        background: none;
+    }
+
+    /*.wpdf-dropped-item{
+        margin: 10px;
+        background: cyan;
+    }*/
+
+    .sortable-placeholder {
+        height: 30px;
+        border: 1px dashed #b4b9be;
+    }
+
+    /**
+     * Form Fields
+     */
+    .wpdf-field-row {
+        width: 104%;
+        clear: both;
+        margin: 0 -2%;
+    }
+
+    .wpdf-field-row .wpdf-col {
+        float: left;
+        margin-bottom: 10px;
+    }
+
+    .wpdf-col.wpdf-col__half {
+        width: 46%;
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .wpdf-col.wpdf-col__full {
+        width: 96%;
+        margin-left: 2%;
+        margin-right: 2%;
+    }
+
+    .wpdf-col .wpdf-label {
+        width: 100%;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .wpdf-col .wpdf-input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .wpdf-field__values {
+        background: #f7f7f7;
+    }
+
+    /**
+     * Repeater value field
+     */
+    .wpdf-repeater .wpdf-repeater-row .wpdf-del-row {
+        display: inline-block;
+    }
+
+    /**
+     * Settings Page
+     */
+
+    .wpdf-form-table td {
+        vertical-align: top;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .wpdf-form-table input, .wpdf-form-table textarea {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .wpdf-settings__header, .wpdf-settings__desc {
+        margin-left: 10px;
+    }
+
+    /**
+     * Notifications Page
+     */
+
+    .notification__input {
+        min-width: 320px;
+    }
+
+    .notification__label {
+        min-width: 90px;
+    }
+
+    /**
+     * Field Validation
+     */
+    .wpdf-repeater-container {
+        margin-bottom: 10px;
+    }
+
+    .wpdf-validation-row {
+        border-bottom: 1px solid #FFFFFF;
+        background: #f7f7f7;
+        padding: 5px;
+    }
+
+    .wpdf-validation__selector {
+        margin-bottom: 5px;
+    }
+
+    .field-values__header {
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ececec;
+        padding-bottom: 5px;
+        padding-top: 10px;
+    }
+
+    /**
+     * Table Archive
+     */
+    .wpdf-table-archive {
+        padding: 20px;
+    }
+
+
 }
 
-.wpdf-header{
-  height: 70px;
-  background: #FFF;
-  width: 100%;
-  border-bottom:1px solid #dedede;
-}
-.wpdf-clear{
-  clear:both;
-}
-.wpdf-cols{
-  display: table;
-  width: 100%;
-}
-.wpdf-left, .wpdf-right{
-  /*float:left;*/
-  min-height: 500px;
-  display: table-cell;
-  vertical-align: top;
-}
-.wpdf-left{
-  background: #f7f7f7;
-  width: 70%;
-}
-.wpdf-right{
-  background: #ececec;
-  width: 30%;
-}
-.wpdf-full{
-  background: #f7f7f7;
-  overflow: hidden;
-}
-
-/**
- * Settings Header
- */
-.wpdf-header{
-  position: relative;
-}
-.wpdf-header__logo{
-  height: 70px;
-  width: 150px;
-  position: absolute;
-  left: 0;
-  top:0;
-  bottom:0;
-}
-.wpdf-header__logo h1{
-  font-size:13px;
-  padding: 0;
-  margin: 0;
-  line-height: 70px;
-  text-align: center;
-  font-weight: bold;
-}
-.wpdf-header__links{
-  list-style: none;
-  padding: 0;
-  margin:0 200px 0 150px;
-  border-left:1px solid #dedede;
-  overflow: hidden;
-}
-.wpdf-header__links li{
-  display: block;
-  float:left;
-  margin: 0;
-  border-right:1px solid #dedede;
-}
-.wpdf-header__links li a{
-  color: #333333;
-  text-decoration: none;
-  padding: 26px 30px;
-  display: block;
-  background: #ffffff;
-}
-.wpdf-header__links li.active a{
-  background: #ececec;
-  color: #000000;
-}
-.wpdf-header__links a:focus{
-  outline: none;
-}
-.wpdf-header__links a:hover{
-  background: #f7f7f7;
-}
-.wpdf-header__actions{
-  position: absolute;
-  right: 20px;
-  top:50%;
-  margin-top: -20px;
-}
-.wpdf-header__actions input, .wpdf-header__actions button{
-  height: 40px;
-  line-height: 40px;
-  font-size: 13px;
-  padding: 0 10px;
-  background: #0085ba;
-  border: 1px solid #0073aa;
-  display: inline-block;
-  -webkit-box-shadow: 0 1px 0 #006799;
-  box-shadow: 0 1px 0 #006799;
-  color: #fff;
-  text-decoration: none;
-  text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
-}
-
-.wpdf-header__actions button:hover, .wpdf-header__actions input:hover{
-  background: #008ec2;
-  border-color: #006799;
-  color: #fff;
-  cursor: pointer;
-}
-
-/**
- * Sub Header
- */
-.wpdf-subheader{
-  overflow: hidden;
-  padding: 10px 20px;
-  border-bottom: 1px solid #dedede;
-}
-.wpdf-subheader p{
-  margin: 0;
-  padding: 0;
-}
-.wpdf-subheader__left{
-  float: left;
-}
-.wpdf-subheader__right{
-  float: right;
-}
-.wpdf-subheader__form{
-  font-weight: bold;
-}
-
-/**
- * WPDF Panel
- */
-.wpdf-panel{
-  background: #f7f7f7;
-}
-.wpdf-panel--active .wpdf-panel__content{
-  display: block;
-}
-.wpdf-panel__header{
-  padding:15px;
-  border-bottom:1px solid #ececec;
-  position: relative;
-}
-.wpdf-panel__title{
-  font-size:14px;
-  margin: 0;
-  padding: 0;
-}
-.wpdf-panel__content{
-  display: none;
-  margin: 7px;
-}
-.wpdf-panel--white{
-  background: #ffffff;
-}
-.wpdf-panel--white .wpdf-panel__header, .wpdf-panel--white.wpdf-panel--active{
-  border: 1px solid #ececec;
-}
-.wpdf-panel--white.wpdf-panel--active .wpdf-panel__header{
-  border-left: none;
-  border-top: none;
-  border-right: none;
-}
-.wpdf-panel--white .wpdf-panel__content{
-  margin: 15px;
-}
-
-.wpdf-right__inside, .wpdf-left__inside{
-  margin: 20px;
-}
-
-.wpdf-field-list{
-  margin: 0 0 7px;
-  padding:0;
-  list-style: none;
-  overflow: hidden;
-}
-.wpdf-field-list li{
-  margin: 0;
-  padding: 0;
-  width: 50%;
-  float:left;
-}
-.wpdf-field-list a{
-  background: #ececec;
-  padding: 15px 0;
-  margin: 7px;
-  display: block;
-  text-align: center;
-  text-decoration: none;
-  color: #444444;
-}
-
-.wpdf-panel__toggle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  display: block;
-  width: 48px;
-  margin-right: 0 !important;
-  text-indent: 100%;
-  outline: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  color: #a0a5aa;
-  text-decoration: none; }
-
-.wpdf-panel__toggle:before {
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  right: 0;
-  content: "\f140";
-  border: none;
-  background: 0 0;
-  font: 400 20px/1 dashicons;
-  speak: none;
-  display: block;
-  padding: 0;
-  text-indent: 0;
-  text-align: center;
-  position: relative;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-decoration: none !important;
-  line-height:48px;
-}
-.wpdf-panel--active .wpdf-panel__toggle:before{
-  content: "\f142";
-}
-
-.wpdf-panel__delete{
-  position: absolute;
-  top: 50%;
-  right: 48px;
-  bottom: 0;
-  display: block;
-  width: auto !important;
-  margin-right: 0 !important;
-  margin-top: -8px;
-  text-indent: 0;
-  outline: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  color: #a0a5aa;
-  text-decoration: none;
-  background: none !important;
-  -webkit-border-radius:none !important;
-  -moz-border-radius:none !important;
-  border-radius:none !important;
-}
-
-/**/
-
-#sortable {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  min-height: 50px;
-}
-#sortable li {
-  margin:5px 0;
-}
-/*.ui-state-default{
-    background: #999;
-    width: 100%;
-    position: relative;
-}*/
-/*.wpdf-fields .ui-state-highlight {
-    background: #999999;
-    height: 20px;
-    width: 100%;
-}*/
-
-/**
-**/
-/*.wpdf-fields .wpdf-panel{
-    background: #ffffff;
-}
-.wpdf-fields .wpdf-panel__header, .wpdf-fields .wpdf-panel--active{
-    border: 1px solid #ececec;
-}
-.wpdf-fields .wpdf-panel--active .wpdf-panel__header{
-    border-left: none;
-    border-top: none;
-    border-right: none;
-}
-.wpdf-fields .wpdf-panel__content{
-    margin: 15px;
-}*/
-/*.wpdf-fields .placeholder{
-    border: 1px dashed #999999;
-    padding: 15px;
-}*/
-
-/*The element used to show the future position of the item currently being sorted.*/
-/*.ui-sortable-placeholder{
-    margin: 10px;
-    background: red;
-}*/
-
-/*The element shown while dragging a sortable item. The element actually used depends on the*/
-.ui-sortable-helper{
-  background: yellow;
-  padding: 0;
-  margin:0;
-}
-
-
-/*The handle of each sortable item, specified using the handle option. By default, each sortable item itself is also the handle.*/
-/*.ui-sortable-handle{
-    margin: 10px;
-    background: green;
-}*/
-
-/*The sortable element.*/
-.ui-sortable{
-  margin: 10px;
-  background: none;
-}
-
-/*.wpdf-dropped-item{
-    margin: 10px;
-    background: cyan;
-}*/
-
-.sortable-placeholder{
-  height: 30px;
-  border: 1px dashed #b4b9be;
-}
-
-/**
- * Form Fields
- */
-.wpdf-field-row{
-  width: 104%;
-  clear:both;
-  margin: 0 -2%;
-}
-
-.wpdf-field-row .wpdf-col{
-  float: left;
-  margin-bottom:10px;
-}
-
-.wpdf-col.wpdf-col__half{
-  width: 46%;
-  margin-left: 2%;
-  margin-right: 2%;
-}
-
-.wpdf-col.wpdf-col__full{
-  width: 96%;
-  margin-left: 2%;
-  margin-right: 2%;
-}
-
-.wpdf-col .wpdf-label{
-  width: 100%;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.wpdf-col .wpdf-input{
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.wpdf-field__values{
-  background: #f7f7f7;
-}
-
-/**
- * Repeater value field
- */
-.wpdf-repeater .wpdf-repeater-row .wpdf-del-row{
-  display: inline-block;
-}
-
-/**
- * Settings Page
- */
-
-.wpdf-form-table td{
-  vertical-align: top;
-  padding-left:10px;
-  padding-right:10px;
-}
-.wpdf-form-table input, .wpdf-form-table textarea{
-  width: 100%;
-  max-width: 300px;
-}
-
-.wpdf-settings__header, .wpdf-settings__desc {
-  margin-left: 10px;
-}
-
-/**
- * Notifications Page
- */
-
-.notification__input{
-  min-width: 320px;
-}
-.notification__label {
-  min-width: 90px;
-}
-
-/**
- * Field Validation
- */
-.wpdf-repeater-container{
-  margin-bottom:10px;
-}
-
-.wpdf-validation-row{
-  border-bottom: 1px solid #FFFFFF;
-  background: #f7f7f7;
-  padding: 5px;
-}
-
-.wpdf-validation__selector{
-  margin-bottom:5px;
-}
-
-.field-values__header {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ececec;
-  padding-bottom: 5px;
-  padding-top: 10px;
+@media (max-width: 1039px) {
+    .wpdf-form-manager {
+        .wpdf-header__links li a {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+    }
 }
 
 /**
  * MCE Editor
  */
-i.mce-i-wpdf{
-  font: 400 20px/1 dashicons;
-  padding: 0 2px 0 0;
-  vertical-align: top;
-  speak: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-left: -2px;
+i.mce-i-wpdf {
+    font: 400 20px/1 dashicons;
+    padding: 0 2px 0 0;
+    vertical-align: top;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-left: -2px;
 }
+
 i.mce-i-wpdf:before {
-  content: "\f175";
-}
-
-/**
- * Table Archive
- */
-.wpdf-table-archive{
-  padding:20px;
-}
-
-@media (max-width: 1039px){
-  .wpdf-header__links li a{
-    padding-right:20px;
-    padding-left: 20px;
-  }
+    content: "\f175";
 }
 
 /**
  * Tooltips
  */
 
-.wpdf-tooltip{
-  width:16px;
-  height: 16px;
-  border-radius: 16px;
-  background: #dedede;
-  color: #333;
-  display: inline-block;
-  line-height: 16px;
-  text-align: center;
-  font-weight: normal;
-  font-size: 12px;
-}
-.wpdf-tooltip__inline{
-  margin-left:5px;
-}
-.wpdf-tooltip__wrapper .wpdf-tooltip{
-  position: absolute;
-  right:0;
-  top: 4px;
+.wpdf-tooltip {
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    background: #dedede;
+    color: #333;
+    display: inline-block;
+    line-height: 16px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 12px;
 }
 
-.wpdf-tooltip:hover{
-  cursor: pointer;
+.wpdf-tooltip__inline {
+    margin-left: 5px;
 }
-.wpdf-tooltip__wrapper{
-  position: relative;
+
+.wpdf-tooltip__wrapper .wpdf-tooltip {
+    position: absolute;
+    right: 0;
+    top: 4px;
 }
-.wpdf-form-table td.wpdf-tooltip__wrapper{
-  padding-right: 25px;
+
+.wpdf-tooltip:hover {
+    cursor: pointer;
 }
+
+.wpdf-tooltip__wrapper {
+    position: relative;
+}
+
+.wpdf-form-table td.wpdf-tooltip__wrapper {
+    padding-right: 25px;
+}
+
 #tiptip_holder {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9999999;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999999;
 }
 
 #tiptip_holder.tip_top {
-  padding-bottom: 5px;
+    padding-bottom: 5px;
 }
+
 #tiptip_holder.tip_top #tiptip_arrow_inner {
-  margin-top: -7px;
-  margin-left: -6px;
-  border-top-color: #333;
+    margin-top: -7px;
+    margin-left: -6px;
+    border-top-color: #333;
 }
+
 #tiptip_holder.tip_bottom {
-  padding-top: 5px;
+    padding-top: 5px;
 }
+
 #tiptip_holder.tip_bottom #tiptip_arrow_inner {
-  margin-top: -5px;
-  margin-left: -6px;
-  border-bottom-color: #333;
+    margin-top: -5px;
+    margin-left: -6px;
+    border-bottom-color: #333;
 }
+
 #tiptip_holder.tip_right {
-  padding-left: 5px;
+    padding-left: 5px;
 }
+
 #tiptip_holder.tip_right #tiptip_arrow_inner {
-  margin-top: -6px;
-  margin-left: -5px;
-  border-right-color: #333;
+    margin-top: -6px;
+    margin-left: -5px;
+    border-right-color: #333;
 }
+
 #tiptip_holder.tip_left {
-  padding-right: 5px;
+    padding-right: 5px;
 }
+
 #tiptip_holder.tip_left #tiptip_arrow_inner {
-  margin-top: -6px;
-  margin-left: -7px;
-  border-left-color: #333;
+    margin-top: -6px;
+    margin-left: -7px;
+    border-left-color: #333;
 }
 
 #tiptip_content,
 .chart-tooltip,
 .wc_error_tip {
-  color: #fff;
-  font-size: .8em;
-  max-width: 150px;
-  background: #333;
-  text-align: center;
-  border-radius: 3px;
-  padding: .618em 1em;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: .8em;
+    max-width: 150px;
+    background: #333;
+    text-align: center;
+    border-radius: 3px;
+    padding: .618em 1em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
+
 #tiptip_content code,
 .chart-tooltip code,
 .wc_error_tip code {
-  padding: 1px;
-  background: #888;
+    padding: 1px;
+    background: #888;
 }
 
 #tiptip_arrow,
 #tiptip_arrow_inner {
-  position: absolute;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 6px;
-  height: 0;
-  width: 0;
+    position: absolute;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 6px;
+    height: 0;
+    width: 0;
 }
+
+

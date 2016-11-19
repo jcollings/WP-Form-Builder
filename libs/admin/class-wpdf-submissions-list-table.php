@@ -157,7 +157,10 @@ class WPDF_Submissions_List_Table extends WP_List_Table{
 								if(!isset($item->data)){
 									$item->data = new stdClass();
 								}
-								$item->data->{$v->field} = $v->content;
+
+								if(!empty($v->field)) {
+									$item->data->{$v->field} = $v->content;
+								}
 							}
 						}
 

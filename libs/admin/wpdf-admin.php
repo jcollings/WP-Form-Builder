@@ -25,7 +25,7 @@ class WPDF_Admin{
 	function enqueue_scripts(){
 		$version = WPDF()->get_version();
 		$ext = '.min';
-		if(defined('WP_DEBUG') && WP_DEBUG){
+		if((defined('WP_DEBUG') && WP_DEBUG) || (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG)){
 			$version = time();
 			$ext = '';
 		}
@@ -622,16 +622,25 @@ class WPDF_Admin{
 			'type' => $field['type'],
 			'label' => $field['label'],
 			'placeholder' => isset($field['placeholder']) ? $field['placeholder'] : '',
-			'default' => isset($field['default']) ? $field['default'] : ''
+			'default' => isset($field['default']) ? $field['default'] : '',
+			'extra_class' => isset($field['css_class']) ? $field['css_class'] : ''
 		);
 
 		switch($field['type']){
 			case 'select':
 
-				if(isset($field['empty_text']) && !empty($field['empty_text'])){
-					$data['empty'] = esc_attr($field['empty_text']);
-				}else{
-					$data['empty'] = false;
+				if($field['type'] == 'select') {
+					if ( isset( $field['empty_text'] ) && ! empty( $field['empty_text'] ) ) {
+						$data['empty'] = esc_attr( $field['empty_text'] );
+					} else {
+						$data['empty'] = false;
+					}
+
+					if( isset( $field['select_type'] ) && !empty( $field['select_type'] ) ){
+						$data['select_type'] = $field['select_type'];
+					}else{
+						$data['select_type'] = 'single';
+					}
 				}
 
 			case 'radio':
@@ -651,6 +660,9 @@ class WPDF_Admin{
 				$data['options'] = $options;
 				$data['default'] = $defaults;
 
+				break;
+			case 'textarea':
+				$data['rows'] = isset($field['rows']) ? $field['rows'] : 8;
 				break;
 		}
 

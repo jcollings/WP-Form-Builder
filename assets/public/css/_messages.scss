@@ -1,0 +1,42 @@
+// =================================
+// Form Errors
+// =================================
+
+.wpdf-form-error{
+    background: $error-msg-background;
+    padding: 30px 15px;
+    color: $error-msg-colour;
+    margin-bottom:20px;
+}
+
+.wpdf-form-errors{
+    margin: 0;
+    padding: 0 0 0 30px;
+}
+.wpdf-form-errors li{
+
+}
+.wpdf-field-error{
+    color: indianred;
+}
+.wpdf-has-error{
+
+}
+.wpdf-has-error .wpdf-field{
+    border: 1px solid indianred;
+}
+.wpdf-has-error.input-checkbox .wpdf-choices label, .wpdf-has-error.input-radio .wpdf-choices label{
+    color: indianred;
+}
+
+/* Form Confirmation Message */
+.wpdf-form-confirmation {
+    background: $success-msg-background;
+    color: $success-msg-colour;
+    padding: 15px 15px 5px;
+    margin-bottom: 1.75em;
+
+}
+.wpdf-form-confirmation p{
+    margin-bottom: 10px
+}

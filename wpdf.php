@@ -189,15 +189,17 @@ class WPDF_DeveloperForms {
 	public function enqueue_scripts(){
 
 		$ext = '.min';
-		if(defined('WP_DEBUG') && WP_DEBUG){
+		$version = $this->get_version();
+		if((defined('WP_DEBUG') && WP_DEBUG) || (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG)){
+			$version = time();
 			$ext = '';
 		}
 
 		// todo: check if viewing form and that form has recaptcha enabled, then output scripts in head
 		wp_enqueue_script('wpdf-recaptcha', '//www.google.com/recaptcha/api.js');
 
-		wp_enqueue_script('wpdf-main', $this->get_plugin_url() . 'assets/public/js/main'.$ext.'.js', array('jquery'), $this->get_version(), true);
-		wp_enqueue_style('wpdf-main', $this->get_plugin_url() . 'assets/public/css/main'.$ext.'.css', array(), $this->get_version());
+		wp_enqueue_script('wpdf-main', $this->get_plugin_url() . 'assets/public/js/main'.$ext.'.js', array('jquery'), $version, true);
+		wp_enqueue_style('wpdf-main', $this->get_plugin_url() . 'assets/public/css/main'.$ext.'.css', array(), $version);
 	}
 
 	public function on_activation(){

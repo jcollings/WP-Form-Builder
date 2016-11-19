@@ -497,7 +497,7 @@ class WPDF_Form{
 		if(empty($label)){
 			$label = $this->_settings['labels']['submit'];
 		}
-		echo '<input type="submit" value="'.$label.'" />';
+		echo '<input type="submit" value="'.$label.'" class="wpdf-button wpdf-submit-button" />';
 	}
 
 	/**
@@ -570,15 +570,15 @@ class WPDF_Form{
 
 		if($this->_error){
 			echo "<p>".$this->_error."</p>";
-			return;
-		}
+		}else {
 
-		echo sprintf("<p>%s</p>", __("Please make sure you have corrected any errors below before resubmitting the form.", "wpdf"));
-		echo '<ul class="wpdf-form-errors">';
-		foreach($this->_errors as $field_id => $error){
-			echo '<li>' . $this->_fields[$field_id]->getLabel() . ' - ' . $error . '</li>';
+			echo sprintf( "<p>%s</p>", __( "Please make sure you have corrected any errors below before resubmitting the form.", "wpdf" ) );
+			echo '<ul class="wpdf-form-errors">';
+			foreach ( $this->_errors as $field_id => $error ) {
+				echo '<li>' . $this->_fields[ $field_id ]->getLabel() . ' - ' . $error . '</li>';
+			}
+			echo '</ul>';
 		}
-		echo '</ul>';
 		echo '</div>';
 	}
 

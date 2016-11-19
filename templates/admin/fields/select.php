@@ -8,6 +8,13 @@
 		<label for="" class="wpdf-label">Empty Text <span class="wpdf-tooltip wpdf-tooltip__inline" title="Default value shown when the form is loaded, leave empty to not show">?</span></label>
 		<input type="text" class="wpdf-input" name="field[][empty_text]" value="<?php echo $this->getEmpty(); ?>">
 	</div>
+	<div class="wpdf-col wpdf-col__half">
+		<label for="" class="wpdf-label">Select Type <span class="wpdf-tooltip wpdf-tooltip__inline" title="Multiple selects allow the user to select multiple values instead of only a single value.">?</span></label>
+		<select name="field[][select_type]" class="wpdf-input">
+			<option value="single" <?php selected('single', $this->getSelectType(), true); ?>>Single</option>
+			<option value="multiple" <?php selected('multiple', $this->getSelectType(), true); ?>>Multiple</option>
+		</select>
+	</div>
 </div>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">

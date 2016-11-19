@@ -15,6 +15,7 @@ class WPDF_FormField{
 	protected $_default;
 	protected $_placeholder;
 	protected $_options;
+	protected $_extra_class;
 
 	public function __construct($name, $type, $args = array()) {
 		$this->_name = $name;
@@ -30,6 +31,7 @@ class WPDF_FormField{
 		$this->_default = isset($args['default']) ? $args['default'] : false;
 		$this->_placeholder = isset($args['placeholder']) ? $args['placeholder'] : false;
 		$this->_options = isset($args['options']) && is_array($args['options']) ? $args['options'] : false;
+		$this->_extra_class = isset($args['extra_class']) ? $args['extra_class'] : '';
 	}
 
 	/**
@@ -121,8 +123,16 @@ class WPDF_FormField{
 		return '';
 	}
 
+	public function getExtraClasses(){
+
+		if(!empty($this->_extra_class) && is_string($this->_extra_class)){
+			return $this->_extra_class;
+		}
+		return '';
+	}
+
 	public function getClasses(){
-		return 'wpdf-field';
+		return 'wpdf-field ' . $this->getExtraClasses();
 	}
 
 	/**

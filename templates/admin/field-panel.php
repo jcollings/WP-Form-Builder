@@ -43,6 +43,17 @@ $field_type = $field->getType();
 			</div>
 		</div>
 
+		<div class="wpdf-field-row">
+			<div class="wpdf-col wpdf-col__half">
+				<label for="" class="wpdf-label">
+					CSS Classes
+					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Add custom css classes to field output">?</span>
+				</label>
+
+				<input type="text" class="wpdf-input" name="field[][css_class]" value="<?php echo $field->getExtraClasses(); ?>">
+			</div>
+		</div>
+
 		<?php
 		// specific fields based on field type
 		$field->displaySettings();
