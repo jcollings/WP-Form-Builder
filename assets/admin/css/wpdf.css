@@ -367,6 +367,13 @@
   margin: 5px 0;
 }
 
+.wpdf-form-manager #sortable li.placeholder {
+  margin: 0;
+  border: 1px dashed #AAA;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
 .wpdf-form-manager .ui-sortable-helper {
   background: yellow;
   padding: 0;
@@ -495,6 +502,40 @@ i.mce-i-wpdf {
 
 i.mce-i-wpdf:before {
   content: "\f175";
+}
+
+.wpdf-dialog {
+  padding: 20px !important;
+}
+
+.wpdf-dialog #wpdf_form_error {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: indianred;
+  color: #FFF;
+}
+
+.wpdf-dialog-table {
+  width: 100% !important;
+}
+
+.wpdf-dialog-table td, .wpdf-dialog-table th {
+  vertical-align: top;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.wpdf-dialog-table th {
+  width: 100px;
+}
+
+.wpdf-dialog-table select, .wpdf-dialog-table input {
+  width: 100%;
+}
+
+.wpdf-dialog-loading {
+  text-align: center !important;
+  padding: 20px !important;
 }
 
 /**

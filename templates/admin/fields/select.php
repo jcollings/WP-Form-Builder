@@ -23,7 +23,7 @@
 			<strong>Values <span class="wpdf-tooltip wpdf-tooltip__inline" title="List of available options">?</span></strong>
 		</div>
 
-		<table width="100%" class="wpdf-repeater wpdf-field__values" data-min="1" data-template-name="field_value_repeater">
+		<table width="100%" class="wpdf-repeater wpdf-field__values" data-min="1" data-template-name="field_value_repeater_select">
 			<thead>
 			<tr>
 				<th>Label <span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed in dropdown">?</span></th>
@@ -35,8 +35,8 @@
 			<tbody class="wpdf-repeater-container">
 			<script type="text/html" class="wpdf-repeater-template">
 				<tr class="wpdf-repeater-row wpdf-repeater__template">
-					<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-					<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+					<td><input title="Label" type="text" class="wpdf-input wpdf-data__label" name="field[][value_labels][]"></td>
+					<td><input title="Key" type="text" class="wpdf-input wpdf-data__key" name="field[][value_keys][]"></td>
 					<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
 					<td>
 						<a href="#" class="wpdf-add-row button">+</a>
@@ -50,9 +50,9 @@
 				foreach ( $options as $key => $option ) {
 					?>
 					<tr class="wpdf-repeater-row wpdf-repeater__template">
-						<td><input title="Label" type="text" class="wpdf-input"
+						<td><input title="Label" type="text" class="wpdf-input wpdf-data__label"
 						           name="field[][value_labels][]" value="<?php echo $option; ?>" /></td>
-						<td><input title="Key" type="text" class="wpdf-input"
+						<td><input title="Key" type="text" class="wpdf-input wpdf-data__key"
 						           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
 						<td><input title="Default?" type="checkbox"
 						           name="field[][value_default][]" <?php
@@ -73,8 +73,8 @@
 			}else{
 				?>
 				<tr class="wpdf-repeater-row wpdf-repeater__template">
-					<td><input title="Label" type="text" class="wpdf-input" name="field[][value_labels][]"></td>
-					<td><input title="Key" type="text" class="wpdf-input" name="field[][value_keys][]"></td>
+					<td><input title="Label" type="text" class="wpdf-input wpdf-data__label" name="field[][value_labels][]"></td>
+					<td><input title="Key" type="text" class="wpdf-input wpdf-data__key" name="field[][value_keys][]"></td>
 					<td><input title="Default?" type="checkbox" name="field[][value_default][]"></td>
 					<td>
 						<a href="#" class="wpdf-add-row button">+</a>

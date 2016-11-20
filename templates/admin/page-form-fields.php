@@ -26,9 +26,9 @@ if($form !== false){
 				<div class="wpdf-left__inside">
 					<div class="wpdf-fields">
 						<ul id="sortable">
-							<?php if(empty($fields)): ?>
-								<li class="placeholder">Drop field here to add to the form</li>
-							<?php else: ?>
+
+								<li class="placeholder" <?php if(!empty($fields)): ?>style="display: none;"<?php endif; ?>>Drop field here to add to the form</li>
+
 
 								<?php
 								foreach($fields as $field):
@@ -39,8 +39,6 @@ if($form !== false){
 									<?php
 								endforeach;
 								?>
-
-							<?php endif; ?>
 						</ul>
 					</div>
 				</div>

@@ -455,18 +455,22 @@ class WPDF_Form{
 
 	public function classes($field_id, $type){
 
+		$classes = array();
+		$classes[] = $this->_fields[$field_id]->getExtraClasses();
+
 		switch($type){
 			case 'validation':
 
 				if(isset($this->_errors[$field_id])){
-					echo 'wpdf-has-error';
+					$classes[] = 'wpdf-has-error';
 				}
 				break;
 			case 'type':
-				echo sprintf('wpdf-input-%s', $this->_fields[$field_id]->getType());
+				$classes[] = sprintf('wpdf-input-%s', $this->_fields[$field_id]->getType());
 				break;
 		}
 
+		echo implode(' ', $classes);
 	}
 
 	public function error($field_id){

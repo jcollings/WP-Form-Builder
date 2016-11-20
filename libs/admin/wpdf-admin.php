@@ -20,6 +20,7 @@ class WPDF_Admin{
 		// mce editor
 		add_filter('mce_external_plugins', array($this, 'enqueue_mce_scripts'));
 		add_filter('mce_buttons', array($this, 'register_mce_buttons'));
+		add_action('wp_ajax_wpdf_insert_dialog', array($this, 'mce_insert_dialog'));
 	}
 
 	function enqueue_scripts(){
@@ -33,6 +34,12 @@ class WPDF_Admin{
 		wp_enqueue_script('tiptip', WPDF()->get_plugin_url() . 'assets/admin/js/jquery-tipTip'.$ext.'.js', array(), '1.3');
 		wp_enqueue_script('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/js/wpdf'.$ext.'.js', array('jquery-ui-draggable', 'jquery-ui-sortable', 'tiptip'), $version);
 		wp_enqueue_style('wpdf-admin', WPDF()->get_plugin_url() . 'assets/admin/css/wpdf'.$ext.'.css', array(), $version);
+	}
+
+	function mce_insert_dialog(){
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/mce-insert-dialog.php';
+		die();
 	}
 
 	function register_mce_buttons($buttons){
@@ -664,6 +671,10 @@ class WPDF_Admin{
 			case 'textarea':
 				$data['rows'] = isset($field['rows']) ? $field['rows'] : 8;
 				break;
+		}
+
+		if($field['type'] == 'radio' && !empty($field['value_default'])){
+			$data['default'] = $field['value_default'];
 		}
 
 		$data['validation'] = array(

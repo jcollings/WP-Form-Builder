@@ -132,7 +132,7 @@ class WPDF_FormField{
 	}
 
 	public function getClasses(){
-		return 'wpdf-field ' . $this->getExtraClasses();
+		return 'wpdf-field';
 	}
 
 	/**

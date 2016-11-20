@@ -301,6 +301,12 @@
 
     #sortable li {
         margin: 5px 0;
+        &.placeholder{
+            margin:0;
+            border: 1px dashed #AAA;
+            padding: 5px;
+            box-sizing: border-box;
+        }
     }
 
     /*.ui-state-default{
@@ -509,6 +515,38 @@ i.mce-i-wpdf:before {
     content: "\f175";
 }
 
+.wpdf-dialog{
+    padding: 20px !important;
+
+    #wpdf_form_error{
+        padding: 10px;
+        margin-bottom: 10px;
+        background: indianred;
+        color: #FFF;
+    }
+}
+.wpdf-dialog-table{
+    width: 100% !important;
+
+    td, th{
+        vertical-align: top;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    th{
+        width: 100px;
+    }
+
+    select, input{
+        width: 100%;
+    }
+}
+.wpdf-dialog-loading{
+    text-align: center !important;
+    padding: 20px !important;
+}
+
 /**
  * Tooltips
  */
@@ -625,5 +663,4 @@ i.mce-i-wpdf:before {
     height: 0;
     width: 0;
 }
-
 
