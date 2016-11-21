@@ -480,6 +480,23 @@
   padding: 20px;
 }
 
+.wpdf-form-create {
+  background: #FFF;
+  border: 1px solid #DDDDDD;
+  padding: 20px;
+}
+
+.wpdf-form-create h1 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.wpdf-form-create .wpdf-errors li {
+  background: indianred;
+  color: #FFF;
+  padding: 20px;
+}
+
 @media (max-width: 1039px) {
   .wpdf-form-manager .wpdf-header__links li a {
     padding-right: 20px;

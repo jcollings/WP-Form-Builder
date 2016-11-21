@@ -51,7 +51,7 @@ class WPDF_Form{
 	/**
 	 * @var WPDF_FormField[]
 	 */
-	protected $_fields = null;
+	protected $_fields = array();
 
 	protected $_field_display_conds = array();
 

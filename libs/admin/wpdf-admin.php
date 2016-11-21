@@ -9,6 +9,7 @@
 class WPDF_Admin{
 
 	protected $_messages = array();
+	protected $_errors = array();
 
 	public function __construct() {
 		add_action( 'admin_menu', array($this, 'wpdf_register_pages'));
@@ -193,6 +194,21 @@ class WPDF_Admin{
 
 		echo '</div>';
 
+	}
+
+	public function add_error($msg){
+		$this->_errors[] = $msg;
+	}
+
+	public function has_errors(){
+		if(!empty($this->_errors)){
+			return true;
+		}
+		return false;
+	}
+
+	public function get_errors(){
+		return $this->_errors;
 	}
 
 	/**
@@ -542,6 +558,10 @@ class WPDF_Admin{
 	private function create_form(){
 
 		$name = sanitize_text_field($_POST['form-name']);
+		if(empty($name)){
+			$this->add_error("Please enter a name before creating the form.");
+			return;
+		}
 
 		$form_data = array(
 			'form_label' => $name
@@ -558,6 +578,8 @@ class WPDF_Admin{
 		if(!is_wp_error($post)){
 			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $post));
 			exit();
+		}else{
+			$this->add_error("An error occured when creating the form.");
 		}
 	}
 

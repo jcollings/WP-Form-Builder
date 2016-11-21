@@ -22,12 +22,8 @@ class WPDF_DB_Form extends WPDF_Form {
 			$this->ID = $form_id;
 			$form = is_serialized($post->post_content) ? unserialize($post->post_content) : array();
 
-			// escape due to no data
-			if(!isset($form['fields'])){
-				return;
-			}
-
-			parent::__construct("Form " . $form_id, $form['fields']);
+			$fields = isset($form['fields']) && !empty($form['fields']) ? $form['fields'] : array();
+			parent::__construct("Form " . $form_id, $fields);
 
 			// load settings
 			if(isset($form['settings']) && isset($form['settings']['labels']) && isset($form['settings']['labels']['submit'])){
