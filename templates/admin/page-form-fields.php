@@ -31,6 +31,7 @@ if($form !== false){
 
 
 								<?php
+								if(!empty($fields)):
 								foreach($fields as $field):
 									?>
 									<li class="ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item" data-field="text" style="width: auto; height: auto; right: auto; bottom: auto;">
@@ -38,6 +39,7 @@ if($form !== false){
 									</li>
 									<?php
 								endforeach;
+								endif;
 								?>
 						</ul>
 					</div>

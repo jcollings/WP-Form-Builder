@@ -84,14 +84,14 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'assets/admin/js/',
-                        src: ['**/*.js'],
+                        src: ['**/*.js', '!**/*.min.js'],
                         dest: 'assets/admin/js/',
                         ext: ['.min.js']
                     },
                     {
                         expand: true,
                         cwd: 'assets/public/js/',
-                        src: ['**/*.js'],
+                        src: ['**/*.js', '!**/*.min.js'],
                         dest: 'assets/public/js/',
                         ext: ['.min.js']
                     }

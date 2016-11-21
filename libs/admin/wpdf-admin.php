@@ -92,6 +92,10 @@ class WPDF_Admin{
 		if(isset($_POST['wpdf-action'])){
 
 			switch($_POST['wpdf-action']){
+				case 'create-form':
+
+					$this->create_form();
+					break;
 				case 'edit-form-fields':
 
 					$this->save_form_fields();
@@ -154,7 +158,8 @@ class WPDF_Admin{
 
 		if( $action == 'new' ) {
 
-			$this->display_manage_form( $form );
+			//$this->display_manage_form( $form );
+			$this->display_create_form();
 
 		}elseif ( $action == 'manage' && $form_id ){
 
@@ -392,6 +397,14 @@ class WPDF_Admin{
 	}
 
 	/**
+	 * Display create form screen
+	 */
+	private function display_create_form(){
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-create.php';
+	}
+
+	/**
 	 * Display form field panel
 	 *
 	 * @param WPDF_FormField|string $field
@@ -519,6 +532,33 @@ class WPDF_Admin{
 		}
 
 		die();
+	}
+
+	/**
+	 * Create form with given name, then redirect to manage fields screen
+	 *
+	 * @return void
+	 */
+	private function create_form(){
+
+		$name = sanitize_text_field($_POST['form-name']);
+
+		$form_data = array(
+			'form_label' => $name
+		);
+
+		$postarr = array(
+			'post_title' => $name,
+			'post_type' => 'wpdf_form',
+			'post_status' => 'publish',
+			'post_content' => serialize($form_data)
+		);
+
+		$post = wp_insert_post($postarr, true);
+		if(!is_wp_error($post)){
+			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $post));
+			exit();
+		}
 	}
 
 	private function save_form_fields(){
