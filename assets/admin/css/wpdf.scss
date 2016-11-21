@@ -67,7 +67,7 @@
     .wpdf-header__links {
         list-style: none;
         padding: 0;
-        margin: 0 200px 0 150px;
+        margin: 0 110px 0 150px;
         border-left: 1px solid #dedede;
         overflow: hidden;
     }
@@ -434,7 +434,11 @@
         padding-right: 10px;
     }
 
-    .wpdf-form-table input, .wpdf-form-table textarea {
+    .wpdf-form-table--style td{
+        vertical-align: middle;
+    }
+
+    .wpdf-form-table input[type="text"], .wpdf-form-table textarea {
         width: 100%;
         max-width: 300px;
     }
@@ -492,7 +496,9 @@
         position: absolute;
         border: 1px solid #ccc;
         border-radius: 3px;
-        box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+        box-shadow: 0 1px 3px rgba(0,0,0,.2);
+        margin-top: 30px;
+    }
 
     .wpdf-color-pick-preview{
         width: 30px;
@@ -508,8 +514,8 @@
     .wpdf-color-picker-input{
         float:left;
         display: block;
-        width: 80px;
-        height: 30px;
+        width: 80px !important;
+        height: 30px !important;
     }
 }
 
@@ -582,7 +588,7 @@ i.mce-i-wpdf:before {
         width: 100px;
     }
 
-    select, input{
+    select, input[type="text"]{
         width: 100%;
     }
 }

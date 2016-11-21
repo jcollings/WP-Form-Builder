@@ -16,6 +16,9 @@
 		<?php if($form->getId()): ?>
 		<li class="<?php echo $active == 'fields' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=manage&form_id=' . $form->getId()); ?>">Fields</a></li>
 		<li class="<?php echo $active == 'settings' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=settings&form_id=' . $form->getId()); ?>">Settings</a></li>
+		<?php if( $form->get_setting('enable_style') == 'enabled'): ?>
+		<li class="<?php echo $active == 'style' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=style&form_id=' . $form->getId()); ?>">Style</a></li>
+		<?php endif; ?>
 		<li class="<?php echo $active == 'notifications' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=notifications&form_id=' . $form->getId()); ?>">Notifications</a></li>
 		<li class="<?php echo $active == 'submissions' ? 'active' : ''; ?>"><a href="<?php echo admin_url('admin.php?page=wpdf-forms&action=entries&form_id=' . $form->getId()); ?>">Submissions</a></li>
 		<?php else: ?>

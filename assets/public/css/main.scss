@@ -1,109 +1,34 @@
-@import "vars";
-@import 'layout';
-@import 'messages';
+$spacing: 1em;
+$choice-spacing: 1em;
 
-/**
- * Theme 01
- */
+.wpdf-form {
+    padding: $spacing;
+}
 
-.wpdf-form{
-    background: $form-background;
-    font-family: $form-font;
-    color: $form-colour;
-    border: $form-border;
-    margin: $form-margin;
-    padding: $form-padding;
-
-    .wpdf-form-title{
-        h1, h2, h3, h4, h5, h6, p{
-            font-size: $form-heading-size;
-        }
+.wpdf-input-select, .wpdf-input-textarea, .wpdf-input-text {
+    .wpdf-field {
+        width: 100%;
     }
+}
 
-    &, p, label{
-        color: $form-colour;
+.wpdf-form-row {
+    margin-bottom: $spacing;
+    width: 100%;
+}
+
+.wpdf-choices label {
+    margin-right: $choice-spacing;
+    display: inline-block;
+}
+
+.wpdf-form-error{
+    padding: $spacing $spacing 0;
+    margin-bottom:$spacing;
+    overflow: hidden;
+
+    p, ul{
+        margin-bottom:$spacing;
     }
-
-    .wpdf-form-row{
-        border-radius: $form-row-border-radius;
-        background: $form-row-background;
-        color: $form-row-colour;
-        border: $form-row-border;
-        margin: $form-row-margin;
-        padding: $form-row-padding;
-        box-sizing: border-box;
-    }
-
-    .wpdf-field{
-        border-radius: $form-field-border-radius;
-        background: $form-field-background;
-        color: $form-field-colour;
-        border: $form-field-border;
-        margin: $form-field-margin;
-        padding: $form-field-padding;
-    }
-
-    .wpdf-label {
-        label {
-            color: $form-label-color;
-            margin: $form-label-margin;
-            padding: $form-label-padding;
-        }
-    }
-
-    .wpdf-choices {
-        margin-left: $form-choice-offset-margin * -1;
-        input{
-            margin-right: $form-choice-label-spacing;
-        }
-        label {
-            color: $form-choice-label-color;
-            margin: $form-choice-label-margin;
-            padding: $form-choice-label-padding;
-        }
-    }
-
-    .wpdf-input-select, .wpdf-input-text, .wpdf-input-textarea{
-
-        .wpdf-field{
-            width: 100%;
-        }
-    }
-
-    .wpdf-input-text{
-
-    }
-    .wpdf-input-textarea{
-
-    }
-    .wpdf-input-select{
-
-    }
-    .wpdf-input-radio{
-
-    }
-    .wpdf-input-checkbox{
-
-    }
-    .wpdf-label{
-
-    }
-
-    .wpdf-button{
-        border: $form-button-border;
-        border-radius: $form-button-border-radius;
-        color: $form-button-colour;
-        background: $form-button-background;
-        margin: $form-button-margin;
-        padding: $form-button-padding;
-        &:hover{
-            border: $form-button-hover-border;
-            color: $form-button-hover-colour;
-            background: $form-button-hover-background;
-        }
-    }
-
-
 }
 
 @media screen and (max-height: 575px){

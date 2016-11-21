@@ -72,6 +72,18 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							</td>
 							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
 						</tr>
+						<tr>
+							<td class="wpdf-tooltip__wrapper">
+								<label for="submit_label">Style Editor</label>
+								<span class="wpdf-tooltip" title="Enable the use of the visual style editor">?</span>
+							</td>
+							<td class="notification__input">
+								<select name="wpdf_settings[enable_style]" id="wpdf_settings-enable_style">
+									<option value="disable" <?php selected('disable', $form->get_setting('enable_style'), true); ?>>Disable</option>
+									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_style'), true); ?>>Enable</option>
+								</select>
+							</td>
+						</tr>
 					</table>
 
 					<h2 class="wpdf-settings__header">
@@ -112,6 +124,25 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 								<span class="wpdf-tooltip" title="Url to redirect the user on successful form submission">?</span>
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[confirmation_redirect]" id="confirmation_redirect" type="text" value="<?php echo $confirmation_redirect; ?>" /></td>
+						</tr>
+					</table>
+
+					<h2 class="wpdf-settings__header">
+						Display Settings <span class="wpdf-tooltip wpdf-tooltip__inline" title="Settings related to the form output">?</span>
+					</h2>
+
+					<table class="wpdf-form-table">
+						<tr>
+							<td class="wpdf-tooltip__wrapper">
+								<label for="submit_label">Style Editor</label>
+								<span class="wpdf-tooltip" title="Enable the use of the visual style editor">?</span>
+							</td>
+							<td class="notification__input">
+								<select name="wpdf_settings[enable_style]" id="wpdf_settings-enable_style">
+									<option value="disable" <?php selected('disable', $form->get_setting('enable_style'), true); ?>>Disable</option>
+									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_style'), true); ?>>Enable</option>
+								</select>
+							</td>
 						</tr>
 					</table>
 

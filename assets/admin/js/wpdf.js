@@ -519,7 +519,7 @@
             }
         });
         $(document).click(function (e) {
-            if (!$(e.target).is(".colour-picker, .iris-picker, .iris-picker-inner")) {
+            if ( $('.wpdf-color-picker-input').length > 0 && $(".colour-picker, .iris-picker, .iris-picker-inner").is(':visible') && !$(e.target).is(".colour-picker, .iris-picker, .iris-picker-inner")) {
                 $('.wpdf-color-picker-input').iris('hide');
                 return false;
             }

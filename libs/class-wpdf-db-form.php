@@ -14,6 +14,10 @@ class WPDF_DB_Form extends WPDF_Form {
 	 */
 	private $_label = null;
 
+
+	protected $_style = array();
+	protected $_style_disabled = array();
+
 	public function __construct( $form_id = null ) {
 
 		$form_id = intval($form_id);
@@ -29,6 +33,10 @@ class WPDF_DB_Form extends WPDF_Form {
 			if(isset($form['settings']) && isset($form['settings']['labels']) && isset($form['settings']['labels']['submit'])){
 				$this->settings($form['settings']);
 			}
+
+			// load style
+			$this->_style = $form['theme'];
+			$this->_style_disabled = $form['theme_disabled'];
 
 			// load form content
 			$this->_content = isset($form['content']) ? $form['content'] : '';
@@ -91,6 +99,25 @@ class WPDF_DB_Form extends WPDF_Form {
 
 	public function getLabel(){
 		return $this->_label;
+	}
+
+	/**
+	 * Get Form Styling
+	 *
+	 * @param $key
+	 *
+	 * @return bool|string
+	 */
+	public function getStyle($key, $force = false) {
+		return isset($this->_style[$key]) && (!$this->isStyleDisabled($key) || $force) ? $this->_style[$key] : false;
+	}
+
+	public function hasStyle($key){
+		return $this->getStyle($key);
+	}
+
+	public function isStyleDisabled($key){
+		return isset($this->_style_disabled[$key]) && $this->_style_disabled[$key] == true ? true : false;
 	}
 
 	public function export(){

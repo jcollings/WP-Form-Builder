@@ -113,7 +113,7 @@ function wpdf_displayNotificationSettings($notification, $i = '', $fieldKeys = a
 /**
  * Display form input using iris colour picker
  *
- * @param $name input name
+ * @param string $name input name
  * @param string $colour default colour
  */
 function wpdf_irisPicker($name, $colour = '#FFFFFF'){

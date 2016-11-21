@@ -109,6 +109,9 @@ class WPDF_Admin{
 
 					$this->save_form_settings();
 					break;
+				case 'edit-form-style':
+					$this->save_form_style();
+					break;
 			}
 		}
 	}
@@ -164,18 +167,19 @@ class WPDF_Admin{
 
 		}elseif ( $action == 'manage' && $form_id ){
 
-//			$form = new WPDF_DB_Form($form_id);
 			$this->display_manage_form( $form );
 
 		}elseif ( $action == 'notifications' && $form_id ){
 
-//			$form = new WPDF_DB_Form($form_id);
 			$this->display_notifications_form( $form );
 
 		}elseif ( $action == 'settings' && $form_id ) {
 
-//			$form = new WPDF_DB_Form( $form_id );
 			$this->display_settings_form( $form );
+
+		}elseif ( $action == 'style' && $form_id ) {
+
+			$this->display_style_form( $form );
 
 		}elseif($form) {
 
@@ -403,6 +407,15 @@ class WPDF_Admin{
 	}
 
 	/**
+	 * Display form styling page
+	 *
+	 * @param WPDF_DB_Form|bool $form
+	 */
+	private function display_style_form($form = false){
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-style.php';
+	}
+
+	/**
 	 * Display form fields page
 	 *
 	 * @param WPDF_DB_Form|bool $form
@@ -498,6 +511,10 @@ class WPDF_Admin{
 			$form_data['form_label'] = $settings['form_label'];
 		}
 
+		if(isset($settings['enable_style'])){
+			$form_data['settings']['enable_style'] = $settings['enable_style'];
+		}
+
 		// save recaptcha settings
 		if(isset($settings['recaptcha_public'])){
 			$form_data['settings']['recaptcha_public'] = $settings['recaptcha_public'];
@@ -544,6 +561,61 @@ class WPDF_Admin{
 
 		if(!is_wp_error($post)){
 			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id));
+			exit();
+		}
+
+		die();
+	}
+
+	private function save_form_style(){
+
+		$form_id = $_POST['wpdf-form'];
+		$form = get_post($form_id);
+		$form_data = maybe_unserialize($form->post_content);
+
+		$style = isset($_POST['wpdf_style']) ? $_POST['wpdf_style'] : array();
+		$disabled = isset($_POST['wpdf_style_disable']) ? $_POST['wpdf_style_disable'] : array();
+
+		$default = array(
+			'form_bg_colour' => '',
+			'form_text_colour' => '',
+			'form_bg_error_colour' => '#c63838',
+			'form_text_error_colour' => '#ffffff',
+			'form_bg_success_colour' => '#80cd5f',
+			'form_text_success_colour' => '#ffffff',
+			'field_label_bg_colour' => '',
+			'field_label_text_colour' => '',
+			'field_input_bg_colour' => '',
+			'field_input_text_colour' => '',
+			'field_error_text_colour' => '#c63838',
+			'field_border_colour' => '',
+			'field_error_border_colour' => '#c63838',
+			'button_bg_colour' => '#000000',
+			'button_text_colour' => '#ffffff',
+			'button_hover_bg_colour' => '#333333',
+			'button_hover_text_colour' => '#ffffff',
+			'checkbox_text_colour' => ''
+		);
+
+		if(!isset($form_data['theme'])){
+			$form_data['theme'] = array();
+		}
+		if(!isset($form_data['theme_disabled'])){
+			$form_data['theme_disabled'] = array();
+		}
+
+		foreach($default as $key => $val){
+			$form_data['theme'][$key] = isset($style[$key]) ? $style[$key] : $default[$key];
+			$form_data['theme_disabled'][$key] = in_array($key, $disabled) ? true : false;
+		}
+
+		$post = wp_update_post(array(
+			'ID' => $form_id,
+			'post_content' => serialize($form_data)
+		));
+
+		if(!is_wp_error($post)){
+			wp_redirect(admin_url('admin.php?page=wpdf-forms&action=style&form_id=' . $form_id));
 			exit();
 		}
 
