@@ -480,6 +480,33 @@
   padding: 20px;
 }
 
+.wpdf-form-manager input + .iris-picker {
+  z-index: 100;
+  display: none;
+  position: absolute;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.wpdf-form-manager .wpdf-color-pick-preview {
+  width: 30px;
+  height: 30px;
+  display: block;
+  float: left;
+}
+
+.wpdf-form-manager .wpdf-iris-wrap {
+  overflow: hidden;
+}
+
+.wpdf-form-manager .wpdf-color-picker-input {
+  float: left;
+  display: block;
+  width: 80px;
+  height: 30px;
+}
+
 .wpdf-form-create {
   background: #FFF;
   border: 1px solid #DDDDDD;

@@ -768,7 +768,7 @@ class WPDF_Form{
 
 		// escape if recaptcha is not setup
 		if(!$this->recaptchaSetup()){
-			return;
+			return true;
 		}
 
 		$secretKey =  $this->get_setting('recaptcha_private');

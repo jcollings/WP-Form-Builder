@@ -505,3 +505,31 @@
     });
 
 })(jQuery);
+
+/**
+ * Iris Colour Picker
+ */
+(function($){
+
+    $(document).ready(function(){
+
+        $('.wpdf-color-picker-input').iris({
+            change: function( event, ui ) {
+                $( this ).parent().find( '.wpdf-color-pick-preview' ).css({ backgroundColor: ui.color.toString() });
+            }
+        });
+        $(document).click(function (e) {
+            if (!$(e.target).is(".colour-picker, .iris-picker, .iris-picker-inner")) {
+                $('.wpdf-color-picker-input').iris('hide');
+                return false;
+            }
+        });
+        $('.wpdf-color-picker-input, .wpdf-color-pick-preview').click(function (event) {
+            $('.wpdf-color-picker-input').iris('hide');
+            $(this).parent().find('.wpdf-color-picker-input').iris('show');
+            return false;
+        });
+
+    });
+
+})(jQuery);

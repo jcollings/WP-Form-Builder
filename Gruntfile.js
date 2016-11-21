@@ -105,7 +105,7 @@ module.exports = function(grunt) {
                 tasks: ['sass:dev', 'sass:dist']
             },
             uglify: {
-                files: ['assets/admin/js/{,*/}*.js', 'assets/public/js/{,*/}*.js'],
+                files: ['assets/admin/js/{,*/}*.js', 'assets/public/js/{,*/}*.js', '!assets/admin/js/{,*/}*.min.js', '!assets/public/js/{,*/}*.min.js'],
                 tasks: ['uglify']
             }
         },
