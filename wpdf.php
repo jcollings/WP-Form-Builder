@@ -231,7 +231,17 @@ class WPDF_DeveloperForms {
 	public function get_form($name){
 
 		if(isset($this->_forms[$name])){
+
+			if(is_array($this->_forms[$name])){
+
+				if(isset($this->_forms[$name]['form_id'])){
+					// load db form
+					$this->_forms[$name] = new WPDF_DB_Form($this->_forms[$name]['form_id']);
+				}
+			}
+
 			$form = $this->_forms[$name];
+
 			return $form;
 		}
 
@@ -280,7 +290,7 @@ class WPDF_DeveloperForms {
 
 		if($query->have_posts()){
 			foreach($query->posts as $id){
-				$this->_forms['WPDF_FORM_'.$id] = new WPDF_DB_Form($id);
+				$this->_forms['WPDF_FORM_'.$id] = array('form_id' => $id); //new WPDF_DB_Form($id);
 			}
 		}
 

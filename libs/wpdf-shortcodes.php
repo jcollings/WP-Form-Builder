@@ -111,6 +111,18 @@ function wpdf_shortcode_form( $atts, $content = null ){
 			border-color: <?php echo $form->getStyle('field_error_border_colour'); ?>
 		}
 		<?php endif; ?>
+
+		<?php if($form->hasStyle('form_bg_success_colour') || $form->hasStyle('form_text_success_colour')): ?>
+		.wpdf-form-confirmation {
+		<?php if($form->hasStyle('form_bg_success_colour')): ?>
+			background: <?php echo $form->getStyle('form_bg_success_colour'); ?>;
+		<?php endif; ?>
+		<?php if($form->hasStyle('form_text_success_colour')): ?>
+			color: <?php echo $form->getStyle('form_text_success_colour'); ?>;
+		<?php endif; ?>
+		}
+		<?php endif; ?>
+
 	</style>
 	<?php
 	endif;

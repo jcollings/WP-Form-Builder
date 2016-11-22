@@ -16,13 +16,13 @@
   display: inline-block;
 }
 
-.wpdf-form-error {
+.wpdf-form-error, .wpdf-form-confirmation {
   padding: 1em 1em 0;
   margin-bottom: 1em;
   overflow: hidden;
 }
 
-.wpdf-form-error p, .wpdf-form-error ul {
+.wpdf-form-error p, .wpdf-form-error ul, .wpdf-form-confirmation p, .wpdf-form-confirmation ul {
   margin-bottom: 1em;
 }
 

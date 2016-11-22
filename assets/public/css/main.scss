@@ -21,7 +21,7 @@ $choice-spacing: 1em;
     display: inline-block;
 }
 
-.wpdf-form-error{
+.wpdf-form-error, .wpdf-form-confirmation{
     padding: $spacing $spacing 0;
     margin-bottom:$spacing;
     overflow: hidden;
