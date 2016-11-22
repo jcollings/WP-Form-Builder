@@ -65,6 +65,11 @@ class WPDF_DeveloperForms {
 	private $default_settings = null;
 
 	/**
+	 * @var WPDF_Text
+	 */
+	public $text = null;
+
+	/**
 	 * Single instance of class
 	 */
 	protected static $_instance = null;
@@ -100,6 +105,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/class-wpdf-db-form.php';
 		include_once 'libs/class-wpdf-form-data.php';
 		include_once 'libs/class-wpdf-form-theme.php';
+		include_once 'libs/class-wpdf-text.php';
 
 		include_once 'libs/class-wpdf-form-field.php';
 		include_once 'libs/fields/class-wpdf-text-field.php';
@@ -135,6 +141,9 @@ class WPDF_DeveloperForms {
 
 		$this->load_settings();
 		$this->includes();
+
+		// load text
+		$this->text = new WPDF_Text();
 	}
 
 	/**

@@ -10,19 +10,10 @@ class WPDF_Validation{
 
 	protected $_error = null;
 	protected $_rules = array();
-	protected $_validation_msgs = array();
 
 
 	public function __construct($rules = array()) {
 		$this->_rules = $rules;
-
-		$this->_validation_msgs = array(
-			'required' => __('This field is required', "wpdf"),
-			'email' => __('Please enter a valid email address', "wpdf"),
-			'unique' => __('This value has already been previously entered', "wpdf"),
-			'min_length' => __('Please enter a value longer than %d', "wpdf"),
-			'max_length' => __('Please enter a value shorter than %d', "wpdf")
-		);
 	}
 
 	/**
@@ -118,29 +109,28 @@ class WPDF_Validation{
 
 			switch ( $code ) {
 				case UPLOAD_ERR_INI_SIZE:
-					$message = __("The uploaded file exceeds the upload_max_filesize directive in php.ini", "wpdf");
+					$message = WPDF()->text->get('ini_size', 'upload');
 					break;
 				case UPLOAD_ERR_FORM_SIZE:
-					$message = __("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form", "wpdf");
+					$message = WPDF()->text->get('form_size', 'upload');
 					break;
 				case UPLOAD_ERR_PARTIAL:
-					$message = __("The uploaded file was only partially uploaded", "wpdf");
+					$message = WPDF()->text->get('partial', 'upload');
 					break;
 				case UPLOAD_ERR_NO_FILE:
-					$message = __("No file was uploaded", "wpdf");
+					$message = WPDF()->text->get('no_file', 'upload');
 					break;
 				case UPLOAD_ERR_NO_TMP_DIR:
-					$message = __("Missing a temporary folder", "wpdf");
+					$message = WPDF()->text->get('no_tmp_dir', 'upload');
 					break;
 				case UPLOAD_ERR_CANT_WRITE:
-					$message = __("Failed to write file to disk", "wpdf");
+					$message = WPDF()->text->get('cant_write', 'upload');
 					break;
 				case UPLOAD_ERR_EXTENSION:
-					$message = __("File upload stopped by extension", "wpdf");
+					$message = WPDF()->text->get('extension', 'upload');
 					break;
-
 				default:
-					$message = __("Unknown upload error", "wpdf");
+					$message = WPDF()->text->get('unknown', 'upload');
 					break;
 			}
 
@@ -149,9 +139,9 @@ class WPDF_Validation{
 		}else{
 
 			if($code == UPLOAD_ERR_INI_SIZE){
-				$message = __("The uploaded file is to large.", "wpdf");
+				$message = WPDF()->text->get('max_size', 'upload');
 			}else{
-				$message = __("An error occured when uploading the file.", "wpdf");
+				$message = WPDF()->text->get('general', 'upload');
 			}
 
 			return $message;
@@ -176,8 +166,8 @@ class WPDF_Validation{
 		// todo: vsprintf need to check amount of arguments with string, so no errors will be thrown
 		if(isset($rule['msg'])){
 			$error = vsprintf( $rule['msg'] , $args );
-		}elseif(isset($this->_validation_msgs[$type])){
-			$error = vsprintf ( $this->_validation_msgs[$type], $args );
+		}elseif( WPDF()->text->get($type, 'validation')){
+			$error = vsprintf ( WPDF()->text->get($type, 'validation'), $args );
 		}
 
 		// save error for later

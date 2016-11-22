@@ -49,7 +49,7 @@ function wpdf_displayValidationBlockSection($type = '', $data = array()){
 			Validation Message:
 			<span class="wpdf-tooltip wpdf-tooltip__inline" title="Enter text to be displayed, or leave blank to display default text.">?</span>
 		</label>
-		<input type="text" name="field[][validation][][msg]" value="<?php echo isset($data['msg']) ? $data['msg'] : ''; ?>" class="wpdf-input" />
+		<input type="text" name="field[][validation][][msg]" value="<?php echo isset($data['msg']) ? $data['msg'] : ''; ?>" placeholder="<?php echo WPDF()->text->get('validation_' . $type); ?>" class="wpdf-input" />
 	</div>
 	<?php
 }

@@ -9,7 +9,11 @@ $forms = WPDF()->get_forms();
 
 $options = array();
 if(!empty($forms)) {
-	foreach ( $forms as $form ) {
+	foreach ( $forms as $form_id => $form ) {
+
+		if(is_array($form)) {
+			$form = WPDF()->get_form( $form_id );
+		}
 
 		$id = $form->getId();
 		if ( $id ) {
@@ -30,17 +34,17 @@ if(!empty($forms)) {
 <div class="wpdf-dialog">
 	<?php if( empty($options) ): ?>
 		<div id="wpdf_form_error" style="display:block;">
-			<p>You currently have no forms available, please create one and try again.</p>
+			<p><?php echo WPDF()->text->get('empty_forms', 'shortcode_error'); ?></p>
 		</div>
 	<?php else: ?>
 		<div id="wpdf_form_error" style="display:none;">
-			<p>An error occured with your selected, please try again.</p>
+			<p><?php echo WPDF()->text->get('selection', 'shortcode_error'); ?></p>
 		</div>
 
 		<table class="wpdf-dialog-table">
 			<tr>
 				<th class="notification__label">
-					<label for="wpdf_form_select">Form:</label>
+					<label for="wpdf_form_select"><?php _e('Form','wpdf'); ?>:</label>
 				</th>
 				<td class="notification__input">
 					<select name="wpdf_form_select" id="wpdf_form_select" data-options='<?php echo json_encode($options); ?>'>

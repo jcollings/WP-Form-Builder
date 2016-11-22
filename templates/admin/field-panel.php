@@ -11,7 +11,7 @@ $field_type = $field->getType();
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
 		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?>
-		<a class="wpdf-tooltip wpdf-panel__delete wpdf-del-field" title="Delete field from form">Delete</a>
+		<a class="wpdf-tooltip wpdf-panel__delete wpdf-del-field" title="Delete field from form"><?php _e('Delete','wpdf'); ?></a>
 		<a href="#" class="wpdf-panel__toggle wpdf-tooltip-blank" title="Toggle display of field settings"></a>
 	</div>
 	<div class="wpdf-panel__content">
@@ -28,7 +28,7 @@ $field_type = $field->getType();
 		<div class="wpdf-field-row">
 			<div class="wpdf-col wpdf-col__half">
 				<label for="" class="wpdf-label">
-					Label
+					<?php _e('Label','wpdf'); ?>
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed before the field on the form">?</span>
 				</label>
 
@@ -36,7 +36,7 @@ $field_type = $field->getType();
 			</div>
 			<div class="wpdf-col wpdf-col__half">
 				<label for="" class="wpdf-label">
-					Placeholder
+					<?php _e('Placeholder','wpdf'); ?>
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed in the field when no value is entered">?</span>
 				</label>
 				<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->getPlaceholder(); ?>">
@@ -46,7 +46,7 @@ $field_type = $field->getType();
 		<div class="wpdf-field-row">
 			<div class="wpdf-col wpdf-col__half">
 				<label for="" class="wpdf-label">
-					CSS Classes
+					<?php _e('CSS Classes','wpdf'); ?>
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Add custom css classes to field output">?</span>
 				</label>
 
@@ -63,7 +63,7 @@ $field_type = $field->getType();
 		<div class="wpdf-clear"></div>
 		<div class="wpdf-repeater wpdf-validation-repeater" data-min="0" data-template-name="validation_repeater">
 			<div class="field-values__header">
-			<strong>Validation Rules <span class="wpdf-tooltip wpdf-tooltip__inline" title="Add rules to validate data entered">?</span></strong>
+			<strong><?php _e('Validation Rules','wpdf'); ?> <span class="wpdf-tooltip wpdf-tooltip__inline" title="Add rules to validate data entered">?</span></strong>
 			</div>
 			<div class="wpdf-repeater-container">
 				<script type="text/html" class="wpdf-repeater-template">
@@ -82,7 +82,7 @@ $field_type = $field->getType();
 				}
 				?>
 			</div>
-			<a href="#" class="wpdf-add-row button button-primary">Add Validation Rule</a>
+			<a href="#" class="wpdf-add-row button button-primary"><?php _e('Add Validation Rule','wpdf'); ?></a>
 		</div>
 		<?php
 		// add-on fields
