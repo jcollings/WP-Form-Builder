@@ -47,7 +47,9 @@ class WPDF_FormField{
 	 * Display field settings in form editor
 	 */
 	public function displaySettings(){
-		require WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php';
+		if(file_exists(WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php')){
+			require WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php';
+		}
 	}
 
 	/**
