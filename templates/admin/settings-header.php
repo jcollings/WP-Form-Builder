@@ -37,7 +37,7 @@
 <div class="wpdf-subheader">
 	<div class="wpdf-subheader__left">
 		<?php if($form): ?>
-		<p class="wpdf-subheader__form"><?php echo $form->getLabel(); ?></p>
+		<p class="wpdf-subheader__form">Form: <?php echo $form->getLabel(); ?></p>
 		<?php else: ?>
 			<p class="wpdf-subheader__form"><?php _e('New Form', 'wpdf'); ?></p>
 		<?php endif; ?>

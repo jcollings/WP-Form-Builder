@@ -635,8 +635,28 @@ class WPDF_Admin{
 			return;
 		}
 
+		// add default form data
 		$form_data = array(
-			'form_label' => $name
+			'form_label' => $name,
+			'fields' => array(),
+			'settings' => array(
+				'labels' => array(
+					'submit' => 'Submit'
+				)
+			),
+			'confirmations' => array(
+				array(
+					'type' => 'message',
+					'message' => 'The form has been submitted successfully'
+				)
+			),
+			'notifications' => array(
+				array(
+					'to' => '{{admin_email}}',
+					'subject' => 'New Form Submission',
+					'message' => 'New Form Submission: {{fields}}'
+				)
+			),
 		);
 
 		$postarr = array(
