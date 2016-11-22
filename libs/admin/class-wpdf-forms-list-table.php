@@ -47,6 +47,9 @@ class WPDF_Forms_List_Table extends WP_List_Table{
 		if(!empty($forms)) {
 			foreach ( $forms as $form_id => $form ) {
 
+				// need to load form since they are not automatically pre-loaded
+				$form = WPDF()->get_form($form_id);
+
 				$row            = new stdClass();
 				$row->form_name = $form->getLabel();
 
