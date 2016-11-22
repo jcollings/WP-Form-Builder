@@ -99,6 +99,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/class-wpdf-form.php';
 		include_once 'libs/class-wpdf-db-form.php';
 		include_once 'libs/class-wpdf-form-data.php';
+		include_once 'libs/class-wpdf-form-theme.php';
 
 		include_once 'libs/class-wpdf-form-field.php';
 		include_once 'libs/fields/class-wpdf-text-field.php';

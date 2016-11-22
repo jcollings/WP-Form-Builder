@@ -72,18 +72,6 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							</td>
 							<td class="notification__input"><input id="submit_label" type="text" name="wpdf_settings[submit_label]" value="<?php echo $submit_label; ?>" /></td>
 						</tr>
-						<tr>
-							<td class="wpdf-tooltip__wrapper">
-								<label for="submit_label">Style Editor</label>
-								<span class="wpdf-tooltip" title="Enable the use of the visual style editor">?</span>
-							</td>
-							<td class="notification__input">
-								<select name="wpdf_settings[enable_style]" id="wpdf_settings-enable_style">
-									<option value="disable" <?php selected('disable', $form->get_setting('enable_style'), true); ?>>Disable</option>
-									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_style'), true); ?>>Enable</option>
-								</select>
-							</td>
-						</tr>
 					</table>
 
 					<h2 class="wpdf-settings__header">

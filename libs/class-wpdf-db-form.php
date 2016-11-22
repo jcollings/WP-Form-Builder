@@ -15,8 +15,11 @@ class WPDF_DB_Form extends WPDF_Form {
 	private $_label = null;
 
 
-	protected $_style = array();
-	protected $_style_disabled = array();
+	/**
+	 * Form Theme Styles
+	 * @var WPDF_FormTheme
+	 */
+	protected $_theme = null;
 
 	public function __construct( $form_id = null ) {
 
@@ -35,8 +38,9 @@ class WPDF_DB_Form extends WPDF_Form {
 			}
 
 			// load style
-			$this->_style = $form['theme'];
-			$this->_style_disabled = $form['theme_disabled'];
+			$style = isset($form['theme']) ? $form['theme'] : array();
+			$style_disabled = isset($form['theme_disabled']) ? $form['theme_disabled'] : array();
+			$this->_theme = new WPDF_FormTheme($style, $style_disabled);
 
 			// load form content
 			$this->_content = isset($form['content']) ? $form['content'] : '';
@@ -109,15 +113,15 @@ class WPDF_DB_Form extends WPDF_Form {
 	 * @return bool|string
 	 */
 	public function getStyle($key, $force = false) {
-		return isset($this->_style[$key]) && (!$this->isStyleDisabled($key) || $force) ? $this->_style[$key] : false;
+		return $this->_theme->getStyle($key, $force);
 	}
 
 	public function hasStyle($key){
-		return $this->getStyle($key);
+		return $this->_theme->getStyle($key);
 	}
 
 	public function isStyleDisabled($key){
-		return isset($this->_style_disabled[$key]) && $this->_style_disabled[$key] == true ? true : false;
+		return $this->_theme->isStyleDisabled($key);
 	}
 
 	public function export(){
