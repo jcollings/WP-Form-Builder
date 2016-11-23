@@ -103,7 +103,11 @@ class WPDF_Validation{
 		return $this->_error;
 	}
 
-	public function get_upload_error($code){
+	public function get_upload_error($code, $maxUploadSize = -1){
+
+		if($maxUploadSize < 0){
+			$maxUploadSize = intval(ini_get('upload_max_filesize'));
+		}
 
 		if(WP_DEBUG) {
 
@@ -139,7 +143,7 @@ class WPDF_Validation{
 		}else{
 
 			if($code == UPLOAD_ERR_INI_SIZE){
-				$message = WPDF()->text->get('max_size', 'upload');
+				$message = sprintf(WPDF()->text->get('max_size', 'upload'), $maxUploadSize );
 			}else{
 				$message = WPDF()->text->get('general', 'upload');
 			}

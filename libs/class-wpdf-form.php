@@ -225,9 +225,15 @@ class WPDF_Form{
 				// check for file upload errors, before checking against field validation rules
 				if(isset($_FILES[$field->getInputName()])){
 					$file_data = $_FILES[$field->getInputName()];
-					if($file_data['error'] !== UPLOAD_ERR_OK && $file_data['error'] !== UPLOAD_ERR_NO_FILE){
-						$this->_errors[$field_id] = $this->_validation->get_upload_error($file_data['error']);
+
+					if($file_data['error'] !== UPLOAD_ERR_NO_FILE && !$field->isValidExt($file_data)){
+						$this->_errors[$field_id] = WPDF()->text->get('invalid_ext', 'upload');
+					}elseif($file_data['error'] !== UPLOAD_ERR_NO_FILE && !$field->isAllowedSize($file_data)){
+						$this->_errors[$field_id] = sprintf(WPDF()->text->get('max_size', 'upload'), $field->getMaxFileSize());
+					}elseif($file_data['error'] !== UPLOAD_ERR_OK && $file_data['error'] !== UPLOAD_ERR_NO_FILE){
+						$this->_errors[$field_id] = $this->_validation->get_upload_error($file_data['error'], $field->getMaxFileSize());
 					}
+
 				}
 			}
 

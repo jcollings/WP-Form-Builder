@@ -48,7 +48,10 @@ class WPDF_FormData{
 
 						//$this->_data[$field_id] = $upload_data[$field_id];
 
-						if( $upload_data[$field->getInputName()]['error'] == 0 ){
+						if( $upload_data[$field->getInputName()]['error'] == 0
+						&& $field->isValidExt($upload_data[$field->getInputName()])
+						&& $field->isAllowedSize($upload_data[$field->getInputName()])
+						){
 
 							// file uploaded
 

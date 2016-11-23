@@ -19,7 +19,7 @@ class WPDF_Text{
 			'validation_min_length' => __('Please enter a value longer than %d', "wpdf"),
 			'validation_max_length' => __('Please enter a value shorter than %d', "wpdf"),
 			// upload errors
-			'upload_max_size' => __("The uploaded file is to large.", "wpdf"),
+			'upload_max_size' => __("The uploaded file is to large. (max size: %dmb)", "wpdf"),
 			'upload_general' => __("An error occured when uploading the file.", "wpdf"),
 			'upload_ini_size' => __("The uploaded file exceeds the upload_max_filesize directive in php.ini", "wpdf"),
 			'upload_form_size' => __("The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form", "wpdf"),
@@ -29,6 +29,7 @@ class WPDF_Text{
 			'upload_cant_write' => __("Failed to write file to disk", "wpdf"),
 			'upload_extension' => __("File upload stopped by extension", "wpdf"),
 			'upload_unknown' => __("Unknown upload error", "wpdf"),
+			'upload_invalid_ext' => __('The upload file type is not allowed', 'wpdf'),
 			// menu text
 			'menu_fields' => __("Fields", "wpdf"),
 			'menu_settings' => __("Settings", "wpdf"),
