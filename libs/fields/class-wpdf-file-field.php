@@ -16,9 +16,10 @@ class WPDF_FileField extends WPDF_FormField {
 		$value = $form_data->get($this->_name);
 
 		// display name of previously uploaded file and show the file uploader to allow users to overwrite upload
-		echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'"  />';
+		echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'" />';
 		if(!empty($value)) {
-			echo '<input type="hidden" name="' . $this->_name . '_uploaded" value="' . $value . '" />';
+			echo '<input type="hidden" name="' . $this->getInputName() . '_uploaded" value="' . $value . '" />';
+			echo sprintf('<p class="wpdf-upload">Uploaded File: <span class="wpdf-upload__name">%s</span></p>', $value);
 		}
 	}
 }
