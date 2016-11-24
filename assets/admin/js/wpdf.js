@@ -157,12 +157,14 @@
 
     $(document).on('click', '.wpdf-del-field', function(e){
         e.preventDefault();
-
-        $(this).parents('li').remove();
-        if($('#sortable li:not(.placeholder)').length == 0) {
-            var _placeholder = $('#sortable .placeholder');
-            _placeholder.height($('.wpdf-cols').height() - 40);
-            _placeholder.show();
+        var result = confirm('Are you sure you want to delete this field?');
+        if(result) {
+            $(this).parents('li').remove();
+            if ($('#sortable li:not(.placeholder)').length == 0) {
+                var _placeholder = $('#sortable .placeholder');
+                _placeholder.height($('.wpdf-cols').height() - 40);
+                _placeholder.show();
+            }
         }
     });
 
