@@ -1,10 +1,10 @@
 <?php
 
 /*
-Plugin Name: WordPress Developer Forms
+Plugin Name: WP Form Builder
 Plugin URI: https://www.wordpressdeveloperforms.com/
-Description: Simple WordPress forms library
-Version: 0.2.3
+Description: Drag & Drop form builder plugin, custom notifications, custom confirmation message, manage form submissions online.
+Version: 0.3
 Author: James Collings
 Author URI: https://www.jclabs.co.uk
 License: GPLv2 or later
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 /**
- * @package WordPress Developer Forms
+ * @package WP Form Builder
  * @author James Collings <james@jclabs.co.uk>
  * @link https://www.wordpressdeveloperforms.com/
  *
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WPDF_DeveloperForms {
 
-	protected $version = '0.2.3';
+	protected $version = '0.3';
 	public $plugin_dir = false;
 	public $plugin_url = false;
 	protected $plugin_slug = false;

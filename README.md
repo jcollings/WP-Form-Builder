@@ -1,13 +1,12 @@
-# WordPress Developer Forms
+# WP Form Builder
 Author: James Collings  
-Version: 0.2.3  
+Version: 0.3  
 Created: 05/08/2016  
-Updated: 07/08/2016  
-License: GPLv2 or later  
-License URI: http://www.gnu.org/licenses/gpl-2.0.html  
+Updated: 24/11/2016
 
 ## About
-WordPress Developer Forms plugin make it easy to create and display forms within your WordPress theme, With a WordPress admin section where you can easily view past form submissions. 
+
+WP Form Builder plugin make it easy to create and display forms within your WordPress theme, With a WordPress admin section where you can easily view past form submissions. 
 
 ## Features
 
@@ -15,318 +14,186 @@ WordPress Developer Forms plugin make it easy to create and display forms within
 * __Email Notifications__ - Easily setup email notifications when forms are submitted, and customise it with template tags to display for entry data.
 * __Form Validation__ - Fields can make use of multiple validation functions, each allowing for custom validation messages.
 * __Field Types__ - Currently supports (text, text area, file, select, checkbox, radio)
+* __Spam Protection__ - reCAPTCHA integration to help stop unwanted spam
 
-## Quick Start Guide
-
-### Step 1 - Registering the Form
-
-In this example we will create a form with (name, email and message field) all fields are required and the email field has to be a valid email address for the form to submit. Once the form has been submitted we will display a custom thank you message, and send website admins a copy of the data submitted via email.
-
-```
-if(function_exists('wpdf_register_form')){
-
-    // 1. register form
-	$form = wpdf_register_form("Contact", array(
-		'name' => array(
-			'type' => 'text',
-			'label' => 'Name',
-			'validation' => 'required'
-		),
-		'email' => array(
-			'type' => 'text',
-			'label' => 'Email Address',
-			'validation' => array(
-				array(
-					'type' => 'required'
-				),
-				array(
-					'type' => 'email'
-				)
-			)
-		),
-		'message' => array(
-			'type' => 'textarea',
-			'label' => 'Message',
-			'validation' => 'required'
-		)
-	));
-	
-	// 2. register form success message
-	$form->add_confirmation('message', 'Your form has been successfully submitted.');
-	
-	// 3. register form email notification
-	$form->add_notification('admin@website.com', 'Email Notification Subject', 'Email Notification Message: {{fields}}');	
-}
-```
-
-### Step 2 - Displaying the Form
-
-Now we have registered the form we can output it, WPDF gives you many ways to display the form going from really simple
- with displaying the form with the plugins default output, or you can have complete control how and what is output.
- 
-#### Display Form via theme function
-
-```
-<?php
-if(function_exists('wpdf_display_form')){
-    wpdf_display_form("Contact");
-}
-?>
-```
-
-#### Display form via Shortcode Output
-
-```
-[wp_form form="Contact"/]
-```
-
-#### Displaying the form Manually  
-
-Custom output is best used when you want to have control over how overything looks and want it to match how your
- existing form looks.
- 
-```
-<?php
-$form = wpdf_get_form("Contact");
-
-if($form->is_complete()):
-
-    // display successful message
-    wpdf_display_confirmation($form);
-
-else: ?>
-
-    <?php
-    // output the form tag <form>
-    $form->start();
-    ?>
-    
-    <?php
-    // display form errors if there are any
-    if($form->has_errors()): ?>
-        <div class="form-errors">
-        <?php $form->errors(); ?>
-    </div>
-    <?php endif; ?>
-    
-    <!-- Display Name Field -->
-    <div class="form-row <?php $form->classes("name", 'validation'); ?> <?php $form->classes("name", 'type'); ?>">
-        <div class="label"><?php $form->label( "name" ); ?></div>
-        <div class="input"><?php $form->input( "name" ); ?></div>
-        <?php $form->error( "name" ); ?>
-    </div>
-    
-    <!-- Display Email Field -->
-    <div class="<?php $form->classes("email", 'validation'); ?> <?php $form->classes("email", 'type'); ?>">
-        <label><?php echo $form->getFieldLabel("email"); ?></label>
-        <input type="text" name="<?php echo $form->getFieldName("email"); ?>" value="<?php echo $form->getFieldValue("email"); ?>" />
-        <?php $form->error( "email" ); ?>
-    </div>
-    
-    <!-- Display Message Field -->
-    <div class="<?php $form->classes("message", 'validation'); ?> <?php $form->classes("message", 'type'); ?>">
-        <label><?php echo $form->getFieldLabel("message"); ?></label>
-        <textarea name="<?php echo $form->getFieldName("message"); ?>"><?php echo $form->getFieldValue("message"); ?></textarea>
-        <?php $form->error( "message" ); ?>
-    </div>
-    
-    <?php $form->submit("SEND); ?>
-
-<?php endif; ?>
-```
-
-If you want to go a step further and customise how the inputs are displayed you can the same example as above with more
-flexibility.
-
-```
-<?php
-$form = wpdf_get_form("Contact");
-
-if($form->is_complete()):
-
-    // display successful message
-    ?>
-    <div class="form-confirmation">
-        <p><?php echo $form->getConfirmationMessage(); ?></p>
-    </div>
-    <?php
-
-else: ?>
-
-    <?php
-    // output the form tag <form>
-    $form->start();
-    ?>
-
-    <?php
-    // display form errors if there are any
-    if($form->has_errors()): ?>
-        <div class="form-errors">
-        <?php $form->errors(); ?>
-        </div>
-    <?php endif; ?>
-    
-    <!-- Display Name Field -->
-    <div class="<?php $form->classes("name", 'validation'); ?> <?php $form->classes("name", 'type'); ?>">
-        <label><?php echo $form->getFieldLabel("name"); ?></label>
-        <input type="text" name="<?php echo $form->getFieldName("name"); ?>" value="<?php echo $form->getFieldValue("name"); ?>" />
-        <?php $form->error( "name" ); ?>
-    </div>
-    
-    <!-- Display Email Field -->
-    <div class="<?php $form->classes("email", 'validation'); ?> <?php $form->classes("email", 'type'); ?>">
-        <label><?php echo $form->getFieldLabel("email"); ?></label>
-        <input type="text" name="<?php echo $form->getFieldName("email"); ?>" value="<?php echo $form->getFieldValue("email"); ?>" />
-        <?php $form->error( "email" ); ?>
-    </div>
-    
-    <!-- Display Message Field -->
-    <div class="<?php $form->classes("message", 'validation'); ?> <?php $form->classes("message", 'type'); ?>">
-        <label><?php echo $form->getFieldLabel("message"); ?></label>
-        <textarea name="<?php echo $form->getFieldName("message"); ?>"><?php echo $form->getFieldValue("message"); ?></textarea>
-        <?php $form->error( "message" ); ?>
-    </div>
-    
-    <?php $form->submit("SEND); ?>
-
-<?php endif; ?>
-```
-
-## WPDF Documentation
-
-### Form Email notifications
-
-Email notifications are setup to send when the form is submitted successfully.
-
-The following function allows you to register an email notification for when the form is submitted.
- 
-```
-$form->add_notification( String $recipient, String $subject, String $message, Array $args);
-```
-
-**$recipient** : Recipients email address  
-**$subject** : Email Subject Line  
-**$message** : Email message  
-**$args** : Extra arguments
-
-##### Basic Example
-
-```
-$form->add_notification( "to@email.com", "Email Subject", "Email Message" );
-```
-
-#### Add from, cc, or bcc
-
-Email options such as adding a sent from address, cc, or bcc can be done by passing the following fields into the functions $args array
-
-```
-$args = array(
-    'from' => '',  
-    'cc' => '',
-    'bcc' => '',
-);
-```
-
-**$from** : Email address notification is sent from  
-**$cc** : List of email addresses to cc  
-**$bcc** : List of email addresses to bcc  
-
-##### Example
-
-Send a notification with custom from, cc, and bcc email addresses, this example would send the email address "from@email.com", send a carbon copy to "cc@email.com" and a blind carbon copy to "bcc@email.com"
-
-```
-$args = array(
-    'from' => 'from@email.com',  
-    'cc' => 'cc@email.com',
-    'bcc' => 'bcc@email.com',
-);
-
-$form->add_notification( "to@email.com", "Email Subject", "Email Message", $args );
-```
-
-#### Conditional Notifications
-
-If you want to send email notifications to specific email addresses depending on what data has been submitted you can 
-use the **conditions** argument to add a list of what fields have to equal for the conditions to be met.
-
-```
-$form->add_notification( String $recipient, String $subject, String $message, Array $args );
-```
-
-```
-$args = array(
-    'conditions' => array(
-        'field_id' => ''
-    )
-);
-```
-
-**$conditions**: An array of keys which are a field name and values which are the specified field value
-
-##### Example
-
-The following example uses a field called "Subject", depending if the value of that field is either "booking" or 
-"enquiry" different notifications will be delivered.
-
-```
-// register notifiaction to be sent if the field "subject" equals "booking"
-$args = array(
-    'conditions' => array(
-        'subject' => 'booking'
-    )
-);
-$form->add_notification( "booking@email.com", "Booking Email Subject", "Email Message", $args );
-
-// register notifiaction to be sent if the field "subject" equals "enquiry"
-$args = array(
-    'conditions' => array(
-        'subject' => 'enquiry'
-    )
-);
-$form->add_notification( "enquiry@email.com", "Enquiry Email Subject", "Email Message", $args );
-```
-
-#### Displaying Form Data in Email
-
-To display form data in your notification there are merge tags, these are based on the fields in your form. You 
-can display the data from any field in the form with "{{field_**FIELD_NAME**}}" for example if you have a field called fname
-to display this field you would use the merge tag "{{field_fname}}".
-
-##### Display Single Field
-
-In the following example it expects the form to have a field called "Name".
-
-```
-$form->add_notification( "to@email.com", "Submission for {{name}}", "A new submission has been submitted {{name}}" );
-```
-
-##### Display All Fields
-
-There is also a merge tag that allows you to display a list of all fields submitted, this can only be used in the message field "{{fields}}"
-
-The following example will replace the merge tag `{{fields}}` with a list of all fields and their values
-
-```
-$form->add_notification( "to@email.com", "Email Subject", "Form Submission: {{fields}}" );
-```
-
-##### Send to Email Field
-
-The following example expects the form to have a field called "Email", and the notification will be sent to the email address submitted from that field.
-
-```
-$form->add_notification( "{{field_email}}", "Thank you!", "Thank you for taking the time to fill out the form with the following data: {{fields}}" );
-```
-
-### Entry Table Headings Columns
-
-Entry admin headings can be customised by to display specific entry data.
-
-```
-$form->settings(array(
-    'admin_columns' => array(
-        'column_name' 	=> __('Column Label', 'wpdf')
-    )
-));
-```
+## Documentation
+
+### Managing Forms
+
+All features of the plugin can be found under the left hand menu item called “Forms”, when this section loads up you will be show a list of all previously created forms.
+
+![Form Archive](./assets/docs/Forms.png)
+
+To interact with any form hover over the form form, you should see a list of actions should appear under the form name.
+
+![Form Hover Actions](./assets/docs/Forms-Action.png)
+
+> Throughout the interface if you don't know what to do, hover over the ? to show a brief message about what that feature does.
+
+#### Creating a Form
+
+To create a form click on the menu item “Forms > Add Form”, or when you are on the form archive a link to create a new form should be visible next to the title of the page.
+
+When this page loads up you have to enter the name of the form, this name will be displayed at the top of the form, this can be edited at a later date under the form settings tab.
+
+![Create Form](./assets/docs/Form-New.png)
+
+Click the “Create Form” button to create the empty form.
+
+#### Managing Fields
+
+![Edit Form](./assets/docs/Form-Edit.png)
+
+On the left hand side of the screen you will see a dashed box that says “Drop field here to add to the form” , this is the field dropzone, to the right of that is a list of fields under the title “Available Fields”.
+
+##### Add a field
+
+Click and drag the field that you want to add to the form from the right hand column into the field dropzone on the left hand size, If there are fields already added you can hover above or below to insert the field in the correct order you require.
+
+Once you have dropped the field in the dropzone, a field panel should appear allowing you (as shown in the next image) to set attributes such as the field label, depending on the type of dropped field different options will be available.
+
+![Add Field](./assets/docs/Form-First-Field.png)
+
+Once a field has been dropped, you can easily reorder the list of fields by click and dragging on the top bar of the field panel, to make this easier you can toggle the display of the field panel by clicking on the up/down arrows at the top right corner of the field (highlighted below).
+
+![Field Toggle](./assets/docs/Field-Show.png)
+
+###### General Field Options
+
+![Field Toggle](./assets/docs/Field-General.png)
+
+All fields have the following fields:
+
+* Label - Text displayed before the field.
+* Placeholder - Text displayed on the field before any data is inserted.
+* CSS Classes - Used when styling the form via CSS
+
+###### Text Field Options
+
+![Field Toggle](./assets/docs/Field-Text.png)
+
+Text fields have the following fields:
+
+* Default value - Text entered here will populate the field when the form is loaded.
+
+###### Textarea Field Options
+
+![Field Toggle](./assets/docs/Field-Textarea.png)
+
+Textarea fields have the following fields:
+
+* Rows - How many rows of text will be visible (alters the height of the textbox)
+* Default value - Text entered here will populate the field when the form is loaded.
+
+###### Select Field Options
+
+![Field Toggle](./assets/docs/Field-Select.png)
+
+select fields have the following fields:
+
+* Empty Text - This text will appear as an empty option
+* Select Type - Allow the field to accept single or multiple options.
+* Values - Values can be add/removed via the plus and minus icons on the right hand side, each row makes up an choosable option. 
+    * Label - Text visible to the user
+    * Value - Value of option, not visible to the user
+    * Default - Check this to make to make the field pre populate with this selection.
+
+###### Checkbox Field Options
+
+![Field Toggle](./assets/docs/Field-Checkbox.png)
+
+checkbox fields have the following fields:
+
+* Values - Values can be add/removed via the plus and minus icons on the right hand side, each row makes up an choosable option. 
+    * Label - Text visible to the user
+    * Value - Value of option, not visible to the user
+    * Default - Check this to make to make the field pre populate with this selection.
+
+###### Radio Field Options
+
+![Field Toggle](./assets/docs/Field-Radio.png)
+
+radio fields have the following fields:
+
+* Values - Values can be add/removed via the plus and minus icons on the right hand side, each row makes up an choosable option. 
+    * Label - Text visible to the user
+    * Value - Value of option, not visible to the user
+    * Default - Check this to make to make the field pre populate with this selection.
+
+###### File Field Options
+
+![Field Toggle](./assets/docs/Field-File.png)
+
+File fields have the following fields:
+
+* Maximum files size - Set this to the size limit of files you want to allow users to upload, enter this in megabytes as an integer (check that your php server settings “post_max_size” and “upload_max_filesize” are greater than the value you enter, otherwise this can cause problems.
+* Allowed Extensions - type all the file extensions you want to allow users to upload each separated by a comma “,”.
+
+##### Field Validation
+
+Adding field validation rules is as easy as clicking on the “Add Validation Rule” on the field panel, once clicked a dropdown will appear allowing you to choose the type of validation you want to add. Once selected extra options will appear depending on the chosen value, by default all validation rules allow you to customise the message displayed when the field is invalid, leave the message blank to use the default validation message.
+
+![Field Validation Rules](./assets/docs/Field-Validation.png)
+
+##### Remove a field
+
+Fields can be deleted by clicking on the delete text at the top right of each field.
+
+#### Form Settings
+
+> If you are unclear about any fields when editing the form settings page, hover over a “?” to show a brief description about that section.
+
+##### General Settings
+
+* Form Name - Name of the form, displayed at the top of the form when viewed
+* Form Content - Text content displayed after the title on the form.
+* Submit Button Text - Set the text displayed on the forms submit button
+
+##### Form Confirmation
+
+* Confirmation Type - What happens when the form is complete show message or Redirect to page
+* Confirmation Location - Where the confirmation message appears.
+* Confirmation Message - Text to display one successful submission
+* Confirmation Redirect - Location to redirect too on successful submission.
+
+##### Display Settings
+
+* Style Editor - Enable display the user of the style editor
+
+##### ReCAPTCHA Settings
+
+Add a reCAPTCHA spam field to the form, you will need to generate an api key on the recaptcha website and follow there instructions on how to get a site key and public key.
+
+##### Form Styles
+
+If you have enabled the style editor in the display settings, on form save a style tab will appear at the top in the header, click this to view all the style choices, each field has a “?” explaining what section it styles, click on the text input box to show a colour picker, once you have the ideal colour, click anywhere on the page to hide.
+
+You can disable each style individually by checking the checkbox labelled “Disable”.
+
+#### Form Notifications
+
+Notifications are triggered on a successful form submission, you can have multiple form notifications, notification messages can contain data from the submitted form.
+
+![Form Notifications](./assets/docs/Form-Notification.png)
+
+When a form is first created you will have a default notification setup, this will send an email to the website administrator with the subject line “New Form Submission” and in the email body a list of all the fields followed by the data submitted.
+
+To display form data in your notification there are merge tags, these are based on the fields in your form. You can display the data from any field in the form with "{{field_FIELD_NAME}}" a list of all merge tags will appear to the right hand side of the notification message box.
+
+#### Form Submissions
+
+By default all form submissions are stored and can be accessed from within the forms section of the website, from the list of forms hover and click on the submissions action, or when on the edit screen click on the “Submissions” menu item.
+
+> You can manage the columns displayed in the submission table by adding a plugin filter to your themes functions file, a way to do this visually will be coming soon.
+
+![Manage Entries](./assets/docs/Form-Submissions.png)
+
+You should see a paginated list of form submissions, which is searchable via the search entries input above. 
+
+All new entries are highlighted with an unread label next to the entry id.
+
+To view an entry in more detail click on the entry id, or hover over it and click on the view action.
+
+![View Entry](./assets/docs/Form-Submission.png)
+
+On the left hand side is a list of all the information submitted, and on the right hand side is information about the submission such as the date/time and the user account / guest who submitted it.
