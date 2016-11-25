@@ -18,7 +18,7 @@ if($settings){
 		$confirmation = $settings['confirmations'][0];
 		$confirmation_type = $confirmation['type'];
 		$confirmation_message = $confirmation['message'];
-		$confirmation_redirect = $confirmation['redirect_url'];
+		$confirmation_redirect = isset($confirmation['redirect_url']) ? $confirmation['redirect_url'] : '';
 	}
 
 	$confirmation_location = isset($settings['confirmation_location']) ? $settings['confirmation_location'] : 'after';

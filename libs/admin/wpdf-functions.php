@@ -87,17 +87,17 @@ function wpdf_displayNotificationSettings($notification, $i = '', $fieldKeys = a
 					</tr>
 					<tr>
 						<td class="notification__label wpdf-tooltip__wrapper"><label for="from">From <span class="wpdf-tooltip" title="Sent from email address">?</span></label></td>
-						<td class="notification__input"><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo $notification['from']; ?>" /></td>
+						<td class="notification__input"><input id="from" type="text" name="notification[<?php echo $i; ?>][from]" value="<?php echo isset($notification['from']) ? $notification['from'] : ''; ?>" /></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td class="notification__label wpdf-tooltip__wrapper"><label for="cc">Cc <span class="wpdf-tooltip" title="Email addresses to cc to, seperated by ','">?</span></label></td>
-						<td class="notification__input"><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo $notification['cc']; ?>" /></td>
+						<td class="notification__input"><input id="cc" type="text" name="notification[<?php echo $i; ?>][cc]" value="<?php echo isset($notification['cc']) ? $notification['cc'] : ''; ?>" /></td>
 						<td></td>
 					</tr>
 					<tr>
 						<td class="notification__label wpdf-tooltip__wrapper"><label for="bcc">Bcc <span class="wpdf-tooltip" title="Email addresses to bcc to, seperated by ','">?</span></label></td>
-						<td class="notification__input"><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo $notification['bcc']; ?>" /></td>
+						<td class="notification__input"><input id="bcc" type="text" name="notification[<?php echo $i; ?>][bcc]" value="<?php echo isset($notification['bcc']) ? $notification['bcc'] : ''; ?>" /></td>
 						<td></td>
 					</tr>
 
