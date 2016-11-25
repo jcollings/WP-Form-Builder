@@ -77,6 +77,22 @@ class WPDF_Admin{
 			exit();
 		}
 
+		// preview form
+		$preview = isset($_GET['action']) && $_GET['action'] == 'preview-form' && isset($_GET['form_id']) ? intval($_GET['form_id']) : 0;
+		if($preview > 0){
+			$post = get_post($preview);
+			if($post->post_type == 'wpdf_form'){
+				$preview_id = wp_generate_password(12, false);
+				$transient_key = sprintf('wpdf_preview_%s', $preview_id);
+				set_transient($transient_key, array(
+					'form_id' => $preview
+				), HOUR_IN_SECONDS);
+				wp_redirect(site_url('/?wpdf_preview=' . $preview_id));
+				exit();
+			}
+		}
+
+		// delete form
 		$delete_form = isset($_GET['action']) && $_GET['action'] == 'delete-form' && isset($_GET['form_id']) ? intval($_GET['form_id']) : 0;
 		if($delete_form > 0){
 

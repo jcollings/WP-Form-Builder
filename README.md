@@ -225,3 +225,11 @@ We have added a button to your WYSIWYG editor to make it simple to insert a form
 A modal window will open up allowing you to choose from a list of forms previously created, once chosen click on the insert button at the bottom, this will insert the form shortcode into the current page.
 
 ![Tinymce Button](./assets/docs/Form-Insert.png)
+
+## Changelog
+
+### 0.3.1
+* ADD: Form Preview link
+
+### 0.3
+* Plugin Released

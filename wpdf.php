@@ -143,6 +143,12 @@ class WPDF_DeveloperForms {
 
 		// load text
 		$this->text = new WPDF_Text();
+
+		// load preview
+		if(isset($_GET['wpdf_preview']) && !empty($_GET['wpdf_preview'])){
+			include_once 'libs/class-wpdf-preview.php';
+			new WPDF_Preview(sanitize_title($_GET['wpdf_preview']));
+		}
 	}
 
 	/**

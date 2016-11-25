@@ -712,7 +712,7 @@ class WPDF_Form{
 			set_transient('wpdf_token_' . $this->_token, array(
 				'ip' => wpdf_getIp(),
 				'time' => time()
-			));
+			), HOUR_IN_SECONDS);
 		}elseif($this->_submitted && isset($_REQUEST['wpdf_token'])){
 			$this->_token = $_REQUEST['wpdf_token'];
 		}

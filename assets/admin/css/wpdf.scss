@@ -107,7 +107,7 @@
         margin-top: -20px;
     }
 
-    .wpdf-header__actions input, .wpdf-header__actions button {
+    .wpdf-header__actions input, .wpdf-header__actions button, .wpdf-header__btn {
         height: 40px;
         line-height: 40px;
         font-size: 13px;
@@ -120,12 +120,35 @@
         color: #fff;
         text-decoration: none;
         text-shadow: 0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799;
+        border: none !important;
     }
 
-    .wpdf-header__actions button:hover, .wpdf-header__actions input:hover {
+    .wpdf-header__actions button:hover, .wpdf-header__actions input:hover{
         background: #008ec2;
         border-color: #006799;
         color: #fff;
+        cursor: pointer;
+    }
+
+    .wpdf-header__btn{
+        $shadow: darken(#ececec, 10%);
+        $lighten: lighten(#ececec, 10%);
+        background: #ececec;
+        color: #000;
+        text-shadow: 0 -1px 1px $lighten, 1px 0 1px $lighten, 0 1px 1px $lighten, -1px 0 1px $lighten;
+        -webkit-box-shadow: 0 1px 0 $shadow;
+        box-shadow: 0 1px 0 $shadow;
+        border-color: $shadow;
+    }
+
+    .wpdf-header__btn:hover {
+
+        $shadow: darken(#ececec, 5%);
+        $bg: darken(#ececec, 10%);
+        $lighten: lighten(#ececec, 5%);
+
+        background: $bg;
+        border-color: $shadow;
         cursor: pointer;
     }
 
