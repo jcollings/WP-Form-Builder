@@ -256,7 +256,7 @@ class WPDF_Form{
 			}
 
 			// store form data in database
-			if($this->get_setting('database') == 'yes') {
+			if($this->get_setting('database') == 'yes' && !defined('WPDF_PREVIEW')) {
 				$db = new WPDF_DatabaseManager();
 				$db->save_entry( $this->getName(), $this->_data );
 			}

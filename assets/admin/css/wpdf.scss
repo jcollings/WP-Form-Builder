@@ -67,7 +67,7 @@
     .wpdf-header__links {
         list-style: none;
         padding: 0;
-        margin: 0 110px 0 150px;
+        margin: 0 160px 0 150px;
         border-left: 1px solid #dedede;
         overflow: hidden;
     }
@@ -562,7 +562,7 @@
     }
 }
 
-@media (max-width: 1039px) {
+@media (max-width: 1080px) {
     .wpdf-form-manager {
         .wpdf-header__links li a {
             padding-right: 20px;

@@ -28,6 +28,12 @@ class WPDF_Preview{
 		$transient_key = sprintf('wpdf_preview_%s', $preview_id);
 		$transient = get_transient($transient_key);
 		if($transient){
+
+			// mark as preview
+			if(!defined('WPDF_PREVIEW')){
+				define('WPDF_PREVIEW', true);
+			}
+
 			add_filter('the_posts',array($this,'generate_preview'));
 			$this->slug = $transient_key;
 			$this->formId = $transient['form_id'];
