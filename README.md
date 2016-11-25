@@ -18,6 +18,24 @@ WP Form Builder plugin make it easy to create and display forms within your Word
 
 ## Documentation
 
+* [Managing forms](#managing-forms)
+* [Creating a form](#creating-a-form)
+* [Managing fields](#managing-fields)
+    * [Add a field](#add-a-field)
+    * [Field validation](#field-validation)
+    * [Remove a field](#remove-a-field)
+* [Form settings](#form-settings)
+    * [General settings](#general-settings)
+    * [Form confirmations](#form-confirmation)
+    * [Display settings](#display-settings)
+    * [ReCAPTCHA settings](#recaptcha-settings)
+    * [Form styles](#form-styles)
+* [Form notifications](#form-notifications)
+* [Form submissions](#form-submissions)
+* [Adding form to page](#adding-form-to-page)
+    
+    
+
 ### Managing Forms
 
 All features of the plugin can be found under the left hand menu item called “Forms”, when this section loads up you will be show a list of all previously created forms.
@@ -197,3 +215,13 @@ To view an entry in more detail click on the entry id, or hover over it and clic
 ![View Entry](./assets/docs/Form-Submission.png)
 
 On the left hand side is a list of all the information submitted, and on the right hand side is information about the submission such as the date/time and the user account / guest who submitted it.
+
+#### Adding form to page
+
+We have added a button to your WYSIWYG editor to make it simple to insert a form into a page, click the form icon highlighted in the image below to start the insert process.
+
+![Tinymce Button](./assets/docs/Form-Button.png)
+
+A modal window will open up allowing you to choose from a list of forms previously created, once chosen click on the insert button at the bottom, this will insert the form shortcode into the current page.
+
+![Tinymce Button](./assets/docs/Form-Insert.png)
