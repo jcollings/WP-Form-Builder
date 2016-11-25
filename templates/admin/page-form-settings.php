@@ -132,6 +132,19 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 								</select>
 							</td>
 						</tr>
+
+						<tr>
+							<td class="wpdf-tooltip__wrapper">
+								<label for="submit_label">Layout CSS</label>
+								<span class="wpdf-tooltip" title="Enable this to help override the themes default display of the form">?</span>
+							</td>
+							<td class="notification__input">
+								<select name="wpdf_settings[enable_layout_css]" id="wpdf_settings-enable_style">
+									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_layout_css'), true); ?>>Enable</option>
+									<option value="disable" <?php selected('disable', $form->get_setting('enable_layout_css'), true); ?>>Disable</option>
+								</select>
+							</td>
+						</tr>
 					</table>
 
 					<h2 class="wpdf-settings__header">

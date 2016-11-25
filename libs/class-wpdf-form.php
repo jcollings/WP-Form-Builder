@@ -400,6 +400,11 @@ class WPDF_Form{
 		if(isset($args['class'])){
 			$classes .= esc_attr( $args['class'] );
 		}
+
+		if($this->get_setting('enable_layout_css') == 'enabled'){
+			$classes .= ' wpdf-form__layout';
+		}
+
 		$attrs .= sprintf( ' class="%s"', $classes );
 
 		//todo: output js data attributes

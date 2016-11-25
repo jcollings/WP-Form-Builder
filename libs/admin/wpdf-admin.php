@@ -496,6 +496,11 @@ class WPDF_Admin{
 		if(isset($settings['enable_style'])){
 			$form_data['settings']['enable_style'] = $settings['enable_style'];
 		}
+		if(isset($settings['enable_layout_css'])){
+			$form_data['settings']['enable_layout_css'] = $settings['enable_layout_css'];
+		}else{
+			$form_data['settings']['enable_layout_css'] = 'enable';
+		}
 
 		// save recaptcha settings
 		if(isset($settings['recaptcha_public'])){

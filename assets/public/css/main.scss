@@ -1,33 +1,66 @@
-$spacing: 1em;
-$choice-spacing: 1em;
+// =====================================
+// Layout CSS
+// =====================================
 
-.wpdf-form {
-    padding: $spacing;
-}
+.wpdf-form.wpdf-form__layout{
 
-.wpdf-input-select, .wpdf-input-textarea, .wpdf-input-text {
-    .wpdf-field {
-        width: 100%;
+    $spacing: 1em;
+    $choice-spacing: 1em;
+    $form-padding: 1em;
+    $message-spacing: 1em;
+
+    padding: $form-padding;
+
+    .wpdf-form-title{
+        margin: 0;
+        padding: 0;
+
+        h1{
+            margin: 0 0 1em;
+            padding: 0;
+        }
     }
-}
+    .wpdf-form-copy{
+        p{
+            margin: 0 0 1em;
+            padding: 0;
+        }
+    }
 
-.wpdf-form-row {
-    margin-bottom: $spacing;
-    width: 100%;
-}
-
-.wpdf-choices label {
-    margin-right: $choice-spacing;
-    display: inline-block;
-}
-
-.wpdf-form-error, .wpdf-form-confirmation{
-    padding: $spacing $spacing 0;
-    margin-bottom:$spacing;
-    overflow: hidden;
-
-    p, ul{
+    .wpdf-form-error, .wpdf-form-confirmation{
+        padding: $message-spacing $message-spacing 0;
         margin-bottom:$spacing;
+        overflow: hidden;
+
+        p, ul{
+            margin-bottom:$message-spacing;
+        }
+    }
+
+    .wpdf-form-errors{
+        list-style: none;
+    }
+
+    .wpdf-choices {
+        label {
+            margin-right: $choice-spacing;
+            display: inline-block;
+        }
+        input{
+            margin-right: 0.5em;
+        }
+    }
+
+    .wpdf-input-select, .wpdf-input-textarea, .wpdf-input-text {
+        .wpdf-field {
+            width: 100%;
+        }
+    }
+
+    .wpdf-form-row {
+        margin-bottom: $spacing;
+        width: 100%;
+        clear: left;
     }
 }
 
