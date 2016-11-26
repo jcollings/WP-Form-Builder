@@ -1,44 +1,22 @@
 <?php
 
-/*
-Plugin Name: WP Form Builder
-Plugin URI: https://www.wordpressdeveloperforms.com/
-Description: Drag & Drop form builder plugin, custom notifications, custom confirmation message, manage form submissions online.
-Version: 0.3
-Author: James Collings
-Author URI: https://www.jclabs.co.uk
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-*/
+/**
+ * Plugin Name: WP Form Builder
+ * Plugin URI: https://www.wpformbuilder.com/
+ * Description: Drag & Drop form builder plugin, custom notifications, custom confirmation message, manage form submissions online.
+ * Version: 0.3
+ * Author: James Collings
+ * Author URI: https://www.jclabs.co.uk
+ *
+ * @package WP Form Builder
+ * @author James Collings <james@jclabs.co.uk>
+ * @link https://www.wpformbuilder.com/
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-/**
- * @package WP Form Builder
- * @author James Collings <james@jclabs.co.uk>
- * @link https://www.wordpressdeveloperforms.com/
- *
- * @license http://www.gnu.org/copyleft/gpl.html GNU Public License
- * @copyright Copyright (c) 2016, James Collings
- *
- * GNU General Public License, Free Software Foundation
- * <http://creativecommons.org/licenses/GPL/2.0/>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+
 class WPDF_DeveloperForms {
 
 	protected $version = '0.3';
