@@ -54,6 +54,7 @@ class WPDF_Preview{
 			$post->post_title = 'WP Form Builder Preview';
 			$post->post_content = sprintf('[wp_form form_id="%d"]', $this->formId);
 			$post->ID = -1;
+			$post->post_type = 'page';
 			$post->post_status = 'static';
 			$post->comment_status = 'closed';
 			$post->ping_status = 'closed';

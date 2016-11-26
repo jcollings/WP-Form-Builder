@@ -32,8 +32,14 @@
         margin-bottom:$spacing;
         overflow: hidden;
 
-        p, ul{
-            margin-bottom:$message-spacing;
+        p, li, ul{
+            margin: 0 0 $message-spacing;
+        }
+
+        ul{
+            li:last-child{
+                margin-bottom: 0;
+            }
         }
     }
 

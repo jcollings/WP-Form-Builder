@@ -418,7 +418,7 @@ class WPDF_Form{
 			<h1><?php echo $this->getLabel(); ?></h1>
 		</div>
 		<div class="wpdf-form-copy">
-			<?php echo $this->getContent(); ?>
+			<?php echo apply_filters('the_content', $this->getContent()); ?>
 		</div>
 		<?php
 	}

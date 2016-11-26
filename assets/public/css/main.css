@@ -23,8 +23,12 @@
   overflow: hidden;
 }
 
-.wpdf-form.wpdf-form__layout .wpdf-form-error p, .wpdf-form.wpdf-form__layout .wpdf-form-error ul, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation p, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation ul {
-  margin-bottom: 1em;
+.wpdf-form.wpdf-form__layout .wpdf-form-error p, .wpdf-form.wpdf-form__layout .wpdf-form-error li, .wpdf-form.wpdf-form__layout .wpdf-form-error ul, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation p, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation li, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation ul {
+  margin: 0 0 1em;
+}
+
+.wpdf-form.wpdf-form__layout .wpdf-form-error ul li:last-child, .wpdf-form.wpdf-form__layout .wpdf-form-confirmation ul li:last-child {
+  margin-bottom: 0;
 }
 
 .wpdf-form.wpdf-form__layout .wpdf-form-errors {

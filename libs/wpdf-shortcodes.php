@@ -76,6 +76,7 @@ function wpdf_shortcode_form( $atts, $content = null ){
 		.wpdf-form .wpdf-button {
 			color: <?php echo $form->getStyle('button_text_colour'); ?>;
 			background: <?php echo $form->getStyle('button_bg_colour'); ?>;
+			border: 1px solid <?php echo $form->getStyle('button_bg_colour'); ?>;
 		}
 		<?php endif; ?>
 
@@ -83,6 +84,7 @@ function wpdf_shortcode_form( $atts, $content = null ){
 		.wpdf-form .wpdf-button:hover {
 			color: <?php echo $form->getStyle('button_hover_text_colour'); ?>;
 			background: <?php echo $form->getStyle('button_hover_bg_colour'); ?>;
+			border: 1px solid <?php echo $form->getStyle('button_hover_bg_colour'); ?>;
 		}
 		<?php endif; ?>
 
@@ -103,12 +105,12 @@ function wpdf_shortcode_form( $atts, $content = null ){
 		<?php endif; ?>
 		<?php if($form->hasStyle('field_border_colour')): ?>
 		.wpdf-field{
-			border-color: <?php echo $form->getStyle('field_border_colour'); ?>
+			border: 1px solid <?php echo $form->getStyle('field_border_colour'); ?>
 		}
 		<?php endif; ?>
 		<?php if($form->hasStyle('field_error_border_colour')): ?>
 		.wpdf-has-error .wpdf-field{
-			border-color: <?php echo $form->getStyle('field_error_border_colour'); ?>
+			border: 1px solid <?php echo $form->getStyle('field_error_border_colour'); ?>
 		}
 		<?php endif; ?>
 
