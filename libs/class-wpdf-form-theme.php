@@ -33,6 +33,8 @@ class WPDF_FormTheme{
 
 	public function __construct($data = array(), $disabled = array()) {
 
+		$this->_defaults = apply_filters('wpdf/theme_defaults', $this->_defaults);
+
 		foreach($this->_defaults as $key => $val){
 			$this->_styles[$key] = isset($data[$key]) ? $data[$key] : $this->_defaults[$key];
 			$this->_disabled[$key] = in_array($key, $disabled) ? true : false;

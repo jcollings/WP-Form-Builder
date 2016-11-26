@@ -61,8 +61,9 @@ class WPDF_Admin{
 	function wpdf_register_pages(){
 
 		$admin_slug = "wpdf-forms";
-		add_menu_page("WP Form Builder", "Forms", "manage_options", $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
-		add_submenu_page( $admin_slug, 'New Form', 'Add Form', 'manage_options', 'admin.php?page=wpdf-forms&action=new');
+		$capabilities = apply_filters('wpdf/admin_capabilities', 'manage_options');
+		add_menu_page("WP Form Builder", "Forms", $capabilities, $admin_slug, array( $this, 'wpdf_form_page'), 'dashicons-feedback', 30 );
+		add_submenu_page( $admin_slug, 'New Form', 'Add Form', $capabilities, 'admin.php?page=wpdf-forms&action=new');
 	}
 
 	function init(){
@@ -511,11 +512,14 @@ class WPDF_Admin{
 
 		if(isset($settings['enable_style'])){
 			$form_data['settings']['enable_style'] = $settings['enable_style'];
-		}
+		}else{
+			$form_data['settings']['enable_style'] = 'enabled';
+        }
+
 		if(isset($settings['enable_layout_css'])){
 			$form_data['settings']['enable_layout_css'] = $settings['enable_layout_css'];
 		}else{
-			$form_data['settings']['enable_layout_css'] = 'enable';
+			$form_data['settings']['enable_layout_css'] = 'enabled';
 		}
 
 		// save recaptcha settings

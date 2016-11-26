@@ -127,8 +127,8 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							</td>
 							<td class="notification__input">
 								<select name="wpdf_settings[enable_style]" id="wpdf_settings-enable_style">
-									<option value="disable" <?php selected('disable', $form->get_setting('enable_style'), true); ?>>Disable</option>
-									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_style'), true); ?>>Enable</option>
+                                    <option value="enabled" <?php selected('enabled', $form->get_setting('enable_style'), true); ?>>Enable</option>
+                                    <option value="disabled" <?php selected('disabled', $form->get_setting('enable_style'), true); ?>>Disable</option>
 								</select>
 							</td>
 						</tr>
@@ -141,7 +141,7 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 							<td class="notification__input">
 								<select name="wpdf_settings[enable_layout_css]" id="wpdf_settings-enable_style">
 									<option value="enabled" <?php selected('enabled', $form->get_setting('enable_layout_css'), true); ?>>Enable</option>
-									<option value="disable" <?php selected('disable', $form->get_setting('enable_layout_css'), true); ?>>Disable</option>
+									<option value="disabled" <?php selected('disabled', $form->get_setting('enable_layout_css'), true); ?>>Disable</option>
 								</select>
 							</td>
 						</tr>

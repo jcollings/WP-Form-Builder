@@ -33,7 +33,7 @@ class WPDF_DB_Form extends WPDF_Form {
 			parent::__construct("Form " . $form_id, $fields);
 
 			// load settings
-			if(isset($form['settings']) && isset($form['settings']['labels']) && isset($form['settings']['labels']['submit'])){
+			if(isset($form['settings'])){
 				$this->settings($form['settings']);
 			}
 

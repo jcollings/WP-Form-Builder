@@ -69,7 +69,9 @@ class WPDF_Form{
 			'database' => 'yes',
 			'labels' => array(
 				'submit' => __('Send', "wpdf")
-			)
+			),
+            'enable_layout_css' => 'enabled',
+            'enable_style' => 'enabled'
 		);
 		$this->_confirmation = array(
 			'type' => 'message',
