@@ -470,6 +470,36 @@ class WPDF_Admin{
 		require WPDF()->get_plugin_dir() . 'templates/admin/field-panel.php';
 	}
 
+	/**
+     * Load field class
+     *
+	 * @param string $field_type field type.
+	 * @param array $args field arguments.
+	 *
+	 * @return WPDF_FormField
+	 */
+	private function load_field( $field_type, $args = array()) {
+
+	    $field_name = isset($args['name']) ? $args['name'] : '';
+
+		switch($field_type){
+			case 'text':
+				return new WPDF_TextField( $field_name, $field_type, $args);
+			case 'textarea':
+				return new WPDF_TextareaField( $field_name, $field_type, $args);
+			case 'select':
+				return new WPDF_SelectField( $field_name, $field_type, $args);
+			case 'radio':
+				return new WPDF_RadioField( $field_name, $field_type, $args);
+			case 'checkbox':
+				return new WPDF_CheckboxField( $field_name, $field_type, $args);
+			case 'file':
+				return new WPDF_FileField( $field_name, $field_type, $args);
+			default:
+				return new WPDF_FormField($field_name, $field_type, $args);
+		}
+    }
+
 	private function save_form_settings(){
 
 		$form_id = $_POST['wpdf-form'];
@@ -724,7 +754,9 @@ class WPDF_Admin{
 					$field_ids[] = $field_id;
 				}
 
-				$fields[ $field_id ] = $this->save_field( $field );
+				// load field.
+                $field_class = $this->load_field( $field['type'], $field);
+				$fields[ $field_id ] = $field_class->save($field);
 			}
 		}
 
@@ -783,116 +815,6 @@ class WPDF_Admin{
 
 		die();
 	}
-
-	private function save_field($field){
-
-		$data = array(
-			'type' => $field['type'],
-			'label' => $field['label'],
-			'placeholder' => isset($field['placeholder']) ? $field['placeholder'] : '',
-			'default' => isset($field['default']) ? $field['default'] : '',
-			'extra_class' => isset($field['css_class']) ? $field['css_class'] : ''
-		);
-
-		switch($field['type']){
-			case 'select':
-
-				if($field['type'] == 'select') {
-					if ( isset( $field['empty_text'] ) && ! empty( $field['empty_text'] ) ) {
-						$data['empty'] = esc_attr( $field['empty_text'] );
-					} else {
-						$data['empty'] = false;
-					}
-
-					if( isset( $field['select_type'] ) && !empty( $field['select_type'] ) ){
-						$data['select_type'] = $field['select_type'];
-					}else{
-						$data['select_type'] = 'single';
-					}
-				}
-
-			case 'radio':
-			case 'checkbox':
-
-				$options = array();
-				$defaults = array();
-				foreach($field['value_labels'] as $arr_id => $label){
-					$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
-					$options[$option_key] = $label;
-
-					if(isset($field['value_default'][$arr_id])){
-						$defaults[] = $option_key;
-					}
-				}
-
-				$data['options'] = $options;
-				$data['default'] = $defaults;
-
-				break;
-			case 'textarea':
-				$data['rows'] = isset($field['rows']) ? $field['rows'] : 8;
-				break;
-			case 'file':
-				if(isset($field['max_file_size'])){
-
-					// find upload limits
-					$post_max_size = ini_get('post_max_size');
-					$upload_max_filesize = ini_get('upload_max_filesize');
-					$limit = $post_max_size;
-					if($limit > $upload_max_filesize){
-						$limit = $upload_max_filesize;
-					}
-
-					if( intval($field['max_file_size']) > $limit || intval($field['max_file_size']) < 0){
-						$data['max_file_size'] = $limit;
-					}else{
-						$data['max_file_size'] = intval($field['max_file_size']);
-					}
-				}
-				if(isset($field['allowed_ext'])){
-					$data['allowed_ext'] = $field['allowed_ext'];
-				}
-				break;
-		}
-
-		if($field['type'] == 'radio' && !empty($field['value_default'])){
-			$data['default'] = $field['value_default'];
-		}
-
-		$data['validation'] = array(
-			array('type' => 'required'),
-			array('type' => 'email')
-		);
-
-		$rules = array();
-		$data['validation'] = array();
-		if(isset($field['validation']) && !empty($field['validation'])) {
-			foreach ( $field['validation'] as $rule ) {
-
-				// skip if empty value
-				if(empty($rule)){
-					continue;
-				}
-
-				$rule_arr = array(
-					'type' => $rule['type'],
-				);
-
-				if( isset($rule['msg']) && !empty($rule['msg']) ){
-					$rule_arr['msg'] = $rule['msg'];
-				}
-
-				$rules[] = $rule_arr;
-			}
-		}
-		if(!empty($rules)){
-			$data['validation'] = $rules;
-		}
-
-		return $data;
-	}
-
-
 }
 
 new WPDF_Admin();

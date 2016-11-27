@@ -73,4 +73,44 @@ class WPDF_SelectField extends WPDF_FormField {
 	public function getSelectType() {
 		return $this->_select_type;
 	}
+
+	/**
+	 * Format field data to store in fields array
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function save( $field = array() ) {
+
+		$data = parent::save( $field );
+
+		if ( isset( $field['empty_text'] ) && ! empty( $field['empty_text'] ) ) {
+			$data['empty'] = esc_attr( $field['empty_text'] );
+		} else {
+			$data['empty'] = false;
+		}
+
+		if( isset( $field['select_type'] ) && !empty( $field['select_type'] ) ){
+			$data['select_type'] = $field['select_type'];
+		}else{
+			$data['select_type'] = 'single';
+		}
+
+		$options = array();
+		$defaults = array();
+		foreach($field['value_labels'] as $arr_id => $label){
+			$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
+			$options[$option_key] = $label;
+
+			if(isset($field['value_default'][$arr_id])){
+				$defaults[] = $option_key;
+			}
+		}
+
+		$data['options'] = $options;
+		$data['default'] = $defaults;
+
+		return $data;
+	}
 }

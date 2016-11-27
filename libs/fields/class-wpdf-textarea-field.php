@@ -31,4 +31,19 @@ class WPDF_TextareaField extends WPDF_FormField {
 		$value = $form_data->get($this->_name);
 		echo '<textarea name="'.$this->getInputName().'" id="'.$this->getId().'" class="'.$this->getClasses().'" rows="'.$this->getRows().'">'.$value.'</textarea>';
 	}
+
+	/**
+	 * Format field data to store in fields array
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function save( $field = array() ) {
+
+		$data = parent::save( $field );
+		$data['rows'] = isset($field['rows']) ? $field['rows'] : 8;
+
+		return $data;
+	}
 }

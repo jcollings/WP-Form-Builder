@@ -143,4 +143,54 @@ class WPDF_FormField{
 	public function getDefaultValue() {
 		return $this->_default;
 	}
+
+	/**
+	 * Format field data to store in fields array
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function save($field){
+
+		$data = array(
+			'type' => $field['type'],
+			'label' => $field['label'],
+			'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : '',
+			'default' => isset( $field['default'] ) ? $field['default'] : '',
+			'extra_class' => isset( $field['css_class'] ) ? $field['css_class'] : '',
+		);
+
+		$data['validation'] = array(
+			array( 'type' => 'required' ),
+			array( 'type' => 'email' )
+		);
+
+		$rules = array();
+		$data['validation'] = array();
+		if ( isset( $field['validation'] ) && !empty( $field['validation'] ) ) {
+			foreach ( $field['validation'] as $rule ) {
+
+				// skip if empty value
+				if ( empty( $rule ) ) {
+					continue;
+				}
+
+				$rule_arr = array(
+					'type' => $rule['type'],
+				);
+
+				if( isset( $rule['msg'] ) && !empty( $rule['msg'] ) ){
+					$rule_arr['msg'] = $rule['msg'];
+				}
+
+				$rules[] = $rule_arr;
+			}
+		}
+		if( !empty( $rules ) ) {
+			$data['validation'] = $rules;
+		}
+
+		return $data;
+	}
 }

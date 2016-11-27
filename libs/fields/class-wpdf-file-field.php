@@ -98,4 +98,38 @@ class WPDF_FileField extends WPDF_FormField {
 			echo sprintf('<p class="wpdf-upload">Uploaded File: <span class="wpdf-upload__name">%s</span></p>', $value);
 		}
 	}
+
+	/**
+	 * Format field data to store in fields array
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function save( $field = array() ) {
+
+		$data = parent::save( $field );
+
+		if(isset($field['max_file_size'])){
+
+			// find upload limits
+			$post_max_size = ini_get('post_max_size');
+			$upload_max_filesize = ini_get('upload_max_filesize');
+			$limit = $post_max_size;
+			if($limit > $upload_max_filesize){
+				$limit = $upload_max_filesize;
+			}
+
+			if( intval($field['max_file_size']) > $limit || intval($field['max_file_size']) < 0){
+				$data['max_file_size'] = $limit;
+			}else{
+				$data['max_file_size'] = intval($field['max_file_size']);
+			}
+		}
+		if(isset($field['allowed_ext'])){
+			$data['allowed_ext'] = $field['allowed_ext'];
+		}
+
+		return $data;
+	}
 }

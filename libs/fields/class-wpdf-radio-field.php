@@ -40,4 +40,36 @@ class WPDF_RadioField extends WPDF_FormField {
 			echo '</div>';
 		}
 	}
+
+	/**
+	 * Format field data to store in fields array
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function save( $field = array() ) {
+
+		$data = parent::save( $field );
+
+		$options = array();
+		$defaults = array();
+		foreach($field['value_labels'] as $arr_id => $label){
+			$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
+			$options[$option_key] = $label;
+
+			if(isset($field['value_default'][$arr_id])){
+				$defaults[] = $option_key;
+			}
+		}
+
+		$data['options'] = $options;
+		$data['default'] = $defaults;
+
+		if ( !empty( $field['value_default'] ) ) {
+			$data['default'] = $field['value_default'];
+		}
+
+		return $data;
+	}
 }
