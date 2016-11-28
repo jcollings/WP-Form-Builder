@@ -44,10 +44,10 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 
 					<ul class="wpdf-notifications wpdf-repeater-container">
 						<script type="text/html" class="wpdf-repeater-template">
-							<?php wpdf_displayNotificationSettings($blankNotification, '', $fieldKeys); ?>
+							<?php wpdf_display_notification_settings($blankNotification, '', $fieldKeys); ?>
 						</script>
 						<?php foreach($notifications as $i => $notification): ?>
-							<?php wpdf_displayNotificationSettings($notification, $i, $fieldKeys); ?>
+							<?php wpdf_display_notification_settings($notification, $i, $fieldKeys); ?>
 						<?php endforeach; ?>
 					</ul>
 

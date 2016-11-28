@@ -67,7 +67,7 @@ $field_type = $field->get_type();
 			</div>
 			<div class="wpdf-repeater-container">
 				<script type="text/html" class="wpdf-repeater-template">
-					<?php wpdf_displayValidationBlock(); ?>
+					<?php wpdf_display_validation_block(); ?>
 				</script>
 				<?php
 				// load saved validation rules
@@ -76,7 +76,7 @@ $field_type = $field->get_type();
 					if( isset($rules[$field->get_name()]) && !empty($rules[$field->get_name()])){
 						foreach($rules[$field->get_name()] as $rule){
 							$type = $rule['type'];
-							wpdf_displayValidationBlock($type, $rule);
+							wpdf_display_validation_block($type, $rule);
 						}
 					}
 				}
