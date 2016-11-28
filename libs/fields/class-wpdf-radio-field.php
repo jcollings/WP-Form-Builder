@@ -13,7 +13,7 @@ class WPDF_RadioField extends WPDF_FormField {
 	 */
 	public function output( $form_data ) {
 
-		$value = $form_data->getRaw( $this->_name );
+		$value = $form_data->get_raw( $this->_name );
 
 		if ( isset( $this->_args['options'] ) && ! empty( $this->_args['options'] ) ) {
 

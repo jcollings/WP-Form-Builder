@@ -42,7 +42,7 @@ class WPDF_SelectField extends WPDF_FormField {
 	 */
 	public function output( $form_data ) {
 
-		$value = $form_data->getRaw( $this->_name );
+		$value = $form_data->get_raw( $this->_name );
 		$attrs = '';
 		$name  = $this->get_input_name();
 		if ( $this->get_select_type() === 'multiple' ) {

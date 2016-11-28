@@ -327,7 +327,7 @@ class WPDF_Form {
 		// todo: modules should be loaded after form has been registered with all settings.
 		$this->load_modules();
 
-		$form_data = $this->_data->toArray();
+		$form_data = $this->_data->to_array();
 
 		foreach ( $this->_fields as $field_id => $field ) {
 
@@ -863,7 +863,7 @@ class WPDF_Form {
 	/**
 	 * Get form fields
 	 *
-	 * @return WPDF_FormField[]
+	 * @return WPDF_FormField[]|WPDF_FileField[]|WPDF_TextareaField[]|WPDF_TextField[]|WPDF_RadioField[]|WPDF_SelectField[]|WPDF_CheckboxField[]
 	 */
 	public function get_fields() {
 		return $this->_fields;
@@ -908,7 +908,7 @@ class WPDF_Form {
 
 			// store transient token.
 			set_transient( 'wpdf_token_' . $this->_token, array(
-				'ip'   => wpdf_getIp(),
+				'ip'   => wpdf_get_ip(),
 				'time' => time(),
 			), HOUR_IN_SECONDS );
 		} elseif ( $this->_submitted && isset( $_REQUEST['wpdf_token'] ) ) {
@@ -931,7 +931,7 @@ class WPDF_Form {
 
 			$transient = get_transient( 'wpdf_token_' . $token );
 			if ( $transient ) {
-				if ( isset( $transient['ip'] ) && wpdf_getIp() === $transient['ip'] ) {
+				if ( isset( $transient['ip'] ) && wpdf_get_ip() === $transient['ip'] ) {
 					return true;
 				}
 			}

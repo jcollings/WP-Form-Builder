@@ -1,139 +1,181 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: james
- * Date: 11/10/2016
- * Time: 18:53
+ * DB Form
+ *
+ * @package WPDF
+ * @author James Collings
+ * @created 11/10/2016
  */
 
+/**
+ * Class WPDF_DB_Form
+ */
 class WPDF_DB_Form extends WPDF_Form {
 
 	/**
 	 * Form Label
+	 *
 	 * @var string
 	 */
 	private $_label = null;
 
-
 	/**
 	 * Form Theme Styles
+	 *
 	 * @var WPDF_FormTheme
 	 */
 	protected $_theme = null;
 
+	/**
+	 * WPDF_DB_Form constructor.
+	 *
+	 * @param int $form_id Form id.
+	 */
 	public function __construct( $form_id = null ) {
 
-		$form_id = intval($form_id);
-		$post = get_post($form_id);
-		if($post && $post->post_type == 'wpdf_form'){
+		$form_id = intval( $form_id );
+		$post    = get_post( $form_id );
+		if ( $post && 'wpdf_form' === $post->post_type ) :
 			$this->ID = $form_id;
-			$form = is_serialized($post->post_content) ? unserialize($post->post_content) : array();
+			$form     = is_serialized( $post->post_content ) ? unserialize( $post->post_content ) : array();
 
-			$fields = isset($form['fields']) && !empty($form['fields']) ? $form['fields'] : array();
-			parent::__construct("Form " . $form_id, $fields);
+			$fields = isset( $form['fields'] ) && ! empty( $form['fields'] ) ? $form['fields'] : array();
+			parent::__construct( 'Form ' . $form_id, $fields );
 
-			// load settings
-			if(isset($form['settings'])){
-				$this->settings($form['settings']);
+			// load settings.
+			if ( isset( $form['settings'] ) ) {
+				$this->settings( $form['settings'] );
 			}
 
-			// load style
-			$style = isset($form['theme']) ? $form['theme'] : array();
-			$style_disabled = isset($form['theme_disabled']) ? $form['theme_disabled'] : array();
-			$this->_theme = new WPDF_FormTheme($style, $style_disabled);
+			// load style.
+			$style          = isset( $form['theme'] ) ? $form['theme'] : array();
+			$style_disabled = isset( $form['theme_disabled'] ) ? $form['theme_disabled'] : array();
+			$this->_theme   = new WPDF_FormTheme( $style, $style_disabled );
 
-			// load form content
-			$this->_content = isset($form['content']) ? $form['content'] : '';
-			$this->_confirmation_location = isset($form['confirmation_location']) ? $form['confirmation_location'] : 'after';
+			// load form content.
+			$this->_content               = isset( $form['content'] ) ? $form['content'] : '';
+			$this->_confirmation_location = isset( $form['confirmation_location'] ) ? $form['confirmation_location'] : 'after';
 
-			if(isset($form['form_label'])){
+			if ( isset( $form['form_label'] ) ) {
 				$this->_label = $form['form_label'];
-			}else{
-				$this->_label = sprintf('WPDF_FORM_%d', $this->ID);
+			} else {
+				$this->_label = sprintf( 'WPDF_FORM_%d', $this->ID );
 			}
 
-			// load confirmations
-			if(isset($form['confirmations'])){
+			// load confirmations.
+			if ( isset( $form['confirmations'] ) ) {
 
-				foreach($form['confirmations'] as $confirmation){
+				foreach ( $form['confirmations'] as $confirmation ) {
 
-					if($confirmation['type'] == 'message'){
-						$this->add_confirmation('message', $confirmation['message']);
-					}elseif($confirmation['type'] == 'redirect'){
-						$this->add_confirmation('redirect', $confirmation['redirect_url']);
+					if ( 'message' === $confirmation['type'] ) {
+						$this->add_confirmation( 'message', $confirmation['message'] );
+					} elseif ( 'redirect' === $confirmation['type'] ) {
+						$this->add_confirmation( 'redirect', $confirmation['redirect_url'] );
 					}
 				}
 			}
 
-			// load notifications
-			if(isset($form['notifications']) && !empty($form['notifications'])){
+			// load notifications.
+			if ( isset( $form['notifications'] ) && ! empty( $form['notifications'] ) ) {
 
-				foreach($form['notifications'] as $notification){
+				foreach ( $form['notifications'] as $notification ) {
 
-					if(empty($notification['to'])){
+					if ( empty( $notification['to'] ) ) {
 						continue;
 					}
 
 					$args = array();
-					if( isset($notification['from']) && !empty($notification['from']) ){
+					if ( isset( $notification['from'] ) && ! empty( $notification['from'] ) ) {
 						$args['from'] = $notification['from'];
 					}
-					if( isset($notification['cc']) && !empty($notification['cc']) ){
+					if ( isset( $notification['cc'] ) && ! empty( $notification['cc'] ) ) {
 						$args['cc'] = $notification['cc'];
 					}
-					if( isset($notification['bcc']) && !empty($notification['bcc']) ){
+					if ( isset( $notification['bcc'] ) && ! empty( $notification['bcc'] ) ) {
 						$args['bcc'] = $notification['bcc'];
 					}
 
-					$this->add_notification($notification['to'], $notification['subject'], $notification['message'], $args);
-
+					$this->add_notification( $notification['to'], $notification['subject'], $notification['message'], $args );
 				}
-
 			}
-		}
+
+		endif;
 	}
 
-	public function getDbId(){
+	/**
+	 * Get form id
+	 *
+	 * @return int
+	 */
+	public function get_db_id() {
 		return $this->get_id();
 	}
 
+	/**
+	 * Get name
+	 *
+	 * @return string
+	 */
 	public function get_name() {
 		return 'WPDF_FORM_' . $this->ID;
 	}
 
-	public function get_label(){
+	/**
+	 * Get label
+	 *
+	 * @return string
+	 */
+	public function get_label() {
 		return $this->_label;
 	}
 
 	/**
 	 * Get Form Styling
 	 *
-	 * @param $key
+	 * @param string $key Style key.
+	 * @param bool   $force Get style even if its disabled.
 	 *
 	 * @return bool|string
 	 */
-	public function getStyle($key, $force = false) {
-		return $this->_theme->getStyle($key, $force);
+	public function get_style( $key, $force = false ) {
+		return $this->_theme->get_style( $key, $force );
 	}
 
-	public function hasStyle($key){
-		return $this->_theme->getStyle($key);
+	/**
+	 * Has Style
+	 *
+	 * @param string $key Style key.
+	 *
+	 * @return bool|mixed
+	 */
+	public function has_style( $key ) {
+		return $this->_theme->get_style( $key );
 	}
 
-	public function isStyleDisabled($key){
-		return $this->_theme->isStyleDisabled($key);
+	/**
+	 * Check to see if style is disabled
+	 *
+	 * @param string $key Style key.
+	 *
+	 * @return bool
+	 */
+	public function is_style_disabled( $key ) {
+		return $this->_theme->is_style_disabled( $key );
 	}
 
-	public function export(){
+	/**
+	 * Export DB Form
+	 *
+	 * @return bool|mixed
+	 */
+	public function export() {
 
-		if(is_admin()) {
+		if ( is_admin() ) {
 			$post = get_post( $this->ID );
-			if ( $post && $post->post_type == 'wpdf_form' ) {
-				return maybe_unserialize($post->post_content);
+			if ( $post && 'wpdf_form' === $post->post_type ) {
+				return maybe_unserialize( $post->post_content );
 			}
 		}
-
 		return false;
-
 	}
 }

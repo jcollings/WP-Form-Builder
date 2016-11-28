@@ -18,7 +18,7 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 
 		$notification = new WPDF_Notification(array());
 		$formData = new WPDF_FormData($form, array('name' => 'asd', 'wpdf_action' => 'TestForm'), array());
-		$this->assertTrue($notification->isValid($formData));
+		$this->assertTrue($notification->is_valid($formData));
 	}
 
 	public function testBasicConditionalNotification(){
@@ -37,13 +37,13 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 		));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
-		$this->assertTrue($notificationValid->isValid($formData));
+		$this->assertTrue($notificationValid->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
-		$this->assertFalse($notificationValid->isValid($formData));
+		$this->assertFalse($notificationValid->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
-		$this->assertFalse($notificationValid->isValid($formData));
+		$this->assertFalse($notificationValid->is_valid($formData));
 	}
 
 	public function testComplexConditionalNotification(){
@@ -65,13 +65,13 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 		));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
-		$this->assertTrue($notificationEq->isValid($formData));
+		$this->assertTrue($notificationEq->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
-		$this->assertFalse($notificationEq->isValid($formData));
+		$this->assertFalse($notificationEq->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
-		$this->assertFalse($notificationEq->isValid($formData));
+		$this->assertFalse($notificationEq->is_valid($formData));
 
 		$notificationNotEq = new WPDF_Notification(array(
 			'conditions' => array(
@@ -83,13 +83,13 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 		));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
-		$this->assertFalse($notificationNotEq->isValid($formData));
+		$this->assertFalse($notificationNotEq->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
-		$this->assertTrue($notificationNotEq->isValid($formData));
+		$this->assertTrue($notificationNotEq->is_valid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
-		$this->assertTrue($notificationNotEq->isValid($formData));
+		$this->assertTrue($notificationNotEq->is_valid($formData));
 	}
 
 }
