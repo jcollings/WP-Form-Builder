@@ -10,8 +10,8 @@ $available_fields = array('text', 'textarea', 'select', 'checkbox', 'radio', 'fi
 $form_id = '';
 $fields = array();
 if($form !== false){
-	$form_id = $form->getId();
-	$fields = $form->getFields();
+	$form_id = $form->get_id();
+	$fields = $form->get_fields();
 }
 ?>
 <form action="" method="post">

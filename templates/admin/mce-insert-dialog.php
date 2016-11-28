@@ -15,15 +15,15 @@ if(!empty($forms)) {
 			$form = WPDF()->get_form( $form_id );
 		}
 
-		$id = $form->getId();
+		$id = $form->get_id();
 		if ( $id ) {
 			$options[ $id ] = array(
-				'label' => $form->getLabel(),
+				'label' => $form->get_label(),
 				'type'  => 'form_id'
 			);
 		} else {
-			$options[ $form->getName() ] = array(
-				'label' => $form->getLabel(),
+			$options[ $form->get_name() ] = array(
+				'label' => $form->get_label(),
 				'type'  => 'form'
 			);
 		}

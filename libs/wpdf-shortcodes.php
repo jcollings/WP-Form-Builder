@@ -25,7 +25,7 @@ function wpdf_shortcode_form( $atts, $content = null ){
 	$form_id = intval($a['form_id']);
 	if($form_id > 0){
 		$form = new WPDF_DB_Form($form_id);
-		$form_key = $form->getName();
+		$form_key = $form->get_name();
 	}else{
 		$form_key = $a['form'];
 		$form = wpdf_get_form($form_key);

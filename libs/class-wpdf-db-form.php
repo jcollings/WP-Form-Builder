@@ -94,14 +94,14 @@ class WPDF_DB_Form extends WPDF_Form {
 	}
 
 	public function getDbId(){
-		return $this->getId();
+		return $this->get_id();
 	}
 
-	public function getName() {
+	public function get_name() {
 		return 'WPDF_FORM_' . $this->ID;
 	}
 
-	public function getLabel(){
+	public function get_label(){
 		return $this->_label;
 	}
 

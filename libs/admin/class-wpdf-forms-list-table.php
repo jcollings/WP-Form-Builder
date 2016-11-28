@@ -65,9 +65,9 @@ class WPDF_Forms_List_Table extends WP_List_Table {
 				}
 
 				$row            = new stdClass();
-				$row->form_name = $form->getLabel();
+				$row->form_name = $form->get_label();
 
-				$row->ID = $form->getId();
+				$row->ID = $form->get_id();
 
 				$count             = $db->get_form_count( $form_id );
 				$row->form_entries = $count[0];

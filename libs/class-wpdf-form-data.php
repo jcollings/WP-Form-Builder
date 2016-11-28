@@ -28,12 +28,12 @@ class WPDF_FormData{
 	 */
 	public function __construct($form, $data, $upload_data){
 
-		$fields = $form->getFields();
+		$fields = $form->get_fields();
 		$this->_data = array();
 		$this->_raw_data = array();
 		$this->_fields = $fields;
 
-		$this->_submitted = isset($data['wpdf_action']) && $data['wpdf_action'] == $form->getName() ? true : false;
+		$this->_submitted = isset($data['wpdf_action']) && $data['wpdf_action'] == $form->get_name() ? true : false;
 
 		foreach($fields as $field_id => $field){
 

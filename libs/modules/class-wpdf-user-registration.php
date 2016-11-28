@@ -41,7 +41,7 @@ class WPDF_UserRegistration{
 		foreach($fields as $key => $field_id){
 
 			// escape if field doesn't exist in form
-			if($form->getField($field_id) == false){
+			if( $form->get_field($field_id) == false){
 				return false;
 			}
 

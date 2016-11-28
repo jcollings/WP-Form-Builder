@@ -28,7 +28,7 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 				'type' => 'text'
 			)
 		));
-		$field = $form->getField('name');
+		$field = $form->get_field('name');
 
 		$notificationValid = new WPDF_Notification(array(
 			'conditions' => array(
@@ -53,7 +53,7 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 				'type' => 'text'
 			)
 		));
-		$field = $form->getField('name');
+		$field = $form->get_field('name');
 
 		$notificationEq = new WPDF_Notification(array(
 			'conditions' => array(

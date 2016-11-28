@@ -61,7 +61,7 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 			)
 		));
 
-		$field = $form->getField('fname');
+		$field = $form->get_field('fname');
 
 		// no value
 		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
@@ -81,7 +81,7 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 			)
 		));
 
-		$field = $form->getField('fname');
+		$field = $form->get_field('fname');
 
 		// default value displayed for non submitted form
 		$data = new WPDF_FormData($form, array(), array());

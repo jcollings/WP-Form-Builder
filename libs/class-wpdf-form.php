@@ -1,92 +1,200 @@
 <?php
 
-class WPDF_Form{
+/**
+ * Class WPDF_Form
+ */
+class WPDF_Form {
 
+	/**
+	 * List of form templates
+	 *
+	 * @var array
+	 */
 	protected $_templates = null;
+
+	/**
+	 * List of form messages
+	 *
+	 * @var array
+	 */
 	protected $_messages = null;
 
 	/**
+	 * Form data
+	 *
 	 * @var WPDF_FormData
 	 */
 	protected $_data = null;
 
+	/**
+	 * Form id
+	 *
+	 * @var int
+	 */
 	protected $ID = null;
 
+	/**
+	 * Form name
+	 *
+	 * @var string
+	 */
 	protected $_name = null;
+
+	/**
+	 * Form content
+	 *
+	 * @var string
+	 */
 	protected $_content = null;
 
-	// field errors
+	/**
+	 * Individual errors
+	 *
+	 * @var array
+	 */
 	protected $_errors = null;
 
-	// form error
+	/**
+	 * Form error
+	 *
+	 * @var string
+	 */
 	protected $_error = false;
 
+	/**
+	 * Form validation rules
+	 *
+	 * @var WPDF_Validation
+	 */
 	protected $_validation = null;
+
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	protected $_rules = null;
+
+	/**
+	 * Form submitted flag
+	 *
+	 * @var bool
+	 */
 	protected $_submitted = false;
+
+	/**
+	 * Form session token
+	 *
+	 * @var bool
+	 */
 	protected $_token = false;
 
+	/**
+	 * Form settings
+	 *
+	 * @var array
+	 */
 	protected $_settings = null;
+
+	/**
+	 * Default form settings
+	 *
+	 * @var array
+	 */
 	protected $_settings_default = array();
 
 	/**
-	 * What happens after the form has been submitted, message or redirect
+	 * Form confirmations
+	 *
 	 * @var array
 	 */
 	protected $_confirmation = array();
+
+	/**
+	 * Location to display form confirmation message
+	 *
+	 * @var string
+	 */
 	protected $_confirmation_location = 'after';
 
+	/**
+	 * Flag to see if form has file field
+	 *
+	 * @var bool
+	 */
 	protected $_has_file_field = false;
 
 	/**
+	 * List of form notifications
+	 *
 	 * @var WPDF_Notification[]
 	 */
 	protected $_notifications = null;
 
 	/**
+	 * Form email manager
+	 *
 	 * @var WPDF_EmailManager
 	 */
 	protected $_email_manager = null;
 
 	/**
+	 * List of form fields
+	 *
 	 * @var WPDF_FormField[]
 	 */
 	protected $_fields = array();
 
+	/**
+	 * Field display conditions
+	 *
+	 * @var array
+	 */
 	protected $_field_display_conds = array();
 
+	/**
+	 * Loaded plugin modules
+	 *
+	 * @var array
+	 */
 	protected $_modules = array();
 
-	public function __construct($name, $fields = array()) {
+	/**
+	 * WPDF_Form constructor.
+	 *
+	 * @param string $name Form name.
+	 * @param array  $fields Form fields.
+	 */
+	public function __construct( $name, $fields = array() ) {
 
-		// Setup default values
-		$this->_name = $name;
-		$this->_fields = array();
-		$this->_errors = array();
-		$this->_rules = array();
-		$this->_notifications = array();
+		// Setup default values.
+		$this->_name             = $name;
+		$this->_fields           = array();
+		$this->_errors           = array();
+		$this->_rules            = array();
+		$this->_notifications    = array();
 		$this->_settings_default = array(
-			'database' => 'yes',
-			'labels' => array(
-				'submit' => __('Send', "wpdf")
+			'database'          => 'yes',
+			'labels'            => array(
+				'submit' => __( 'Send', 'wpdf' ),
 			),
-            'enable_layout_css' => 'enabled',
-            'enable_style' => 'enabled'
+			'enable_layout_css' => 'enabled',
+			'enable_style'      => 'enabled',
 		);
-		$this->_confirmation = array(
-			'type' => 'message',
-			'message' => __('Form has been successfully submitted!', "wpdf")
+		$this->_confirmation     = array(
+			'type'    => 'message',
+			'message' => __( 'Form has been successfully submitted!', 'wpdf' ),
 		);
 
-		// load default settings
-		$this->_settings = apply_filters('wpdf/form_settings', $this->_settings_default, $this->getId() );
+		// load default settings.
+		$this->_settings = apply_filters( 'wpdf/form_settings', $this->_settings_default, $this->get_id() );
 
-		// setup fields
-		if(!empty($fields)) {
-			foreach ( $fields as $field_id => $field ) {
+		// setup fields.
+		if ( ! empty( $fields ) ) :
+			foreach ( $fields as $field_id => $field ) :
 
-				$type                       = $field['type'];
-				switch($type){
+				$type = $field['type'];
+				switch ( $type ) {
 					case 'text':
 						$this->_fields[ $field_id ] = new WPDF_TextField( $field_id, $type, $field );
 						break;
@@ -106,225 +214,252 @@ class WPDF_Form{
 						$this->_fields[ $field_id ] = new WPDF_FileField( $field_id, $type, $field );
 						break;
 				}
-				//$this->_fields[ $field_id ] = new WPDF_FormField( $field_id, $type, $field );
 
-				if ( $type == 'file' ) {
+				if ( 'file' === $type ) {
 					$this->_has_file_field = true;
 				}
 
-				// get display rules
-				$this->extract_display_conditions($field_id, $field);
+				// get display rules.
+				$this->extract_display_conditions( $field_id, $field );
 
-				// add validation rules to rules array
-				if ( isset( $field['validation'] ) && ! empty( $field['validation'] )  ) {
+				// add validation rules to rules array.
+				if ( isset( $field['validation'] ) && ! empty( $field['validation'] ) ) {
 
-					// validation should end up like [ [ 'type' => 'required'], ['type' => 'email'] ]
-					if(is_array($field['validation'])){
+					/**
+					 * Validation should end up like:
+					 * [ [ 'type' => 'required'], ['type' => 'email'] ].
+					 */
+					if ( is_array( $field['validation'] ) ) {
 
-						if(isset($field['validation']['type'])){
-							// is in the format [ 'type' => 'required' ]
+						if ( isset( $field['validation']['type'] ) ) {
 							$rule = array(
 								$field['validation']
 							);
-						}else{
-							// has been given in the same format as needed
+						} else {
 							$rule = $field['validation'];
 						}
-
-
-					}else{
-						// if only validation type string was give, convert to full
+					} else {
+						// if only validation type string was give, convert to full.
 						$rule = array(
 							array(
-								'type' => $field['validation']
-							)
+								'type' => $field['validation'],
+							),
 						);
 					}
 
-					// todo: check to see if this is a valid rule
+					// todo: check to see if this is a valid rule.
 					$this->_rules[ $field_id ] = $rule;
 				}
-			}
-		}
+			endforeach;
+		endif;
 
-		// now all fields have been initialized
-		if(!empty($fields)) {
+		// now all fields have been initialized.
+		if ( ! empty( $fields ) ) {
 			foreach ( $fields as $field_id => $field ) {
 
-				// setup display conditions
+				// setup display conditions.
 				$this->extract_display_conditions( $field_id, $field );
 			}
 		}
 
-		$this->_data = new WPDF_FormData($this, $_POST, $_FILES);
+		$this->_data = new WPDF_FormData( $this, $_POST, $_FILES );
 	}
 
 	/**
 	 * Build array of field display conditions
 	 *
-	 * @param $field_id string Name of field
-	 * @param $field array
+	 * @param string $field_id String name of field.
+	 * @param array  $field Field name.
 	 */
-	private function extract_display_conditions($field_id, $field){
+	private function extract_display_conditions( $field_id, $field ) {
 
-		if(isset($field['display_conditions']) && is_array($field['display_conditions']) && !empty($field['display_conditions'])){
+		if ( isset( $field['display_conditions'] ) && is_array( $field['display_conditions'] ) && ! empty( $field['display_conditions'] ) ) {
 
-			$name = $this->_fields[ $field_id ]->get_input_name();
-			$this->_field_display_conds[$name] = array();
+			$name                                = $this->_fields[ $field_id ]->get_input_name();
+			$this->_field_display_conds[ $name ] = array();
 
-			foreach($field['display_conditions'] as $f => $v){
+			foreach ( $field['display_conditions'] as $f => $v ) {
 
 				$operator = '=';
-				$value = $v;
+				$value    = $v;
 
-				if(is_array($v)){
-					$operator = isset($v['operator']) && $v['operator'] == '!=' ? '!=' : $operator;
-					$value = isset($v['value']) ? $v['value'] : $value;
+				if ( is_array( $v ) ) {
+					$operator = isset( $v['operator'] ) && $v['operator'] == '!=' ? '!=' : $operator;
+					$value    = isset( $v['value'] ) ? $v['value'] : $value;
 				}
 
-				$target = $this->_fields[$f];
-				$this->_field_display_conds[$name][] = array(
-					'field' => $target->get_input_name(),
-					'field_type' =>  $target->get_type(),
-					'operator' => $operator,
-					'value' => $value,
+				$target                                = $this->_fields[ $f ];
+				$this->_field_display_conds[ $name ][] = array(
+					'field'      => $target->get_input_name(),
+					'field_type' => $target->get_type(),
+					'operator'   => $operator,
+					'value'      => $value,
 				);
 			}
 		}
 	}
 
-	public function process(){
+	/**
+	 * Process form submission request
+	 */
+	public function process() {
 
-		if( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->getName() )){
-			$this->setError( __("An Error occurred when submitting the form, please retry.", "wpdf") );
+		if ( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->get_name() ) ) {
+			$this->set_error( __( 'An Error occurred when submitting the form, please retry.', 'wpdf' ) );
 		}
 
-		if( intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0 ){
-			$this->setError( __("An Error occurred: PHP discarded POST data because of request exceeding post_max_size.", "wpdf") );
+		if ( intval( $_SERVER['CONTENT_LENGTH'] ) > 0 && count( $_POST ) === 0 ) {
+			$this->set_error( __( 'An Error occurred: PHP discarded POST data because of request exceeding post_max_size.', 'wpdf' ) );
 		}
 
 
-		// clear data array
-		$this->_submitted = true;
-		$this->_validation = new WPDF_Validation($this->_rules);
+		// clear data array.
+		$this->_submitted  = true;
+		$this->_validation = new WPDF_Validation( $this->_rules );
 
-		// make sure valid token is present
-		$token = $this->getToken(false);
-		if(!isset($token) || !$this->verifyToken($token)){
-			$this->setError( __("Your session has expired", "wpdf") );
+		// make sure valid token is present.
+		$token = $this->get_token( false );
+		if ( ! isset( $token ) || ! $this->verify_token( $token ) ) {
+			$this->set_error( __( 'Your session has expired', 'wpdf' ) );
 		}
 
 		// load modules
-		// todo: modules should be loaded after form has been registered with all settings
+		// todo: modules should be loaded after form has been registered with all settings.
 		$this->load_modules();
 
 		$form_data = $this->_data->toArray();
 
-		foreach($this->_fields as $field_id => $field){
+		foreach ( $this->_fields as $field_id => $field ) {
 
-			if($field->is_type("file")){
+			if ( $field->is_type( 'file' ) ) {
 
-				// check for file upload errors, before checking against field validation rules
-				if(isset($_FILES[$field->get_input_name()])){
-					$file_data = $_FILES[$field->get_input_name()];
+				// check for file upload errors, before checking against field validation rules.
+				if ( isset( $_FILES[ $field->get_input_name() ] ) ) {
+					$file_data = $_FILES[ $field->get_input_name() ];
 
-					if($file_data['error'] !== UPLOAD_ERR_NO_FILE && !$field->isValidExt($file_data)){
-						$this->_errors[$field_id] = WPDF()->text->get('invalid_ext', 'upload');
-					}elseif($file_data['error'] !== UPLOAD_ERR_NO_FILE && !$field->isAllowedSize($file_data)){
-						$this->_errors[$field_id] = sprintf(WPDF()->text->get('max_size', 'upload'), $field->getMaxFileSize());
-					}elseif($file_data['error'] !== UPLOAD_ERR_OK && $file_data['error'] !== UPLOAD_ERR_NO_FILE){
-						$this->_errors[$field_id] = $this->_validation->get_upload_error($file_data['error'], $field->getMaxFileSize());
+					if ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->isValidExt( $file_data ) ) {
+						$this->_errors[ $field_id ] = WPDF()->text->get( 'invalid_ext', 'upload' );
+					} elseif ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->isAllowedSize( $file_data ) ) {
+						$this->_errors[ $field_id ] = sprintf( WPDF()->text->get( 'max_size', 'upload' ), $field->getMaxFileSize() );
+					} elseif ( UPLOAD_ERR_OK !== $file_data['error'] && UPLOAD_ERR_NO_FILE !== $file_data['error'] ) {
+						$this->_errors[ $field_id ] = $this->_validation->get_upload_error( $file_data['error'], $field->getMaxFileSize() );
 					}
-
 				}
 			}
 
-			if(!isset($this->_errors[$field_id]) && !$this->_validation->validate($field, $form_data)){
-				$this->_errors[$field_id] = $this->_validation->get_error();
+			if ( ! isset( $this->_errors[ $field_id ] ) && ! $this->_validation->validate( $field, $form_data ) ) {
+				$this->_errors[ $field_id ] = $this->_validation->get_error();
 			}
 		}
 
-		if(!$this->has_errors()){
+		if ( ! $this->has_errors() ) :
 
-			// validate reCaptcha
-			if( !$this->verifyRecaptcha()){
-				$this->setError( __("The reCAPTCHA wasn't entered correctly. Go back and try it again.", 'wpdf') );
+			// validate reCaptcha.
+			if ( ! $this->verify_recaptcha() ) {
+				$this->set_error( __( "The reCAPTCHA wasn't entered correctly. Go back and try it again.", 'wpdf' ) );
 				return;
 			}
 
 			$submit = apply_filters( 'wpdf/process_form', true, $this, $this->_data );
-			if(!$submit){
+			if ( ! $submit ) {
 				return;
 			}
 
-			// store form data in database
-			if($this->get_setting('database') == 'yes' && !defined('WPDF_PREVIEW')) {
+			// store form data in database.
+			if ( $this->get_setting( 'database' ) === 'yes' && ! defined( 'WPDF_PREVIEW' ) ) {
 				$db = new WPDF_DatabaseManager();
-				$db->save_entry( $this->getName(), $this->_data );
+				$db->save_entry( $this->get_name(), $this->_data );
 			}
 
-			// send email notifications with template tags
+			// send email notifications with template tags.
 			if ( ! empty( $this->_notifications ) ) {
 				$this->_email_manager = new WPDF_EmailManager( $this->_notifications );
 				$this->_email_manager->send( $this->_data );
 			}
 
-			// redirect now if needed
-			if ( $this->_confirmation['type'] == "redirect" ) {
+			// redirect now if needed.
+			if ( 'redirect' === $this->_confirmation['type'] ) {
 				wp_redirect( $this->_confirmation['redirect_url'] );
 				exit;
 			}
 
-			$this->clearToken();
-			// on form complete
-			do_action('wpdf/form_complete', $this, $this->_data);
-		}
+			$this->clear_token();
+
+			// on form complete.
+			do_action( 'wpdf/form_complete', $this, $this->_data );
+
+		endif;
 	}
 
-	public function load_modules(){
+	/**
+	 * Load form plugin modules
+	 *
+	 * @throws Error Error message.
+	 */
+	public function load_modules() {
 
-		$modules = apply_filters('wpdf/list_modules', array());
+		$modules = apply_filters( 'wpdf/list_modules', array() );
 
-		foreach($modules as $module_id => $module){
+		foreach ( $modules as $module_id => $module ) {
 
-			// check if class exists
+			// check if class exists.
 			// todo: How should we handle errors like this, report it?
-			if(!class_exists($module)){
-				throw new Error("WPDF Module could not be loaded: " . $module);
+			if ( ! class_exists( $module ) ) {
+				throw new Error( 'WPDF Module could not be loaded: ' . $module );
 			}
 
-			// check if class key exists
-			if($this->get_setting($module_id)){
-				$this->_modules[$module_id] = new $module;
+			// check if class key exists.
+			if ( $this->get_setting( $module_id ) ) {
+				$this->_modules[ $module_id ] = new $module;
 			}
 		}
 	}
 
-	public function settings($settings){
+	/**
+	 * Load form settings
+	 *
+	 * @param array $settings Form settings.
+	 */
+	public function settings( $settings ) {
 
-		$this->_settings = array_replace_recursive($this->_settings, $settings);
+		$this->_settings = array_replace_recursive( $this->_settings, $settings );
 	}
 
-	public function get_setting($setting){
-		return isset($this->_settings[$setting]) ? $this->_settings[$setting] : false;
+	/**
+	 * Get form settings
+	 *
+	 * @param string $setting Settings key.
+	 *
+	 * @return bool|mixed
+	 */
+	public function get_setting( $setting ) {
+		return isset( $this->_settings[ $setting ] ) ? $this->_settings[ $setting ] : false;
 	}
 
-	public function add_confirmation($type, $value){
+	/**
+	 * Add form confirmation
+	 *
+	 * @param string $type Confirmation type.
+	 * @param string $value Conformation message / redirect url based on type.
+	 *
+	 * @return bool
+	 */
+	public function add_confirmation( $type, $value ) {
 
-		if($type == 'redirect'){
+		if ( 'redirect' === $type ) {
 
 			$this->_confirmation = array(
-				'type' => 'redirect',
-				'redirect_url' => $value
+				'type'         => 'redirect',
+				'redirect_url' => $value,
 			);
 
 			return true;
 
-		}elseif($type == 'message'){
+		} elseif ( 'message' === $type ) {
 
 			$this->_confirmation = array(
-				'type' => 'message',
-				'message' => $value
+				'type'    => 'message',
+				'message' => $value,
 			);
 
 			return true;
@@ -333,27 +468,35 @@ class WPDF_Form{
 		return false;
 	}
 
-	public function add_notification($to, $subject, $message, $args = array()){
+	/**
+	 * Add form notification
+	 *
+	 * @param string $to Email recipients.
+	 * @param string $subject Email subject.
+	 * @param string $message Email message.
+	 * @param array  $args Extra email arguments such as cc, bcc.
+	 */
+	public function add_notification( $to, $subject, $message, $args = array() ) {
 
 		$notification = array(
-			'to' => $to,
+			'to'      => $to,
 			'subject' => $subject,
 			'message' => $message,
 		);
 
-		if(isset($args['cc'])){
+		if ( isset( $args['cc'] ) ) {
 			$notification['cc'] = $args['cc'];
 		}
 
-		if(isset($args['bcc'])){
+		if ( isset( $args['bcc'] ) ) {
 			$notification['bcc'] = $args['bcc'];
 		}
 
-		if(isset($args['from'])){
+		if ( isset( $args['from'] ) ) {
 			$notification['from'] = $args['from'];
 		}
 
-		if(isset($args['conditions'])){
+		if ( isset( $args['conditions'] ) ) {
 			$notification['conditions'] = $args['conditions'];
 		}
 
@@ -361,202 +504,233 @@ class WPDF_Form{
 
 	}
 
-	public function add_field_error($field, $message){
-		$this->_errors[$field] = $message;
+	/**
+	 * Add field error
+	 *
+	 * @param string $field Field id.
+	 * @param string $message Field message.
+	 */
+	public function add_field_error( $field, $message ) {
+		$this->_errors[ $field ] = $message;
 	}
 
-	public function add_error($message){
+	/**
+	 * Add form error
+	 *
+	 * @param string $message Error message.
+	 */
+	public function add_error( $message ) {
 		$this->_error = $message;
 	}
-
-	#region Form Output
 
 	/**
 	 * Display form opening tag
 	 *
-	 * @param $args array
+	 * @param array $args Form opening tag arguments.
 	 */
-	public function start($args = array()){
+	public function start( $args = array() ) {
 
-		// if is file upload form need to add
-
+		// if is file upload form need to add.
 		$attrs = ' method="post"';
-		if($this->_has_file_field){
+		if ( $this->_has_file_field ) {
 			$attrs .= ' enctype="multipart/form-data"';
 		}
 
-		if(isset($args['id'])){
+		if ( isset( $args['id'] ) ) {
 			$attrs .= sprintf( ' id="%s"', esc_attr( $args['id'] ) );
 
-			if(!isset($args['action'])){
+			if ( ! isset( $args['action'] ) ) {
 				$attrs .= sprintf( ' action="#%s"', esc_attr( $args['id'] ) );
 			}
 		}
 
-		if(isset($args['action'])){
+		if ( isset( $args['action'] ) ) {
 			$attrs .= sprintf( ' action="#%s"', esc_attr( $args['action'] ) );
 		}
 
 		$classes = 'wpdf-form ';
 
-		if(isset($args['class'])){
+		if ( isset( $args['class'] ) ) {
 			$classes .= esc_attr( $args['class'] );
 		}
 
-		if($this->get_setting('enable_layout_css') == 'enabled'){
+		if ( 'enabled' === $this->get_setting( 'enable_layout_css' ) ) {
 			$classes .= ' wpdf-form__layout';
 		}
 
 		$attrs .= sprintf( ' class="%s"', $classes );
 
-		//todo: output js data attributes
-		if(!empty($this->_field_display_conds)){
-			$attrs .= sprintf( " data-wpdf-display='%s'", json_encode($this->_field_display_conds));
+		// todo: output js data attributes.
+		if ( ! empty( $this->_field_display_conds ) ) {
+			$attrs .= sprintf( " data-wpdf-display='%s'", json_encode( $this->_field_display_conds ) );
 		}
 
-		echo "<form {$attrs}>";
+		echo '<form ' . esc_attr( $attrs ) . '>';
 		?>
 		<div class="wpdf-form-title">
-			<h1><?php echo $this->getLabel(); ?></h1>
+			<h1><?php echo esc_html( $this->get_label() ); ?></h1>
 		</div>
 		<div class="wpdf-form-copy">
-			<?php echo apply_filters('the_content', $this->getContent()); ?>
+			<?php echo esc_html( apply_filters( 'the_content', $this->get_content() ) ); ?>
 		</div>
 		<?php
 	}
 
-	public function getFieldName($field_id){
+	/**
+	 * Get field name
+	 *
+	 * @param string $field_id Field id.
+	 *
+	 * @return bool|string
+	 */
+	public function get_field_name( $field_id ) {
 
-		$field = isset($this->_fields[$field_id]) ? $this->_fields[$field_id] : false;
-		if($field){
+		$field = isset( $this->_fields[ $field_id ] ) ? $this->_fields[ $field_id ] : false;
+		if ( $field ) {
 			return $field->get_input_name();
 		}
 
 		return false;
 	}
 
-	public function getFieldValue($field_id, $default = false){
+	/**
+	 * Get field value
+	 *
+	 * @param string $field_id Field id.
+	 * @param bool   $default Flag to return default value or current value.
+	 *
+	 * @return string
+	 */
+	public function get_field_value( $field_id, $default = false ) {
 
-		$data = $this->_data->get($field_id);
-		if($data){
+		$data = $this->_data->get( $field_id );
+		if ( $data ) {
 			return $data;
 		}
 
 		return $default;
 	}
 
-	public function getValidationRules(){
+	/**
+	 * Get list of validation rules
+	 *
+	 * @return array
+	 */
+	public function get_validation_rules() {
 		return $this->_rules;
 	}
 
 	/**
-	 * Display form field
+	 * Display form field input
 	 *
-	 * @param $name
+	 * @param string $name Input id.
 	 */
-	public function input($name){
+	public function input( $name ) {
 
-		$field = isset($this->_fields[$name]) ? $this->_fields[$name] : false;
-		if($field){
-			$field->output($this->_data);
+		$field = isset( $this->_fields[ $name ] ) ? $this->_fields[ $name ] : false;
+		if ( $field ) {
+			$field->output( $this->_data );
 		}
 	}
 
-	public function label($name){
-		echo '<label for="'.$name.'" >'.$this->_fields[$name]->get_label() . '</label>';
+	/**
+	 * Get form field label
+	 *
+	 * @param string $name Field id.
+	 */
+	public function label( $name ) {
+		echo '<label for="' . esc_attr( $name ) . '" >' . esc_html( $this->_fields[ $name ]->get_label() ) . '</label>';
 	}
 
-	public function classes($field_id, $type){
+	/**
+	 * Get field classes
+	 *
+	 * @param string $field_id Field id.
+	 * @param string $type Field type.
+	 */
+	public function classes( $field_id, $type ) {
 
-		$classes = array();
-		$classes[] = $this->_fields[$field_id]->get_extra_classes();
+		$classes   = array();
+		$classes[] = $this->_fields[ $field_id ]->get_extra_classes();
 
-		switch($type){
+		switch ( $type ) {
 			case 'validation':
 
-				if(isset($this->_errors[$field_id])){
+				if ( isset( $this->_errors[ $field_id ] ) ) {
 					$classes[] = 'wpdf-has-error';
 				}
 				break;
 			case 'type':
-				$classes[] = sprintf('wpdf-input-%s', $this->_fields[$field_id]->get_type());
+				$classes[] = sprintf( 'wpdf-input-%s', $this->_fields[ $field_id ]->get_type() );
 				break;
 		}
 
-		echo implode(' ', $classes);
+		echo esc_attr( implode( ' ', $classes ) );
 	}
 
-	public function error($field_id){
+	/**
+	 * Get field input error
+	 *
+	 * @param string $field_id Field id.
+	 */
+	public function error( $field_id ) {
 
-		$beforeError = '<span class="wpdf-field-error">';
-		$afterError = '</span>';
-
-		if(isset($this->_errors[$field_id])){
-			echo $beforeError . $this->_errors[$field_id] . $afterError;
+		if ( isset( $this->_errors[ $field_id ] ) ) {
+			echo '<span class="wpdf-field-error">' . esc_html( $this->_errors[ $field_id ] ) . '</span>';
 		}
 	}
 
 	/**
 	 * Display submit button for form
 	 *
-	 * @param $label
-	 * @param array $args
+	 * @param string $label Submit button text.
+	 * @param array  $args Submit button display arguments.
 	 */
-	public function submit($label = false, $args = array()){
+	public function submit( $label = false, $args = array() ) {
 
-		if(!$this->hasValidToken()){
+		if ( ! $this->has_valid_token() ) {
 			return;
 		}
 
-		// output recaptcha
-		$this->outputRecaptcha();
+		// output recaptcha.
+		$this->output_recaptcha();
 
-		if(empty($label)){
+		if ( empty( $label ) ) {
 			$label = $this->_settings['labels']['submit'];
 		}
-		echo '<input type="submit" value="'.$label.'" class="wpdf-button wpdf-submit-button" />';
+		echo '<input type="submit" value="' . esc_attr( $label ) . '" class="wpdf-button wpdf-submit-button" />';
 	}
 
 	/**
 	 * Display form closing tag
 	 */
-	public function end(){
+	public function end() {
 
-		// hidden fields
-		wp_nonce_field( 'wpdf_submit_form_' . $this->getName(), 'wpdf_nonce' );
-		echo '<input type="hidden" name="wpdf_action" value="' . $this->getName() .'" />';
-		echo '<input type="hidden" name="wpdf_token" value="' . $this->getToken() .'" />';
+		// hidden fields.
+		wp_nonce_field( 'wpdf_submit_form_' . $this->get_name(), 'wpdf_nonce' );
+		echo '<input type="hidden" name="wpdf_action" value="' . esc_attr( $this->get_name() ) . '" />';
+		echo '<input type="hidden" name="wpdf_token" value="' . esc_attr( $this->get_token() ) . '" />';
 
 		echo '</form>';
 	}
 
-	#endregion
-
-	#region Form Errors
-
 	/**
 	 * Set form error
-	 * @param $error
+	 *
+	 * @param string $error Error message.
 	 */
-	public function setError($error){
+	public function set_error( $error ) {
 		$this->_error = $error;
 	}
 
 	/**
-	 * Add form error
-	 * @param $error
-	 */
-	public function addError($error){
-		$this->_errors[] = $error;
-	}
-
-	/**
 	 * Check to see if form has errors
+	 *
 	 * @return bool
 	 */
-	public function has_errors(){
+	public function has_errors() {
 
-		if(!empty($this->_errors) || $this->_error !== false){
+		if ( ! empty( $this->_errors ) || false !== $this->_error ) {
 			return true;
 		}
 
@@ -568,10 +742,10 @@ class WPDF_Form{
 	 *
 	 * @return bool
 	 */
-	public function hasValidToken(){
+	public function has_valid_token() {
 
-		$token = $this->getToken(false);
-		if(!$this->_submitted || $this->verifyToken($token)){
+		$token = $this->get_token( false );
+		if ( ! $this->_submitted || $this->verify_token( $token ) ) {
 			return true;
 		}
 
@@ -581,37 +755,34 @@ class WPDF_Form{
 	/**
 	 * Display form error message
 	 */
-	public function errors(){
+	public function errors() {
 
 		echo '<div class="wpdf-form-error">';
 
-		if($this->_error){
-			echo "<p>".$this->_error."</p>";
-		}else {
+		if ( $this->_error ) {
+			echo '<p>' . esc_html( $this->_error ) . '</p>';
+		} else {
 
-			echo sprintf( "<p>%s</p>", __( "Please make sure you have corrected any errors below before resubmitting the form.", "wpdf" ) );
+			echo sprintf( '<p>%s</p>', esc_html( __( 'Please make sure you have corrected any errors below before resubmitting the form.', 'wpdf' ) ) );
 			echo '<ul class="wpdf-form-errors">';
 			foreach ( $this->_errors as $field_id => $error ) {
-				echo '<li>' . $this->_fields[ $field_id ]->get_label() . ' - ' . $error . '</li>';
+				echo '<li>' . esc_html( $this->_fields[ $field_id ]->get_label() ) . ' - ' . esc_html( $error ) . '</li>';
 			}
 			echo '</ul>';
 		}
 		echo '</div>';
 	}
 
-	#endregion
-
-	#region Complete Form
-
 	/**
 	 * Check to see if form is complete
+	 *
 	 * @return bool
 	 */
-	public function is_complete(){
+	public function is_complete() {
 
-		// no data has been submitted
-		if($this->_submitted === true && !$this->has_errors()){
-			$this->getConfirmationMessage();
+		// no data has been submitted.
+		if ( true === $this->_submitted && ! $this->has_errors() ) {
+			$this->get_confirmation_message();
 			return true;
 		}
 
@@ -621,25 +792,30 @@ class WPDF_Form{
 	/**
 	 * Output form complete/confirmation/thank you message
 	 */
-	public function getConfirmationMessage(){
+	public function get_confirmation_message() {
 
-		if($this->_confirmation['type'] == "message"){
+		if ( 'message' === $this->_confirmation['type']   ) {
 			return $this->_confirmation['message'];
 		}
 
-		return __("Form submitted successfully", "wpdf");
+		return __( 'Form submitted successfully', 'wpdf' );
 	}
 
-	#endregion
-
 	/**
+	 * Get form name
+	 *
 	 * @return string
 	 */
-	public function getName() {
+	public function get_name() {
 		return $this->_name;
 	}
 
-	public function getLabel(){
+	/**
+	 * Get form label
+	 *
+	 * @return string
+	 */
+	public function get_label() {
 		return $this->_name;
 	}
 
@@ -648,74 +824,94 @@ class WPDF_Form{
 	 *
 	 * @return null|string
 	 */
-	public function getContent(){
+	public function get_content() {
 
-		// don't show form content if confirmation location is set to replace
-		if($this->_submitted && $this->getConfirmationLocation() == 'replace'){
+		// don't show form content if confirmation location is set to replace.
+		if ( $this->_submitted && 'replace' === $this->get_confirmation_location() ) {
 			return '';
 		}
 
 		return $this->_content;
 	}
 
-	public function getId(){
+	/**
+	 * Get form id
+	 *
+	 * @return int
+	 */
+	public function get_id() {
 		return $this->ID;
 	}
 
-	public function getFieldLabel($field, $fallback = null){
+	/**
+	 * Get field label
+	 *
+	 * @param string $field Field id.
+	 * @param string $fallback Fallback label.
+	 *
+	 * @return null|string
+	 */
+	public function get_field_label( $field, $fallback = null ) {
 
-		if(!is_null($fallback)){
-			return isset($this->_fields[$field]) ? $this->_fields[$field]->get_label() : $fallback;
+		if ( ! is_null( $fallback ) ) {
+			return isset( $this->_fields[ $field ] ) ? $this->_fields[ $field ]->get_label() : $fallback;
 		}
 
-		return isset($this->_fields[$field]) ? $this->_fields[$field]->get_label() : $field;
+		return isset( $this->_fields[ $field ] ) ? $this->_fields[ $field ]->get_label() : $field;
 	}
 
 	/**
+	 * Get form fields
+	 *
 	 * @return WPDF_FormField[]
 	 */
-	public function getFields() {
+	public function get_fields() {
 		return $this->_fields;
 	}
 
 	/**
-	 * @param $field string
+	 * Get form field
+	 *
+	 * @param string $field Field id.
 	 *
 	 * @return bool|WPDF_FormField
 	 */
-	public function getField($field){
-		return isset($this->_fields[$field]) ? $this->_fields[$field] : false;
+	public function get_field( $field ) {
+		return isset( $this->_fields[ $field ] ) ? $this->_fields[ $field ] : false;
 	}
 
-	protected function getConfirmationLocation(){
+	/**
+	 * Get form confirmation location
+	 *
+	 * @return string
+	 */
+	protected function get_confirmation_location() {
 		return $this->_confirmation_location;
 	}
-
-	#region Session Token
 
 	/**
 	 * Get current form token
 	 *
-	 * @param bool $generate flag to allow token generation
+	 * @param bool $generate Flag to allow token generation.
 	 *
 	 * @return string
 	 */
-	public function getToken($generate = true){
+	public function get_token( $generate = true ) {
 
-		// form has not been submitted
-		if($generate && !$this->_submitted && !$this->_token){
+		// form has not been submitted.
+		if ( $generate && ! $this->_submitted && ! $this->_token ) {
 
-			// generate fresh token
-			do{
-				$this->_token = wp_generate_password(12, false);
-			}while(get_transient('wpdf_token_' .$this->_token) !== false);
+			// generate fresh token.
+			do {
+				$this->_token = wp_generate_password( 12, false );
+			} while ( get_transient( 'wpdf_token_' . $this->_token ) !== false );
 
-			// store transient token
-			set_transient('wpdf_token_' . $this->_token, array(
-				'ip' => wpdf_getIp(),
-				'time' => time()
-			), HOUR_IN_SECONDS);
-		}elseif($this->_submitted && isset($_REQUEST['wpdf_token'])){
+			// store transient token.
+			set_transient( 'wpdf_token_' . $this->_token, array(
+				'ip'   => wpdf_getIp(),
+				'time' => time(),
+			), HOUR_IN_SECONDS );
+		} elseif ( $this->_submitted && isset( $_REQUEST['wpdf_token'] ) ) {
 			$this->_token = $_REQUEST['wpdf_token'];
 		}
 
@@ -725,17 +921,17 @@ class WPDF_Form{
 	/**
 	 * Make sure token is valid
 	 *
-	 * @param string $token
+	 * @param string $token Token string.
 	 *
 	 * @return bool
 	 */
-	public function verifyToken($token){
+	public function verify_token( $token ) {
 
-		if($token && !empty($token)){
+		if ( $token && ! empty( $token ) ) {
 
-			$transient = get_transient('wpdf_token_' . $token);
-			if($transient){
-				if(isset($transient['ip']) && $transient['ip'] == wpdf_getIp()){
+			$transient = get_transient( 'wpdf_token_' . $token );
+			if ( $transient ) {
+				if ( isset( $transient['ip'] ) && wpdf_getIp() === $transient['ip'] ) {
 					return true;
 				}
 			}
@@ -749,26 +945,24 @@ class WPDF_Form{
 	 *
 	 * @return bool
 	 */
-	public function clearToken(){
-		if($this->verifyToken($this->_token)){
-			return delete_transient('wpdf_token_' . $this->_token);
+	public function clear_token() {
+		if ( $this->verify_token( $this->_token ) ) {
+			return delete_transient( 'wpdf_token_' . $this->_token );
 		}
+
 		return false;
 	}
-
-	#endregion
-
-	#region reCaptcha Validation
 
 	/**
 	 * Check to see if recaptcha has been setup form the form
 	 *
 	 * @return bool
 	 */
-	public function recaptchaSetup(){
-		if( $this->get_setting('recaptcha_private') && $this->get_setting('recaptcha_public') ){
+	public function recaptcha_setup() {
+		if ( $this->get_setting( 'recaptcha_private' ) && $this->get_setting( 'recaptcha_public' ) ) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -777,17 +971,17 @@ class WPDF_Form{
 	 *
 	 * @return bool
 	 */
-	public function verifyRecaptcha(){
+	public function verify_recaptcha() {
 
-		// escape if recaptcha is not setup
-		if(!$this->recaptchaSetup()){
+		// escape if recaptcha is not setup.
+		if ( ! $this->recaptcha_setup() ) {
 			return true;
 		}
 
-		$secretKey =  $this->get_setting('recaptcha_private');
-		$captcha = $_POST['g-recaptcha-response'];
-		$response= json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
-		if( isset($response['success']) && $response['success'] === true){
+		$secretKey = $this->get_setting( 'recaptcha_private' );
+		$captcha   = $_POST['g-recaptcha-response'];
+		$response  = json_decode( file_get_contents( "https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR'] ), true );
+		if ( isset( $response['success'] ) && $response['success'] === true ) {
 			return true;
 		}
 
@@ -797,20 +991,18 @@ class WPDF_Form{
 	/**
 	 * Display recaptcha field
 	 */
-	public function outputRecaptcha(){
+	public function output_recaptcha() {
 
-		// escape if recaptcha is not setup
-		if(!$this->recaptchaSetup()){
+		// escape if recaptcha is not setup.
+		if ( ! $this->recaptcha_setup() ) {
 			return;
 		}
 
-		$publicKey = $this->get_setting('recaptcha_public');
+		$public_key = $this->get_setting( 'recaptcha_public' );
 		?>
 		<div class="wpdf-form-row wpdf-input-captcha">
-			<div class="g-recaptcha" data-sitekey="<?php echo $publicKey; ?>"></div>
+			<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $public_key ); ?>"></div>
 		</div>
 		<?php
 	}
-
-	#endregion
 }

@@ -22,7 +22,7 @@ function wpdf_get_uploads_url(){
 
 function wpdf_is_submitted_form($form_id){
 	$form = WPDF()->get_current_form();
-	if( $form != false && $form->getName() == $form_id){
+	if( $form != false && $form->get_name() == $form_id){
 		return true;
 	}
 	return false;
@@ -71,7 +71,7 @@ function wpdf_display_form($name){
 			$form->errors();
 		}
 
-		$fields = $form->getFields();
+		$fields = $form->get_fields();
 		foreach($fields as $field_id => $field){
 			wpdf_display_field($form, $field_id);
 		}
@@ -88,7 +88,7 @@ function wpdf_display_form($name){
  */
 function wpdf_display_field($form, $field_id){
 
-	if(!$form->hasValidToken()){
+	if(!$form->has_valid_token()){
 		return;
 	}
 
@@ -107,7 +107,7 @@ function wpdf_display_field($form, $field_id){
 function wpdf_display_confirmation($form){
 	?>
 	<div class="wpdf-form-confirmation">
-		<p><?php echo $form->getConfirmationMessage(); ?></p>
+		<p><?php echo $form->get_confirmation_message(); ?></p>
 	</div>
 	<?php
 }

@@ -7,10 +7,10 @@
 
 $form_id = '';
 if($form !== false){
-	$form_id = $form->getId();
+	$form_id = $form->get_id();
 }
 
-$fields = $form->getFields();
+$fields = $form->get_fields();
 $fieldKeys = array();
 if(!empty($fields)) {
 	foreach ( $fields as $field_id => $field ) {

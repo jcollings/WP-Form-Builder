@@ -86,7 +86,7 @@ class WPDF_Validation{
 						case 'unique':
 
 							$form = WPDF()->get_current_form();
-							if( ! $this->is_unique( $form->getName(), $field->get_name(), $post_data ) ) {
+							if( ! $this->is_unique( $form->get_name(), $field->get_name(), $post_data ) ) {
 								$this->set_error($rule);
 								return false;
 							}

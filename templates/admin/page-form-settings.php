@@ -7,7 +7,7 @@
 
 $form_id = '';
 if($form !== false){
-	$form_id = $form->getId();
+	$form_id = $form->get_id();
 }
 
 $settings = $form->export();
@@ -56,14 +56,14 @@ $recaptcha_public = $form->get_setting('recaptcha_public');
 								<label for="form_label">Form Name</label>
 								<span class="wpdf-tooltip" title="Name of form, displayed when outputting form.">?</span>
 							</td>
-							<td class="notification__input"><input id="form_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->getLabel(); ?>" /></td>
+							<td class="notification__input"><input id="form_label" type="text" name="wpdf_settings[form_label]" value="<?php echo $form->get_label(); ?>" /></td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
 								<label for="form_content">Form Content</label>
 								<span class="wpdf-tooltip" title="Content displayed on the form before the fields">?</span>
 							</td>
-							<td class="notification__input"><textarea name="wpdf_settings[form_content]" id="form_content" cols="30" rows="10"><?php echo $form->getContent(); ?></textarea></td>
+							<td class="notification__input"><textarea name="wpdf_settings[form_content]" id="form_content" cols="30" rows="10"><?php echo $form->get_content(); ?></textarea></td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">

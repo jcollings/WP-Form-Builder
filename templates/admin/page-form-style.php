@@ -7,7 +7,7 @@
 
 $form_id = '';
 if($form !== false){
-	$form_id = $form->getId();
+	$form_id = $form->get_id();
 }
 ?>
 <form action="" method="post">

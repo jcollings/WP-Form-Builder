@@ -72,7 +72,7 @@ $field_type = $field->get_type();
 				<?php
 				// load saved validation rules
 				if($form){
-					$rules = $form->getValidationRules();
+					$rules = $form->get_validation_rules();
 					if( isset($rules[$field->get_name()]) && !empty($rules[$field->get_name()])){
 						foreach($rules[$field->get_name()] as $rule){
 							$type = $rule['type'];

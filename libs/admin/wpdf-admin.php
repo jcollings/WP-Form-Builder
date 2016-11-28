@@ -266,13 +266,13 @@ class WPDF_Admin{
 								} else {
 									$content = esc_html( $submission->content );
 								}
-								echo "<p><strong>{$form->getFieldLabel($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+								echo "<p><strong>{$form->get_field_label($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
 							}
 						}
 
-						$url = 'form=' .$form->getName();
-						if($form->getId()){
-							$url = 'form_id=' .$form->getId();
+						$url = 'form=' .$form->get_name();
+						if($form->get_id()){
+							$url = 'form_id=' .$form->get_id();
 						}
 
 						echo '<a href="'. admin_url('admin.php?page=wpdf-forms&'.$url).'" class="button">Back</a>';
@@ -319,7 +319,7 @@ class WPDF_Admin{
 		echo '<form method="GET">';
 
 		echo '<input type="hidden" name="page" value="wpdf-forms" />';
-		echo '<input type="hidden" name="form" value="'.$form->getName().'" />';
+		echo '<input type="hidden" name="form" value="'.$form->get_name() . '" />';
 
 		?>
 
