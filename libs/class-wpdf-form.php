@@ -169,7 +169,7 @@ class WPDF_Form{
 
 		if(isset($field['display_conditions']) && is_array($field['display_conditions']) && !empty($field['display_conditions'])){
 
-			$name = $this->_fields[ $field_id ]->getInputName();
+			$name = $this->_fields[ $field_id ]->get_input_name();
 			$this->_field_display_conds[$name] = array();
 
 			foreach($field['display_conditions'] as $f => $v){
@@ -184,8 +184,8 @@ class WPDF_Form{
 
 				$target = $this->_fields[$f];
 				$this->_field_display_conds[$name][] = array(
-					'field' => $target->getInputName(),
-					'field_type' =>  $target->getType(),
+					'field' => $target->get_input_name(),
+					'field_type' =>  $target->get_type(),
 					'operator' => $operator,
 					'value' => $value,
 				);
@@ -222,11 +222,11 @@ class WPDF_Form{
 
 		foreach($this->_fields as $field_id => $field){
 
-			if($field->isType("file")){
+			if($field->is_type("file")){
 
 				// check for file upload errors, before checking against field validation rules
-				if(isset($_FILES[$field->getInputName()])){
-					$file_data = $_FILES[$field->getInputName()];
+				if(isset($_FILES[$field->get_input_name()])){
+					$file_data = $_FILES[$field->get_input_name()];
 
 					if($file_data['error'] !== UPLOAD_ERR_NO_FILE && !$field->isValidExt($file_data)){
 						$this->_errors[$field_id] = WPDF()->text->get('invalid_ext', 'upload');
@@ -429,7 +429,7 @@ class WPDF_Form{
 
 		$field = isset($this->_fields[$field_id]) ? $this->_fields[$field_id] : false;
 		if($field){
-			return $field->getInputName();
+			return $field->get_input_name();
 		}
 
 		return false;
@@ -463,13 +463,13 @@ class WPDF_Form{
 	}
 
 	public function label($name){
-		echo '<label for="'.$name.'" >'.$this->_fields[$name]->getLabel().'</label>';
+		echo '<label for="'.$name.'" >'.$this->_fields[$name]->get_label() . '</label>';
 	}
 
 	public function classes($field_id, $type){
 
 		$classes = array();
-		$classes[] = $this->_fields[$field_id]->getExtraClasses();
+		$classes[] = $this->_fields[$field_id]->get_extra_classes();
 
 		switch($type){
 			case 'validation':
@@ -479,7 +479,7 @@ class WPDF_Form{
 				}
 				break;
 			case 'type':
-				$classes[] = sprintf('wpdf-input-%s', $this->_fields[$field_id]->getType());
+				$classes[] = sprintf('wpdf-input-%s', $this->_fields[$field_id]->get_type());
 				break;
 		}
 
@@ -592,7 +592,7 @@ class WPDF_Form{
 			echo sprintf( "<p>%s</p>", __( "Please make sure you have corrected any errors below before resubmitting the form.", "wpdf" ) );
 			echo '<ul class="wpdf-form-errors">';
 			foreach ( $this->_errors as $field_id => $error ) {
-				echo '<li>' . $this->_fields[ $field_id ]->getLabel() . ' - ' . $error . '</li>';
+				echo '<li>' . $this->_fields[ $field_id ]->get_label() . ' - ' . $error . '</li>';
 			}
 			echo '</ul>';
 		}
@@ -665,10 +665,10 @@ class WPDF_Form{
 	public function getFieldLabel($field, $fallback = null){
 
 		if(!is_null($fallback)){
-			return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $fallback;
+			return isset($this->_fields[$field]) ? $this->_fields[$field]->get_label() : $fallback;
 		}
 
-		return isset($this->_fields[$field]) ? $this->_fields[$field]->getLabel() : $field;
+		return isset($this->_fields[$field]) ? $this->_fields[$field]->get_label() : $field;
 	}
 
 	/**

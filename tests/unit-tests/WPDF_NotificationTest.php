@@ -36,10 +36,10 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 			)
 		));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asd', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($notificationValid->isValid($formData));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asda', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
 		$this->assertFalse($notificationValid->isValid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
@@ -64,10 +64,10 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 			)
 		));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asd', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($notificationEq->isValid($formData));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asda', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
 		$this->assertFalse($notificationEq->isValid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
@@ -82,10 +82,10 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 			)
 		));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asd', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asd', 'wpdf_action' => 'TestForm'), array());
 		$this->assertFalse($notificationNotEq->isValid($formData));
 
-		$formData = new WPDF_FormData($form, array($field->getInputName() => 'asda', 'wpdf_action' => 'TestForm'), array());
+		$formData = new WPDF_FormData($form, array( $field->get_input_name() => 'asda', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($notificationNotEq->isValid($formData));
 
 		$formData = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());

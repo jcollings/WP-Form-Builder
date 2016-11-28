@@ -6,11 +6,11 @@
  * @var WPDF_Form $form
  * @var bool $active
  */
-$field_type = $field->getType();
+$field_type = $field->get_type();
 ?>
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
-		<?php echo ucfirst($field_type); ?>: <?php echo $field->getLabel(); ?>
+		<?php echo ucfirst($field_type); ?>: <?php echo $field->get_label(); ?>
 		<a class="wpdf-tooltip wpdf-panel__delete wpdf-del-field" title="Delete field from form"><?php _e('Delete','wpdf'); ?></a>
 		<a href="#" class="wpdf-panel__toggle wpdf-tooltip-blank" title="Toggle display of field settings"></a>
 	</div>
@@ -20,7 +20,7 @@ $field_type = $field->getType();
 		// hidden fields
 		?>
 		<input type="hidden" name="field[][type]" value="<?php echo $field_type; ?>" />
-		<input type="hidden" name="field[][id]" value="<?php echo $field->getName(); ?>" />
+		<input type="hidden" name="field[][id]" value="<?php echo $field->get_name(); ?>" />
 
 		<?php
 		// general fields
@@ -32,14 +32,14 @@ $field_type = $field->getType();
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed before the field on the form">?</span>
 				</label>
 
-				<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->getLabel(); ?>">
+				<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->get_label(); ?>">
 			</div>
 			<div class="wpdf-col wpdf-col__half">
 				<label for="" class="wpdf-label">
 					<?php _e('Placeholder','wpdf'); ?>
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed in the field when no value is entered">?</span>
 				</label>
-				<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->getPlaceholder(); ?>">
+				<input type="text" class="wpdf-input" name="field[][placeholder]" value="<?php echo $field->get_placeholder(); ?>">
 			</div>
 		</div>
 
@@ -50,13 +50,13 @@ $field_type = $field->getType();
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Add custom css classes to field output">?</span>
 				</label>
 
-				<input type="text" class="wpdf-input" name="field[][css_class]" value="<?php echo $field->getExtraClasses(); ?>">
+				<input type="text" class="wpdf-input" name="field[][css_class]" value="<?php echo $field->get_extra_classes(); ?>">
 			</div>
 		</div>
 
 		<?php
 		// specific fields based on field type
-		$field->displaySettings();
+		$field->display_settings();
 
 		// validation fields
 		?>
@@ -73,8 +73,8 @@ $field_type = $field->getType();
 				// load saved validation rules
 				if($form){
 					$rules = $form->getValidationRules();
-					if(isset($rules[$field->getName()]) && !empty($rules[$field->getName()])){
-						foreach($rules[$field->getName()] as $rule){
+					if( isset($rules[$field->get_name()]) && !empty($rules[$field->get_name()])){
+						foreach($rules[$field->get_name()] as $rule){
 							$type = $rule['type'];
 							wpdf_displayValidationBlock($type, $rule);
 						}

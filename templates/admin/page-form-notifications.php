@@ -14,7 +14,7 @@ $fields = $form->getFields();
 $fieldKeys = array();
 if(!empty($fields)) {
 	foreach ( $fields as $field_id => $field ) {
-		$fieldKeys[] = sprintf( '%s <code>{{field_%s}}</code>', $field->getLabel(), $field_id );
+		$fieldKeys[] = sprintf( '%s <code>{{field_%s}}</code>', $field->get_label(), $field_id );
 	}
 }
 

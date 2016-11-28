@@ -1,3 +1,10 @@
+<?php
+/**
+ * Checkbox field edit panel
+ *
+ * @var WPDF_CheckboxField $this
+ */
+?>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">
 
@@ -27,8 +34,8 @@
 				</tr>
 			</script>
 			<?php
-			$options = $this->getOptions();
-			if(!empty($options)) {
+			$options = $this->get_options();
+			if ( ! empty( $options ) ) {
 				foreach ( $options as $key => $option ) {
 					?>
 					<tr class="wpdf-repeater-row wpdf-repeater__template">
@@ -38,11 +45,11 @@
 						           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
 						<td><input title="Default?" type="checkbox"
 						           name="field[][value_default][]" <?php
-							$default = $this->getDefaultValue();
-							if(is_array($default)){
-								checked(in_array($key, $default), true, true);
+							$default = $this->get_default_value();
+							if ( is_array( $default ) ) {
+								checked( in_array( $key, $default ), true, true );
 							}else{
-								checked($key, $default, true);
+								checked( $key, $default, true );
 							}
 							?> /></td>
 						<td>

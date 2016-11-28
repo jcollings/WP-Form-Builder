@@ -1,39 +1,40 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: james
- * Date: 03/11/2016
- * Time: 21:29
+ * Class WPDF_CheckboxField
+ *
+ * Add checkbox field.
  */
-
 class WPDF_CheckboxField extends WPDF_FormField {
 
+
 	/**
-	 * @param $form_data WPDF_FormData
+	 * Output field on frontend
+	 *
+	 * @param WPDF_FormData $form_data Passed form data.
 	 */
-	public function output($form_data){
+	public function output( $form_data ) {
 
-		$value = $form_data->getRaw($this->_name);
+		$value = $form_data->getRaw( $this->_name );
 
-		if(isset($this->_args['options']) && !empty($this->_args['options'])){
+		if ( isset( $this->_args['options'] ) && ! empty( $this->_args['options'] ) ) {
 
-			$name = $this->getInputName();
-			if($this->isType('checkbox')){
+			$name = $this->get_input_name();
+			if ( $this->is_type( 'checkbox' ) ) {
 				$name .= '[]';
 			}
 
 			echo '<div class="wpdf-choices">';
 
-			foreach($this->_args['options'] as $key => $option){
+			foreach ( $this->_args['options'] as $key => $option ) {
 
-				if(is_array($value)){
-					$checked = in_array("".$key, $value) ? 'checked="checked"' : '';
-				}else{
-					$checked = "".$key === $value ? 'checked="checked"' : '';
+				if ( is_array( $value ) ) {
+					$checked = in_array( '' . $key, $value, true ) ? 'checked="checked"' : '';
+				} else {
+					$checked = '' . $key === $value ? 'checked="checked"' : '';
 				}
 
 				echo '<label>';
-				echo '<input type="'.$this->getType().'" name="'.$name.'"'.$checked.' value="'.$key.'" class="wpdf-field">' . $option;
+				echo '<input type="' . $this->get_type() . '" name="' . $name . '"' . $checked . ' value="' . $key . '" class="wpdf-field">' . $option;
 				echo '</label>';
 			}
 
@@ -44,7 +45,7 @@ class WPDF_CheckboxField extends WPDF_FormField {
 	/**
 	 * Format field data to store in fields array
 	 *
-	 * @param $field
+	 * @param array $field Field data to be passed.
 	 *
 	 * @return array
 	 */
@@ -52,13 +53,13 @@ class WPDF_CheckboxField extends WPDF_FormField {
 
 		$data = parent::save( $field );
 
-		$options = array();
+		$options  = array();
 		$defaults = array();
 		foreach ( $field['value_labels'] as $arr_id => $label ) {
-			$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
-			$options[$option_key] = $label;
+			$option_key             = isset( $field['value_keys'][ $arr_id ] ) && ! empty( $field['value_keys'][ $arr_id ] ) ? esc_attr( $field['value_keys'][ $arr_id ] ) : esc_attr( $label );
+			$options[ $option_key ] = $label;
 
-			if(isset($field['value_default'][$arr_id])){
+			if ( isset( $field['value_default'][ $arr_id ] ) ) {
 				$defaults[] = $option_key;
 			}
 		}

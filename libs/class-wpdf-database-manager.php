@@ -37,13 +37,13 @@ class WPDF_DatabaseManager{
 		foreach($values as $field_id => $value){
 
 			$field = $data->getField($field_id);
-			if($field->isType("password")){
+			if($field->is_type("password")){
 				// dont store password data in entry table
 				continue;
 			}
 
 			$temp_val = $value;
-			if($field->isType("file")){
+			if($field->is_type("file")){
 				// if file, add url to file instead of just filename
 				$temp_val = wpdf_get_uploads_url() . $value;
 			}
@@ -127,9 +127,9 @@ class WPDF_DatabaseManager{
 			return false;
 		}
 
-		$field_label = $field->getLabel();
-		$field_type = $field->getType();
-		$field_name = $field->getName();
+		$field_label = $field->get_label();
+		$field_type = $field->get_type();
+		$field_name = $field->get_name();
 
 		global $wpdb;
 		$query = $wpdb->prepare("INSERT INTO {$this->_submission_data_table}(`submission_id`, `field`, `content`, `created`, `field_type`, `field_label`) VALUES(%d, %s, %s, %s, %s, %s)", array($submission_id, $field_name, $content, $created, $field_type, $field_label) );

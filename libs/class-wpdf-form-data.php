@@ -37,20 +37,20 @@ class WPDF_FormData{
 
 		foreach($fields as $field_id => $field){
 
-			$this->_raw_data[$field_id] = isset($data[$field->getInputName()]) ? $field->sanitize($data[$field->getInputName()]) : false;
-			$this->_defaults[$field_id] = $field->getDefaultValue();
+			$this->_raw_data[$field_id] = isset($data[$field->get_input_name()]) ? $field->sanitize($data[$field->get_input_name()]) : false;
+			$this->_defaults[$field_id] = $field->get_default_value();
 
-			if($field->isType('file')){
+			if($field->is_type('file')){
 
-				if(isset($upload_data[$field->getInputName()])){
+				if(isset($upload_data[$field->get_input_name()])){
 
-					if(isset($upload_data[$field->getInputName()]['name']) && isset($upload_data[$field->getInputName()]['error']) ){
+					if( isset($upload_data[$field->get_input_name()]['name']) && isset($upload_data[$field->get_input_name()]['error']) ){
 
 						//$this->_data[$field_id] = $upload_data[$field_id];
 
-						if( $upload_data[$field->getInputName()]['error'] == 0
-						&& $field->isValidExt($upload_data[$field->getInputName()])
-						&& $field->isAllowedSize($upload_data[$field->getInputName()])
+						if( $upload_data[$field->get_input_name()]['error'] == 0
+						&& $field->isValidExt($upload_data[$field->get_input_name()])
+						&& $field->isAllowedSize($upload_data[$field->get_input_name()])
 						){
 
 							// file uploaded
@@ -58,16 +58,16 @@ class WPDF_FormData{
 							// check upload path exists
 							$upload_dir = wpdf_get_uploads_dir();
 
-							$file_name = $upload_data[$field->getInputName()]['name'];
+							$file_name = $upload_data[$field->get_input_name()]['name'];
 
-							if(move_uploaded_file($upload_data[$field->getInputName()]['tmp_name'], $upload_dir . $file_name )){
+							if(move_uploaded_file($upload_data[$field->get_input_name()]['tmp_name'], $upload_dir . $file_name )){
 								$this->_data[$field_id] = $file_name;
 							}
-						}elseif( $upload_data[$field->getInputName()]['error'] == 4 ){
+						}elseif( $upload_data[$field->get_input_name()]['error'] == 4 ){
 							// no file uploaded
 							// load from previously stored upload
-							if(isset($data[$field->getInputName().'_uploaded'])){
-								$this->_data[$field_id] = $data[$field->getInputName().'_uploaded'];
+							if(isset($data[ $field->get_input_name() . '_uploaded'])){
+								$this->_data[$field_id] = $data[ $field->get_input_name() . '_uploaded'];
 							}
 						}
 					}
@@ -75,18 +75,18 @@ class WPDF_FormData{
 
 			}else{
 
-				if(isset($data[$field->getInputName()])){
+				if(isset($data[$field->get_input_name()])){
 
-					$type = $field->getType();
+					$type = $field->get_type();
 					if($type == 'radio' || $type == 'checkbox' || $type == 'select'){
 
-						$sanitized_data = $field->sanitize($data[$field->getInputName()]);
+						$sanitized_data = $field->sanitize($data[$field->get_input_name()]);
 
 						if(is_array($sanitized_data)){
 
 							$temp = array();
 							foreach($sanitized_data as $v){
-								$chosenValue = $field->getOptionValue($v);
+								$chosenValue = $field->get_option_value($v);
 								if($chosenValue !== false){
 									$temp[] = $chosenValue;
 								}
@@ -97,14 +97,14 @@ class WPDF_FormData{
 							}
 
 						}else{
-							$chosenValue = $field->getOptionValue($sanitized_data);
+							$chosenValue = $field->get_option_value($sanitized_data);
 							if($chosenValue !== false){
 								$this->_data[$field_id] = $chosenValue;
 							}
 						}
 
 					}else{
-						$sanitized_data = $field->sanitize($data[$field->getInputName()]);
+						$sanitized_data = $field->sanitize($data[$field->get_input_name()]);
 						if($sanitized_data !== ""){
 							// only add non empty data
 							$this->_data[$field_id] = $sanitized_data;

@@ -1,91 +1,173 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: james
- * Date: 05/08/2016
- * Time: 18:58
+ * Class WPDF_FormField
+ *
+ * Base field class
  */
+class WPDF_FormField {
 
-class WPDF_FormField{
-
+	/**
+	 * Field Id
+	 *
+	 * @var string $_name
+	 */
 	protected $_name;
+
+	/**
+	 * Field Type
+	 *
+	 * @var string $_type
+	 */
 	protected $_type;
+
+	/**
+	 * Field Label
+	 *
+	 * @var string $_label
+	 */
 	protected $_label;
+
+	/**
+	 * Raw Field arguments
+	 *
+	 * @var array $_args
+	 */
 	protected $_args;
+
+	/**
+	 * Field default value
+	 *
+	 * @var bool|mixed
+	 */
 	protected $_default;
+
+	/**
+	 * Field placeholder text
+	 *
+	 * @var bool|mixed
+	 */
 	protected $_placeholder;
+
+	/**
+	 * Field options
+	 *
+	 * @var bool|mixed
+	 */
 	protected $_options;
+
+	/**
+	 * Field row classes
+	 *
+	 * @var mixed|string
+	 */
 	protected $_extra_class;
 
-	public function __construct($name, $type, $args = array()) {
+	/**
+	 * WPDF_FormField constructor.
+	 *
+	 * @param string $name Field name.
+	 * @param string $type Field type.
+	 * @param array  $args Field arguments.
+	 */
+	public function __construct( $name, $type, $args = array() ) {
 		$this->_name = $name;
 		$this->_type = $type;
 		$this->_args = $args;
 
-		if(isset($args['label'])){
+		if ( isset( $args['label'] ) ) {
 			$this->_label = $args['label'];
-		}else{
-			$this->_label = ucfirst($this->_name);
+		} else {
+			$this->_label = ucfirst( $this->_name );
 		}
 
-		$this->_default = isset($args['default']) ? $args['default'] : false;
-		$this->_placeholder = isset($args['placeholder']) ? $args['placeholder'] : false;
-		$this->_options = isset($args['options']) && is_array($args['options']) ? $args['options'] : false;
-		$this->_extra_class = isset($args['extra_class']) ? $args['extra_class'] : '';
+		$this->_default     = isset( $args['default'] ) ? $args['default'] : false;
+		$this->_placeholder = isset( $args['placeholder'] ) ? $args['placeholder'] : false;
+		$this->_options     = isset( $args['options'] ) && is_array( $args['options'] ) ? $args['options'] : false;
+		$this->_extra_class = isset( $args['extra_class'] ) ? $args['extra_class'] : '';
 	}
 
 	/**
 	 * Output field on the frontend
 	 *
-	 * @param $form_data WPDF_FormData
+	 * @param WPDF_FormData $form_data Field data use to generate output.
 	 */
-	public function output($form_data){
+	public function output( $form_data ) {
 
 	}
 
 	/**
 	 * Display field settings in form editor
 	 */
-	public function displaySettings(){
-		if(file_exists(WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php')){
-			require WPDF()->get_plugin_dir() . 'templates/admin/fields/'.$this->getType().'.php';
+	public function display_settings() {
+		if ( file_exists( WPDF()->get_plugin_dir() . 'templates/admin/fields/' . $this->get_type() . '.php' ) ) {
+			require WPDF()->get_plugin_dir() . 'templates/admin/fields/' . $this->get_type() . '.php';
 		}
 	}
 
 	/**
+	 * Get field type
+	 *
 	 * @return string
 	 */
-	public function getType() {
+	public function get_type() {
 		return $this->_type;
 	}
 
-	public function isType($type){
-		if($this->_type == $type){
+	/**
+	 * Check to see if field is of type
+	 *
+	 * @param string $type Type to compare with.
+	 *
+	 * @return bool
+	 */
+	public function is_type( $type ) {
+		if ( $this->_type === $type ) {
 			return true;
 		}
+
 		return false;
 	}
 
-	public function getInputName(){
+	/**
+	 * Get input field name
+	 *
+	 * @return string
+	 */
+	public function get_input_name() {
 		return 'wpdf_field_' . $this->_name;
 	}
 
-	public function getOptionValue($key){
+	/**
+	 * Get option value by key
+	 *
+	 * @param string $key option key.
+	 *
+	 * @return bool
+	 */
+	public function get_option_value( $key ) {
 
-		if(isset($this->_args['options']) && !empty($this->_args['options']) && array_key_exists($key, $this->_args['options'])){
-			return $this->_args['options'][$key];
+		if ( isset( $this->_args['options'] ) && ! empty( $this->_args['options'] ) && array_key_exists( $key, $this->_args['options'] ) ) {
+			return $this->_args['options'][ $key ];
 		}
 
 		return false;
 	}
 
-	public function sanitize($data){
+	/**
+	 * Sanitize field data
+	 *
+	 * @param array $data field submitted data.
+	 *
+	 * @return array|string
+	 */
+	public function sanitize( $data ) {
 
-		if(is_array($data)){
+		if ( is_array( $data ) ) {
 
 			$output = array();
 
-			if(!empty($data)) {
+			if ( ! empty( $data ) ) {
 				foreach ( $data as $k => $d ) {
 					$output[ $k ] = $this->sanitize( $d );
 				}
@@ -96,82 +178,115 @@ class WPDF_FormField{
 
 		$data = wp_check_invalid_utf8( $data );
 		$data = wp_kses_no_null( $data );
-		return sanitize_text_field($data);
+
+		return sanitize_text_field( $data );
 	}
 
 	/**
+	 * Get field label
+	 *
 	 * @return string
 	 */
-	public function getLabel() {
+	public function get_label() {
 		return $this->_label;
 	}
 
 	/**
+	 * Get field name
+	 *
 	 * @return string
 	 */
-	public function getName() {
+	public function get_name() {
 		return $this->_name;
 	}
 
-	public function getPlaceholder(){
+	/**
+	 * Get field placeholder text
+	 *
+	 * @return bool|mixed
+	 */
+	public function get_placeholder() {
 		return $this->_placeholder;
 	}
 
-	public function getOptions(){
+	/**
+	 * Get field options
+	 *
+	 * @return bool|mixed
+	 */
+	public function get_options() {
 		return $this->_options;
 	}
 
-	public function getId(){
+	/**
+	 * Get field id
+	 *
+	 * @return string
+	 */
+	public function get_id() {
 		return '';
 	}
 
-	public function getExtraClasses(){
+	/**
+	 * Get field row extra classes
+	 *
+	 * @return mixed|string
+	 */
+	public function get_extra_classes() {
 
-		if(!empty($this->_extra_class) && is_string($this->_extra_class)){
+		if ( ! empty( $this->_extra_class ) && is_string( $this->_extra_class ) ) {
 			return $this->_extra_class;
 		}
+
 		return '';
 	}
 
-	public function getClasses(){
+	/**
+	 * Get field input classes
+	 *
+	 * @return string
+	 */
+	public function get_classes() {
 		return 'wpdf-field';
 	}
 
 	/**
+	 * Get default value
+	 *
 	 * @return mixed|string
 	 */
-	public function getDefaultValue() {
+	public function get_default_value() {
 		return $this->_default;
 	}
 
 	/**
 	 * Format field data to store in fields array
 	 *
-	 * @param $field
+	 * @param array $field File data to be parsed.
 	 *
 	 * @return array
 	 */
-	public function save($field){
+	public function save( $field ) {
 
 		$data = array(
-			'type' => $field['type'],
-			'label' => $field['label'],
+			'type'        => $field['type'],
+			'label'       => $field['label'],
 			'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : '',
-			'default' => isset( $field['default'] ) ? $field['default'] : '',
+			'default'     => isset( $field['default'] ) ? $field['default'] : '',
 			'extra_class' => isset( $field['css_class'] ) ? $field['css_class'] : '',
 		);
 
 		$data['validation'] = array(
 			array( 'type' => 'required' ),
-			array( 'type' => 'email' )
+			array( 'type' => 'email' ),
 		);
 
-		$rules = array();
+		$rules              = array();
 		$data['validation'] = array();
-		if ( isset( $field['validation'] ) && !empty( $field['validation'] ) ) {
+		if ( isset( $field['validation'] ) && ! empty( $field['validation'] ) ) {
 			foreach ( $field['validation'] as $rule ) {
 
-				// skip if empty value
+				// skip if empty value.
 				if ( empty( $rule ) ) {
 					continue;
 				}
@@ -180,14 +295,14 @@ class WPDF_FormField{
 					'type' => $rule['type'],
 				);
 
-				if( isset( $rule['msg'] ) && !empty( $rule['msg'] ) ){
+				if ( isset( $rule['msg'] ) && ! empty( $rule['msg'] ) ) {
 					$rule_arr['msg'] = $rule['msg'];
 				}
 
 				$rules[] = $rule_arr;
 			}
 		}
-		if( !empty( $rules ) ) {
+		if ( ! empty( $rules ) ) {
 			$data['validation'] = $rules;
 		}
 

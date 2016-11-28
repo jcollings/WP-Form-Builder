@@ -1,3 +1,10 @@
+<?php
+/**
+ * Radio field edit panel
+ *
+ * @var WPDF_RadioField $this
+ */
+?>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__full">
 
@@ -27,9 +34,9 @@
 				</tr>
 			</script>
 			<?php
-			$options = $this->getOptions();
-			$default = $this->getDefaultValue();
-			if(!empty($options)) {
+			$options = $this->get_options();
+			$default = $this->get_default_value();
+			if ( ! empty( $options ) ) {
 				foreach ( $options as $key => $option ) {
 					?>
 					<tr class="wpdf-repeater-row wpdf-repeater__template">
@@ -39,10 +46,10 @@
 						           name="field[][value_keys][]" value="<?php echo $key; ?>" /></td>
 						<td><input title="Default?" type="radio"
 						           name="field[][value_default]" class="wpdf-data__default" value="<?php echo $key; ?>" <?php
-							if(is_array($default)){
-								checked(in_array($key, $default), true, true);
+							if ( is_array( $default ) ) {
+								checked( in_array( $key, $default ), true, true );
 							}else{
-								checked($key, $default, true);
+								checked( $key, $default, true );
 							}
 							?> /></td>
 						<td>

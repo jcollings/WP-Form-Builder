@@ -67,7 +67,7 @@ class WPDF_EmailManager{
 			}
 
 			$field = $data->getField($field_id);
-			if($field->isType('file')){
+			if($field->is_type('file')){
 
 				if($this->_email_type == 'html'){
 					$value = '<a href="' . wpdf_get_uploads_url() . $value . '">'.$value.'</a>';
@@ -79,11 +79,11 @@ class WPDF_EmailManager{
 			$tag = $this->setup_merge_tag("field_" . $field_id);
 			$raw_template_tags[$tag] = $value;
 			$template_tags[$tag] = $this->parse_merge_tags( $this->_template['field_'.$this->_email_type], array(
-				'{{field_name}}' => $field->getLabel(),
+				'{{field_name}}' => $field->get_label(),
 				'{{field_value}}' => $value
 			));
 
-			if(!$field->isType('password')){
+			if(!$field->is_type('password')){
 				// dont add password fields to {{fields}} tag
 				$all .= $tag;
 			}

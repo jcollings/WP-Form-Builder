@@ -26,15 +26,15 @@ class WPDF_Validation{
 	public function validate($field, $post_data){
 
 		// hook into field validation
-		$error = apply_filters('wpdf/validate_field', null, $field->getName(), $post_data);
+		$error = apply_filters('wpdf/validate_field', null, $field->get_name(), $post_data);
 		if(!empty($error)){
 			$this->_error = $error;
 			return false;
 		}
 
-		if(isset($this->_rules[$field->getName()])) {
-			if(!empty($this->_rules[$field->getName()])) {
-				foreach ( $this->_rules[ $field->getName() ] as $rule ) {
+		if(isset($this->_rules[$field->get_name()])) {
+			if(!empty($this->_rules[$field->get_name()])) {
+				foreach ( $this->_rules[ $field->get_name() ] as $rule ) {
 					$type = isset( $rule['type'] ) ? $rule['type'] : false;
 					$args = array();
 
@@ -48,13 +48,13 @@ class WPDF_Validation{
 
 					switch ( $type ) {
 						case 'required':
-							if ( ! $this->is_required($field->getName(), $post_data) ) {
+							if ( ! $this->is_required($field->get_name(), $post_data) ) {
 								$this->set_error($rule);
 								return false;
 							}
 							break;
 						case 'email':
-							if ( ! $this->is_valid_email($field->getName(), $post_data) ) {
+							if ( ! $this->is_valid_email($field->get_name(), $post_data) ) {
 								$this->set_error($rule);
 								return false;
 							}
@@ -66,7 +66,7 @@ class WPDF_Validation{
 								throw new Exception(__("No argument for minimum length validation", "wpdf"));
 							}
 
-							if( !$this->is_min_length($field->getName(), $args[0], $post_data) ){
+							if( !$this->is_min_length($field->get_name(), $args[0], $post_data) ){
 								$this->set_error($rule);
 								return false;
 							}
@@ -78,7 +78,7 @@ class WPDF_Validation{
 								throw new Exception(__("No argument for maximum length validation", "wpdf"));
 							}
 
-							if( !$this->is_max_length($field->getName(), $args[0], $post_data) ){
+							if( !$this->is_max_length($field->get_name(), $args[0], $post_data) ){
 								$this->set_error($rule);
 								return false;
 							}
@@ -86,7 +86,7 @@ class WPDF_Validation{
 						case 'unique':
 
 							$form = WPDF()->get_current_form();
-							if( ! $this->is_unique( $form->getName(), $field->getName(), $post_data ) ) {
+							if( ! $this->is_unique( $form->getName(), $field->get_name(), $post_data ) ) {
 								$this->set_error($rule);
 								return false;
 							}

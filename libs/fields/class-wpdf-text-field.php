@@ -1,19 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: james
- * Date: 03/11/2016
- * Time: 21:29
- */
 
+/**
+ * Class WPDF_TextField
+ *
+ * Add text field
+ */
 class WPDF_TextField extends WPDF_FormField {
 
 	/**
-	 * @param $form_data WPDF_FormData
+	 * Display field output on public form
+	 *
+	 * @param WPDF_FormData $form_data Form data to be output.
 	 */
-	public function output($form_data){
+	public function output( $form_data ) {
 
-		$value = $form_data->get($this->_name);
-		echo '<input type="'.$this->getType().'" name="'.$this->getInputName().'" value="'.$value.'" id="'.$this->getId().'" class="'.$this->getClasses().'" />';
+		$value = $form_data->get( $this->_name );
+		echo '<input type="' . $this->get_type() . '" name="' . $this->get_input_name() . '" value="' . $value . '" id="' . $this->get_id() . '" class="' . $this->get_classes() . '" />';
 	}
 }

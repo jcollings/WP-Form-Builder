@@ -1,42 +1,61 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: james
- * Date: 03/11/2016
- * Time: 21:29
- */
 
+/**
+ * Class WPDF_SelectField
+ *
+ * Add select field
+ */
 class WPDF_SelectField extends WPDF_FormField {
 
+	/**
+	 * Get select empty field text
+	 *
+	 * @var string
+	 */
 	protected $_empty;
+
+	/**
+	 * Type of select
+	 *
+	 * @var string $_select_type Select type multiple or single.
+	 */
 	protected $_select_type;
 
+	/**
+	 * WPDF_SelectField constructor.
+	 *
+	 * @param string $name Field name.
+	 * @param string $type Field type.
+	 * @param array  $args Field arguments.
+	 */
 	public function __construct( $name, $type, $args = array() ) {
 		parent::__construct( $name, $type, $args );
 
-		$this->_empty = isset($args['empty']) ? $args['empty'] : 'Please select an option';
-		$this->_select_type = isset($args['select_type']) ? $args['select_type'] : 'single';
+		$this->_empty       = isset( $args['empty'] ) ? $args['empty'] : 'Please select an option';
+		$this->_select_type = isset( $args['select_type'] ) ? $args['select_type'] : 'single';
 	}
 
 	/**
-	 * @param $form_data WPDF_FormData
+	 * Display field output on public form
+	 *
+	 * @param WPDF_FormData $form_data Form data to be output.
 	 */
-	public function output($form_data){
+	public function output( $form_data ) {
 
-		$value = $form_data->getRaw($this->_name);
+		$value = $form_data->getRaw( $this->_name );
 		$attrs = '';
-		$name = $this->getInputName();
-		if($this->getSelectType() == 'multiple'){
+		$name  = $this->get_input_name();
+		if ( $this->get_select_type() === 'multiple' ) {
 			$attrs .= ' multiple="multiple"';
 			$name .= '[]';
 		}
 
-		echo '<select name="'.$name.'" id="'.$this->getId().'" class="'.$this->getClasses().'"'.$attrs.'>';
+		echo '<select name="' . $name . '" id="' . $this->get_id() . '" class="' . $this->get_classes() . '"' . $attrs . '>';
 
-		// only show empty value if not multiple select
-		if($this->getSelectType() !== 'multiple') {
+		// only show empty value if not multiple select.
+		if ( $this->get_select_type() !== 'multiple' ) {
 			if ( isset( $this->_args['empty'] ) ) {
-				if ( $this->_args['empty'] != false ) {
+				if ( false !== $this->_args['empty'] ) {
 					echo '<option value="">' . $this->_args['empty'] . '</option>';
 				}
 			} else {
@@ -44,16 +63,16 @@ class WPDF_SelectField extends WPDF_FormField {
 			}
 		}
 
-		if(isset($this->_args['options']) && !empty($this->_args['options'])){
-			foreach($this->_args['options'] as $key => $option){
+		if ( isset( $this->_args['options'] ) && ! empty( $this->_args['options'] ) ) {
+			foreach ( $this->_args['options'] as $key => $option ) {
 
 				$selected = '';
-				if(is_array($value) && in_array($key, $value)){
+				if ( is_array( $value ) && in_array( $key, $value, true ) ) {
 					$selected = 'selected="selected"';
-				}elseif(!is_array($value) && !empty($value) && $key === $value){
+				} elseif ( ! is_array( $value ) && ! empty( $value ) && $key === $value ) {
 					$selected = 'selected="selected"';
 				}
-				echo '<option value="'.$key.'"'.$selected.'>'.$option.'</option>';
+				echo '<option value="' . $key . '"' . $selected . '>' . $option . '</option>';
 			}
 		}
 
@@ -61,23 +80,27 @@ class WPDF_SelectField extends WPDF_FormField {
 	}
 
 	/**
+	 * Get empty text
+	 *
 	 * @return mixed|string
 	 */
-	public function getEmpty() {
+	public function get_empty() {
 		return $this->_empty;
 	}
 
 	/**
+	 * Get select type
+	 *
 	 * @return mixed|string
 	 */
-	public function getSelectType() {
+	public function get_select_type() {
 		return $this->_select_type;
 	}
 
 	/**
 	 * Format field data to store in fields array
 	 *
-	 * @param $field
+	 * @param array $field Field data.
 	 *
 	 * @return array
 	 */
@@ -91,19 +114,19 @@ class WPDF_SelectField extends WPDF_FormField {
 			$data['empty'] = false;
 		}
 
-		if( isset( $field['select_type'] ) && !empty( $field['select_type'] ) ){
+		if ( isset( $field['select_type'] ) && ! empty( $field['select_type'] ) ) {
 			$data['select_type'] = $field['select_type'];
-		}else{
+		} else {
 			$data['select_type'] = 'single';
 		}
 
-		$options = array();
+		$options  = array();
 		$defaults = array();
-		foreach($field['value_labels'] as $arr_id => $label){
-			$option_key = isset($field['value_keys'][$arr_id]) && !empty($field['value_keys'][$arr_id]) ? esc_attr($field['value_keys'][$arr_id]) : esc_attr($label);
-			$options[$option_key] = $label;
+		foreach ( $field['value_labels'] as $arr_id => $label ) {
+			$option_key             = isset( $field['value_keys'][ $arr_id ] ) && ! empty( $field['value_keys'][ $arr_id ] ) ? esc_attr( $field['value_keys'][ $arr_id ] ) : esc_attr( $label );
+			$options[ $option_key ] = $label;
 
-			if(isset($field['value_default'][$arr_id])){
+			if ( isset( $field['value_default'][ $arr_id ] ) ) {
 				$defaults[] = $option_key;
 			}
 		}
