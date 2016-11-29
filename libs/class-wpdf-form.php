@@ -1,4 +1,11 @@
 <?php
+/**
+ * Core Form Class
+ *
+ * @package WPDF
+ * @author James Collings
+ * @created 06/08/2016
+ */
 
 /**
  * Class WPDF_Form
@@ -180,6 +187,10 @@ class WPDF_Form {
 			),
 			'enable_layout_css' => 'enabled',
 			'enable_style'      => 'enabled',
+			'error' => array(
+				'general_message' => 'Please make sure you have corrected any errors below before resubmitting the form.',
+				'show_fields' => 'yes',
+			),
 		);
 		$this->_confirmation     = array(
 			'type'    => 'message',
@@ -429,10 +440,16 @@ class WPDF_Form {
 	 * Get form settings
 	 *
 	 * @param string $setting Settings key.
+	 * @param string $section Settings section key.
 	 *
 	 * @return bool|mixed
 	 */
-	public function get_setting( $setting ) {
+	public function get_setting( $setting, $section = '' ) {
+
+		if ( ! empty( $section ) && isset( $this->_settings[ $section ] ) ) {
+			return isset( $this->_settings[ $section ][ $setting ] ) ? $this->_settings[ $section ][ $setting ] : false;
+		}
+
 		return isset( $this->_settings[ $setting ] ) ? $this->_settings[ $setting ] : false;
 	}
 
@@ -571,7 +588,7 @@ class WPDF_Form {
 			<h1><?php echo esc_html( $this->get_label() ); ?></h1>
 		</div>
 		<div class="wpdf-form-copy">
-			<?php echo esc_html( apply_filters( 'the_content', $this->get_content() ) ); ?>
+			<?php echo wpautop( esc_html( $this->get_content() ) ); ?>
 		</div>
 		<?php
 	}
@@ -763,12 +780,22 @@ class WPDF_Form {
 			echo '<p>' . esc_html( $this->_error ) . '</p>';
 		} else {
 
-			echo sprintf( '<p>%s</p>', esc_html( __( 'Please make sure you have corrected any errors below before resubmitting the form.', 'wpdf' ) ) );
-			echo '<ul class="wpdf-form-errors">';
-			foreach ( $this->_errors as $field_id => $error ) {
-				echo '<li>' . esc_html( $this->_fields[ $field_id ]->get_label() ) . ' - ' . esc_html( $error ) . '</li>';
+			// display general message.
+			$general_msg = $this->get_setting( 'general_message', 'error' );
+			if ( ! empty( $general_msg ) ) {
+				echo sprintf( '<p>%s</p>', esc_html( $general_msg ) );
 			}
-			echo '</ul>';
+
+			// Display list of field errors.
+			$show_errors = $this->get_setting( 'show_fields', 'error' );
+			if ( 'no' !== $show_errors ) {
+
+				echo '<ul class="wpdf-form-errors">';
+				foreach ( $this->_errors as $field_id => $error ) {
+					echo '<li>' . esc_html( $this->_fields[ $field_id ]->get_label() ) . ' - ' . esc_html( $error ) . '</li>';
+				}
+				echo '</ul>';
+			}
 		}
 		echo '</div>';
 	}
@@ -827,7 +854,7 @@ class WPDF_Form {
 	public function get_content() {
 
 		// don't show form content if confirmation location is set to replace.
-		if ( $this->_submitted && 'replace' === $this->get_confirmation_location() ) {
+		if ( $this->_submitted  && !$this->has_errors() && 'replace' === $this->get_confirmation_location() ) {
 			return '';
 		}
 

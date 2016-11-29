@@ -67,6 +67,19 @@
         margin-bottom: $spacing;
         width: 100%;
         clear: left;
+
+        // two column layout
+        &.wpdf-half-col, &.wpdf-half-col-last{
+            width: 48%;
+            clear: none;
+            float:left;
+        }
+        &.wpdf-half-col{
+            margin-right: 4%;
+        }
+        &.wpdf-half-col-last{
+            margin-right: 0;
+        }
     }
 }
 

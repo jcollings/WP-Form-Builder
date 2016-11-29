@@ -54,6 +54,20 @@
   clear: left;
 }
 
+.wpdf-form.wpdf-form__layout .wpdf-form-row.wpdf-half-col, .wpdf-form.wpdf-form__layout .wpdf-form-row.wpdf-half-col-last {
+  width: 48%;
+  clear: none;
+  float: left;
+}
+
+.wpdf-form.wpdf-form__layout .wpdf-form-row.wpdf-half-col {
+  margin-right: 4%;
+}
+
+.wpdf-form.wpdf-form__layout .wpdf-form-row.wpdf-half-col-last {
+  margin-right: 0;
+}
+
 @media screen and (max-height: 575px) {
   .wpdf-form #rc-imageselect, .wpdf-form .g-recaptcha {
     transform: scale(0.77);

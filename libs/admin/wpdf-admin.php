@@ -630,6 +630,20 @@ class WPDF_Admin {
 			$form_data['settings']['enable_layout_css'] = 'enabled';
 		}
 
+		// settings error.
+		if ( isset( $settings['error'] ) ) {
+
+			$form_data['settings']['error'] = array();
+
+			if ( isset( $settings['error']['general_message'] ) ) {
+				$form_data['settings']['error']['general_message'] = $settings['error']['general_message'];
+			}
+
+			if ( isset( $settings['error']['show_fields'] ) ) {
+				$form_data['settings']['error']['show_fields'] = $settings['error']['show_fields'];
+			}
+		}
+
 		// save recaptcha settings.
 		if ( isset( $settings['recaptcha_public'] ) ) {
 			$form_data['settings']['recaptcha_public'] = $settings['recaptcha_public'];
