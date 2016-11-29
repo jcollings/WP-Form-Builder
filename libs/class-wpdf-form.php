@@ -284,7 +284,7 @@ class WPDF_Form {
 				$value    = $v;
 
 				if ( is_array( $v ) ) {
-					$operator = isset( $v['operator'] ) && $v['operator'] == '!=' ? '!=' : $operator;
+					$operator = isset( $v['operator'] ) && '!=' === $v['operator'] ? '!=' : $operator;
 					$value    = isset( $v['value'] ) ? $v['value'] : $value;
 				}
 
@@ -558,14 +558,14 @@ class WPDF_Form {
 			$classes .= ' wpdf-form__layout';
 		}
 
-		$attrs .= sprintf( ' class="%s"', $classes );
+		$attrs .= sprintf( ' class="%s"', esc_attr( $classes ) );
 
 		// todo: output js data attributes.
 		if ( ! empty( $this->_field_display_conds ) ) {
 			$attrs .= sprintf( " data-wpdf-display='%s'", json_encode( $this->_field_display_conds ) );
 		}
 
-		echo '<form ' . esc_attr( $attrs ) . '>';
+		echo '<form ' . $attrs . '>';
 		?>
 		<div class="wpdf-form-title">
 			<h1><?php echo esc_html( $this->get_label() ); ?></h1>
@@ -981,7 +981,7 @@ class WPDF_Form {
 		$secretKey = $this->get_setting( 'recaptcha_private' );
 		$captcha   = $_POST['g-recaptcha-response'];
 		$response  = json_decode( file_get_contents( "https://www.google.com/recaptcha/api/siteverify?secret=" . $secretKey . "&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR'] ), true );
-		if ( isset( $response['success'] ) && $response['success'] === true ) {
+		if ( isset( $response['success'] ) && true === $response['success'] ) {
 			return true;
 		}
 
