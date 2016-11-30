@@ -7,6 +7,10 @@
  * @created 05/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Class WPDF_FormData
  */
@@ -91,12 +95,18 @@ class WPDF_FormData {
 						) {
 
 							// check upload path exists.
-							$file_name = $upload_data[ $field->get_input_name() ]['name'];
+							$raw_file_name = sanitize_file_name( $upload_data[ $field->get_input_name() ]['name'] );
 
 							// create directory if needed.
 							if ( ! file_exists( $upload_dir ) ) {
 								mkdir( $upload_dir );
 							}
+
+							// Randomly generate prefix.
+							do {
+								$prefix = substr( md5( time() ), 0, 5 );
+								$file_name = $prefix . '-' . $raw_file_name;
+							} while ( file_exists( $upload_dir . $file_name ) );
 
 							if ( move_uploaded_file( $upload_data[ $field->get_input_name() ]['tmp_name'], $upload_dir . $file_name ) ) {
 								$this->_data[ $field_id ] = $file_name;
