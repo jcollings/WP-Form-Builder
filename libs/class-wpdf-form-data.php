@@ -48,6 +48,13 @@ class WPDF_FormData {
 	private $_submitted = true;
 
 	/**
+	 * Upload directory
+	 *
+	 * @var string
+	 */
+	private $_upload_dir = null;
+
+	/**
 	 * WPDF_FormData constructor.
 	 *
 	 * @param WPDF_Form $form  Form object.
@@ -62,6 +69,10 @@ class WPDF_FormData {
 		$this->_fields   = $fields;
 
 		$this->_submitted = isset( $data['wpdf_action'] ) && $data['wpdf_action'] == $form->get_name() ? true : false;
+
+		$upload_dir = wpdf_get_uploads_dir();
+		$this->_upload_dir = $form->get_upload_folder();
+		$upload_dir = trailingslashit( $upload_dir ) . trailingslashit( $this->_upload_dir );
 
 		foreach ( $fields as $field_id => $field ) {
 
@@ -80,9 +91,12 @@ class WPDF_FormData {
 						) {
 
 							// check upload path exists.
-							$upload_dir = wpdf_get_uploads_dir();
-
 							$file_name = $upload_data[ $field->get_input_name() ]['name'];
+
+							// create directory if needed.
+							if ( ! file_exists( $upload_dir ) ) {
+								mkdir( $upload_dir );
+							}
 
 							if ( move_uploaded_file( $upload_data[ $field->get_input_name() ]['tmp_name'], $upload_dir . $file_name ) ) {
 								$this->_data[ $field_id ] = $file_name;
@@ -198,6 +212,15 @@ class WPDF_FormData {
 	 */
 	public function get_field( $field_id ) {
 		return isset( $this->_fields[ $field_id ] ) ? $this->_fields[ $field_id ] : false;
+	}
+
+	/**
+	 * Get upload directory
+	 *
+	 * @return string
+	 */
+	public function get_upload_folder() {
+		return $this->_upload_dir;
 	}
 
 	/**

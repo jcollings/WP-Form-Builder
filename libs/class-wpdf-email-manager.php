@@ -93,10 +93,12 @@ class WPDF_EmailManager {
 			$field = $data->get_field( $field_id );
 			if ( $field->is_type( 'file' ) ) {
 
+				$link = trailingslashit( $data->get_upload_folder() ) . $value;
+
 				if ( 'html' === $this->_email_type ) {
-					$value = '<a href="' . wpdf_get_uploads_url() . $value . '">' . $value . '</a>';
+					$value = '<a href="' . wpdf_get_uploads_url() . $link . '">' . $value . '</a>';
 				} else {
-					$value = wpdf_get_uploads_url() . $value;
+					$value = wpdf_get_uploads_url() . $link;
 				}
 			}
 

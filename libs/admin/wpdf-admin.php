@@ -335,6 +335,8 @@ class WPDF_Admin {
 
 								if ( 'virtual' === $submission->field_type ) {
 									$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
+								} elseif ( 'file' === $submission->field_type ) {
+									$content = '<a target="_blank" href="' . esc_attr( trailingslashit( wpdf_get_uploads_url() ) . $submission->content ) . '">' . esc_html( $submission->content ) . '</a>';
 								} else {
 									$content = esc_html( $submission->content );
 								}

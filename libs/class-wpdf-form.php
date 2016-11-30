@@ -200,6 +200,12 @@ class WPDF_Form {
 		// load default settings.
 		$this->_settings = apply_filters( 'wpdf/form_settings', $this->_settings_default, $this->get_id() );
 
+		// mark form as submitted.
+		$this->_submitted = isset( $_POST['wpdf_action'] ) && $_POST['wpdf_action'] == $this->get_name() ? true : false;
+		if ( $this->_submitted ) {
+			$this->get_token( false );
+		}
+
 		// setup fields.
 		if ( ! empty( $fields ) ) :
 			foreach ( $fields as $field_id => $field ) :
@@ -348,12 +354,12 @@ class WPDF_Form {
 				if ( isset( $_FILES[ $field->get_input_name() ] ) ) {
 					$file_data = $_FILES[ $field->get_input_name() ];
 
-					if ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->isValidExt( $file_data ) ) {
+					if ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->is_valid_ext( $file_data ) ) {
 						$this->_errors[ $field_id ] = WPDF()->text->get( 'invalid_ext', 'upload' );
-					} elseif ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->isAllowedSize( $file_data ) ) {
-						$this->_errors[ $field_id ] = sprintf( WPDF()->text->get( 'max_size', 'upload' ), $field->getMaxFileSize() );
+					} elseif ( UPLOAD_ERR_NO_FILE !== $file_data['error'] && ! $field->is_allowed_size( $file_data ) ) {
+						$this->_errors[ $field_id ] = sprintf( WPDF()->text->get( 'max_size', 'upload' ), $field->get_max_filesize() );
 					} elseif ( UPLOAD_ERR_OK !== $file_data['error'] && UPLOAD_ERR_NO_FILE !== $file_data['error'] ) {
-						$this->_errors[ $field_id ] = $this->_validation->get_upload_error( $file_data['error'], $field->getMaxFileSize() );
+						$this->_errors[ $field_id ] = $this->_validation->get_upload_error( $file_data['error'], $field->get_max_filesize() );
 					}
 				}
 			}
@@ -943,6 +949,25 @@ class WPDF_Form {
 		}
 
 		return $this->_token;
+	}
+
+	/**
+	 * Get upload folder for current session
+	 *
+	 * @return string
+	 */
+	public function get_upload_folder() {
+
+		$token = $this->get_token( false );
+
+		$transient_key = sprintf( 'wpdf_token_%s', $token );
+		$transient = get_transient( 'wpdf_token_' . $token );
+		if ( ! isset( $transient['upload_dir'] ) ) {
+			$transient['upload_dir'] = md5( $token . $transient['time'] );
+			set_transient( $transient_key, $transient );
+		}
+
+		return $transient['upload_dir'];
 	}
 
 	/**

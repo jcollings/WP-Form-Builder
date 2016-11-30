@@ -62,8 +62,10 @@ class WPDF_DatabaseManager {
 
 			$temp_val = $value;
 			if ( $field->is_type( 'file' ) ) {
-				// if file, add url to file instead of just filename.
-				$temp_val = wpdf_get_uploads_url() . $value;
+
+				// Get root upload directory, append on upload session dir and file.
+				$upload_folder = $data->get_upload_folder();
+				$temp_val = trailingslashit( $upload_folder ) . $value;
 			}
 			$this->save_submission_data( $submission_id, $field, $temp_val );
 		}
