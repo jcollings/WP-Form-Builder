@@ -542,6 +542,23 @@
     }
 }
 
+.wpdf-debug-table{
+    width: 100%;
+    td, th{
+        padding: 10px;
+        text-align: left;
+        border-bottom:1px solid #EEEEEE;
+    }
+    th{
+        width: 190px;
+    }
+    tr:last-child{
+        td,th{
+            border-bottom:none;
+        }
+    }
+}
+
 .wpdf-form-create{
     background: #FFF;
     border: 1px solid #DDDDDD;

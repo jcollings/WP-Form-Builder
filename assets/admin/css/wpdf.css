@@ -528,6 +528,24 @@
   height: 30px !important;
 }
 
+.wpdf-debug-table {
+  width: 100%;
+}
+
+.wpdf-debug-table td, .wpdf-debug-table th {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.wpdf-debug-table th {
+  width: 190px;
+}
+
+.wpdf-debug-table tr:last-child td, .wpdf-debug-table tr:last-child th {
+  border-bottom: none;
+}
+
 .wpdf-form-create {
   background: #FFF;
   border: 1px solid #DDDDDD;

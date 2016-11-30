@@ -115,6 +115,7 @@ class WPDF_Admin {
 			'wpdf_form_page',
 		), 'dashicons-feedback', 30 );
 		add_submenu_page( $admin_slug, 'New Form', 'Add Form', $capabilities, 'admin.php?page=wpdf-forms&action=new' );
+		add_submenu_page( $admin_slug, 'Settings', 'Settings', $capabilities, 'admin.php?page=wpdf-settings', array( $this, 'display_plugin_settings' ) );
 	}
 
 	/**
@@ -503,6 +504,14 @@ class WPDF_Admin {
 	private function display_create_form() {
 
 		require WPDF()->get_plugin_dir() . 'templates/admin/page-form-create.php';
+	}
+
+	/**
+	 * Display plugin settings screen
+	 */
+	public function display_plugin_settings() {
+
+		require WPDF()->get_plugin_dir() . 'templates/admin/page-settings.php';
 	}
 
 	/**
