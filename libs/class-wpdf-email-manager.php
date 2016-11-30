@@ -1,6 +1,6 @@
 <?php
 /**
- * Form Theme
+ * Email Manager
  *
  * @package WPDF
  * @author James Collings

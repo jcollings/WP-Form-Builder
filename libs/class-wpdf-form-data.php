@@ -68,7 +68,7 @@ class WPDF_FormData {
 		$this->_raw_data = array();
 		$this->_fields   = $fields;
 
-		$this->_submitted = isset( $data['wpdf_action'] ) && $data['wpdf_action'] == $form->get_name() ? true : false;
+		$this->_submitted = $form->is_submitted() === true ? true : false;
 
 		$upload_dir = wpdf_get_uploads_dir();
 		$this->_upload_dir = $form->get_upload_folder();

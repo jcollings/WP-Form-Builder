@@ -823,6 +823,15 @@ class WPDF_Form {
 	}
 
 	/**
+	 * Has form been submitted
+	 *
+	 * @return bool
+	 */
+	public function is_submitted() {
+		return $this->_submitted;
+	}
+
+	/**
 	 * Output form complete/confirmation/thank you message
 	 */
 	public function get_confirmation_message() {
