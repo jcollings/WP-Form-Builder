@@ -1,5 +1,17 @@
 <?php
 /**
+ * Radio/Option Field
+ *
+ * @package WPDF/Fields
+ * @author James Collings
+ * @created 03/11/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
  * Class WPDF_RadioField
  *
  * Add radio field
@@ -27,13 +39,13 @@ class WPDF_RadioField extends WPDF_FormField {
 			foreach ( $this->_args['options'] as $key => $option ) {
 
 				if ( is_array( $value ) ) {
-					$checked = in_array( "" . $key, $value ) ? 'checked="checked"' : '';
+					$checked = in_array( '' . $key, $value, true ) ? 'checked="checked"' : '';
 				} else {
-					$checked = "" . $key === $value ? 'checked="checked"' : '';
+					$checked = '' . $key === $value ? 'checked="checked"' : '';
 				}
 
 				echo '<label>';
-				echo '<input type="' . $this->get_type() . '" name="' . $name . '"' . $checked . ' value="' . $key . '" class="wpdf-field">' . $option;
+				echo '<input type="' . esc_attr( $this->get_type() ) . '" name="' . esc_attr( $name ) . '"' . $checked . ' value="' . esc_attr( $key ) . '" class="wpdf-field">' . esc_html( $option );
 				echo '</label>';
 			}
 

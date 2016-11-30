@@ -1,4 +1,15 @@
 <?php
+/**
+ * Select/Dropdown Field
+ *
+ * @package WPDF/Fields
+ * @author James Collings
+ * @created 03/11/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
  * Class WPDF_SelectField
@@ -50,16 +61,16 @@ class WPDF_SelectField extends WPDF_FormField {
 			$name .= '[]';
 		}
 
-		echo '<select name="' . $name . '" id="' . $this->get_id() . '" class="' . $this->get_classes() . '"' . $attrs . '>';
+		echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '"' . $attrs . '>';
 
 		// only show empty value if not multiple select.
 		if ( $this->get_select_type() !== 'multiple' ) {
 			if ( isset( $this->_args['empty'] ) ) {
 				if ( false !== $this->_args['empty'] ) {
-					echo '<option value="">' . $this->_args['empty'] . '</option>';
+					echo '<option value="">' . esc_html( $this->_args['empty'] ) . '</option>';
 				}
 			} else {
-				echo sprintf( '<option value="">%s</option>', __( "Select an option", "wpdf" ) );
+				echo sprintf( '<option value="">%s</option>', __( 'Select an option', 'wpdf' ) );
 			}
 		}
 
@@ -72,7 +83,7 @@ class WPDF_SelectField extends WPDF_FormField {
 				} elseif ( ! is_array( $value ) && ! empty( $value ) && $key === $value ) {
 					$selected = 'selected="selected"';
 				}
-				echo '<option value="' . $key . '"' . $selected . '>' . $option . '</option>';
+				echo '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $option ) . '</option>';
 			}
 		}
 

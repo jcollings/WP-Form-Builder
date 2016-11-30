@@ -1,4 +1,15 @@
 <?php
+/**
+ * Textarea Field
+ *
+ * @package WPDF/Fields
+ * @author James Collings
+ * @created 03/11/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
  * Class WPDF_TextareaField
@@ -44,7 +55,7 @@ class WPDF_TextareaField extends WPDF_FormField {
 	public function output( $form_data ) {
 
 		$value = $form_data->get( $this->_name );
-		echo '<textarea name="' . $this->get_input_name() . '" id="' . $this->get_id() . '" class="' . $this->get_classes() . '" rows="' . $this->get_rows() . '">' . $value . '</textarea>';
+		echo '<textarea name="' . esc_attr( $this->get_input_name() ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" rows="' . esc_attr( $this->get_rows() ) . '">' . esc_textarea( $value ) . '</textarea>';
 	}
 
 	/**

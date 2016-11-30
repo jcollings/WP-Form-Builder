@@ -1,5 +1,17 @@
 <?php
 /**
+ * File Upload Field
+ *
+ * @package WPDF/Fields
+ * @author James Collings
+ * @created 03/11/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
  * Class WPDF_FileField
  *
  * Add file field.
@@ -159,10 +171,10 @@ class WPDF_FileField extends WPDF_FormField {
 		$value = $form_data->get( $this->_name );
 
 		// display name of previously uploaded file and show the file uploader to allow users to overwrite upload.
-		echo '<input type="' . $this->get_type() . '" name="' . $this->get_input_name() . '" />';
+		echo '<input type="' . esc_attr( $this->get_type() ) . '" name="' . esc_attr( $this->get_input_name() ) . '" />';
 		if ( ! empty( $value ) ) {
-			echo '<input type="hidden" name="' . $this->get_input_name() . '_uploaded" value="' . $value . '" />';
-			echo sprintf( '<p class="wpdf-upload">Uploaded File: <span class="wpdf-upload__name">%s</span></p>', $value );
+			echo '<input type="hidden" name="' . esc_attr( $this->get_input_name() ) . '_uploaded" value="' . esc_attr( $value ) . '" />';
+			echo sprintf( '<p class="wpdf-upload">Uploaded File: <span class="wpdf-upload__name">%s</span></p>', esc_html( $value ) );
 		}
 	}
 

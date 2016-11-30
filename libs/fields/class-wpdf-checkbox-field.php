@@ -1,5 +1,17 @@
 <?php
 /**
+ * Checkbox Field
+ *
+ * @package WPDF/Fields
+ * @author James Collings
+ * @created 03/11/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
  * Class WPDF_CheckboxField
  *
  * Add checkbox field.
@@ -34,7 +46,7 @@ class WPDF_CheckboxField extends WPDF_FormField {
 				}
 
 				echo '<label>';
-				echo '<input type="' . $this->get_type() . '" name="' . $name . '"' . $checked . ' value="' . $key . '" class="wpdf-field">' . $option;
+				echo '<input type="' . esc_attr( $this->get_type() ) . '" name="' . esc_attr( $name ) . '"' . $checked . ' value="' . esc_attr( $key ) . '" class="wpdf-field">' . esc_html( $option );
 				echo '</label>';
 			}
 
