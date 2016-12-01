@@ -1,9 +1,11 @@
 # WP Form Builder
 Author: James Collings  
-Version: 0.3  
+Version: 0.3.1  
 Homepage: https://www.wpformbuilder.com/  
+Documentation: https://www.wpformbuilder.com/documentation/  
+Demo: https://www.wpformbuilder.com/demo/  
 Created: 05/08/2016  
-Updated: 24/11/2016
+Updated: 01/12/2016
 
 ## About
 
@@ -231,6 +233,8 @@ A modal window will open up allowing you to choose from a list of forms previous
 
 ### 0.3.1
 * ADD: Form Preview link
+* ADD: Edit form general error, toggle display of field errors below message
+* FIX: Increase security with file upload, randomly generate folder and file prefix
 
 ### 0.3
 * Plugin Released
