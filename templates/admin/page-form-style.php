@@ -14,7 +14,7 @@ if($form !== false){
 
 	<input type="hidden" name="wpdf-action" value="edit-form-style" />
 	<input type="hidden" name="wpdf-form" value="<?php echo $form_id; ?>" />
-	<div class="wpdf-form-manager">
+	<div class="wpdf-form-manager wpdf-form-manager--inputs">
 
 		<?php $this->display_form_header('style', $form); ?>
 		<div class="wpdf-cols">

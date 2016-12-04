@@ -44,7 +44,7 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 
 	<input type="hidden" name="wpdf-action" value="edit-form-settings"/>
 	<input type="hidden" name="wpdf-form" value="<?php echo esc_attr( $form_id ); ?>"/>
-	<div class="wpdf-form-manager">
+	<div class="wpdf-form-manager wpdf-form-manager--inputs">
 
 		<?php $this->display_form_header( 'settings', $form ); ?>
 		<div class="wpdf-cols">

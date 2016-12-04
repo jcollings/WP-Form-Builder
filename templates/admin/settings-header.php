@@ -30,8 +30,8 @@
 
 	<div class="wpdf-header__actions">
 		<?php if(!$form || $form->get_id()): ?>
-		<a class="wpdf-header__btn" href="<?php echo admin_url('admin.php?page=wpdf-forms&action=preview-form&form_id=' . $form->get_id()); ?>" target="_blank">Preview</a>
-		<input type="submit" value="<?php _e('Update', 'wpdf'); ?>" class="" />
+		<a class="wpdf-header__btn wpdf-header__preview" href="<?php echo admin_url('admin.php?page=wpdf-forms&action=preview-form&form_id=' . $form->get_id()); ?>" target="_blank">Preview</a>
+		<input type="submit" class="wpdf-header__submit" value="<?php _e('Update', 'wpdf'); ?>" class="" />
 		<?php endif; ?>
 	</div>
 </div>

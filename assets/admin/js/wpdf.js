@@ -54,7 +54,10 @@
                 _sortable_elem.find('.placeholder').hide();
             },
             out: function() {
-                _sortable_elem.find('.placeholder').show();
+
+                if( _sortable_elem.find('li:not(.placeholder)').length <= 2){
+                    _sortable_elem.find('.placeholder').show();
+                }
             },
             stop: function() {
                 _sortable_elem.find('.placeholder').hide();
@@ -96,6 +99,9 @@
                 var panel = $(ui.helper).find('.wpdf-panel').addClass('wpdf-panel--active');
                 $('body').trigger('wpdf_element_added', panel);
             }
+
+            // trigger that element has been changed
+            $(document).trigger('wpdf_changed');
         } );
 
         /**
@@ -115,6 +121,9 @@
                 console.log('reindex field rows');
             }
             _sortable_elem.find('li').wpdf_reindex_rows();
+
+            // trigger that element has been changed
+            $(document).trigger('wpdf_changed');
         });
 
         /**
@@ -165,6 +174,9 @@
                 _placeholder.height($('.wpdf-cols').height() - 40);
                 _placeholder.show();
             }
+
+            // trigger that element has been changed
+            $(document).trigger('wpdf_changed');
         }
     });
 
@@ -232,8 +244,8 @@
                 });
             });
 
+            // trigger that element has been changed
             _repeater.trigger('wpdf_repeater_init',_repeater);
-
         });
     });
 
@@ -272,6 +284,9 @@
 
         // reindex field it belongs to
         $('#sortable li').wpdf_reindex_rows();
+
+        // trigger that element has been changed
+        $(document).trigger('wpdf_changed');
     });
 
     $(document).on('click', '.wpdf-del-row', function(e){
@@ -289,6 +304,8 @@
             _repeater.trigger('wpdf_repeater_removed');
         }
 
+        // trigger that element has been changed
+        $(document).trigger('wpdf_changed');
     });
 
 })(jQuery);
@@ -417,6 +434,9 @@
         var _validation_selector = $(this);
 
         onRuleTypeChange(_repeater, _validation_selector);
+
+        // trigger that element has been changed
+        $(document).trigger('wpdf_changed');
     });
 
     $(document).on('wpdf_repeater_removed', '.wpdf-validation-repeater', function(){
@@ -426,6 +446,8 @@
 
         onRuleTypeChange(_repeater, _validation_selector);
 
+        // trigger that element has been changed
+        $(document).trigger('wpdf_changed');
     });
 
     $(document).on('change', '.wpdf-validation-repeater .validation_type', function(){
@@ -534,5 +556,47 @@
         });
 
     });
+
+})(jQuery);
+
+/**
+ * Alert when leaving changes
+ */
+(function($){
+
+    var _changed = false;
+
+    $(document).on('wpdf_changed', function(){
+        if ( false === _changed ){
+            _changed = true;
+        }
+    });
+
+    $(document).on('click', '.wpdf-form-manager--inputs input, .wpdf-form-manager--inputs select, .wpdf-form-manager--inputs textarea', function(){
+        $(document).trigger('wpdf_changed');
+    });
+
+    $(document).on('keyup change', '.wpdf-form-manager--inputs input, .wpdf-form-manager--inputs select, .wpdf-form-manager--inputs textarea', function(){
+        $(document).trigger('wpdf_changed');
+    });
+
+    /**
+     * If submit is clicked, skip onBeforeunload
+     */
+    $(document).on('click', '.wpdf-header__submit', function(){
+        _changed = false;
+    });
+
+    /**
+     * Show browser warning
+     *
+     * @returns {string}
+     */
+    window.onbeforeunload = function() {
+
+        if ( true === _changed ){
+            return "";
+        }
+    }
 
 })(jQuery);
