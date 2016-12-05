@@ -54,6 +54,8 @@
             _sortable_elem.find('.wpdf-panel--new').wrap('<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item"></li>').removeClass('wpdf-panel--new');
             $('body').trigger('wpdf_element_added', template);
 
+            _sortable_elem.find('.placeholder').hide();
+
             // trigger that element has been changed
             $(document).trigger('wpdf_changed');
 

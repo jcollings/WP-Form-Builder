@@ -123,7 +123,11 @@ class WPDF_Forms_List_Table extends WP_List_Table {
 				switch ( $column_name ) :
 					case 'col_form_name':
 
-						$link      = admin_url( 'admin.php?page=wpdf-forms&action=entries' . $link_param );
+						$submissions_link = $link = admin_url( 'admin.php?page=wpdf-forms&action=entries' . $link_param );
+						if ( isset( $item->ID ) ) {
+							$link = admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $item->ID );
+						}
+
 						$entry_str = '<strong><a href="' . $link . '">' . $item->form_name . '</a></strong>';
 						$del_link  = admin_url( 'admin.php?page=wpdf-forms&action=delete-form' . $form_param );
 
@@ -133,10 +137,10 @@ class WPDF_Forms_List_Table extends WP_List_Table {
 							$links[] = '<span class="edit"><a href="' . admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $item->ID ) . '" aria-label="View">Edit</a></span>';
 							$links[] = '<span class="edit"><a href="' . admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $item->ID ) . '" aria-label="Settings">Settings</a></span>';
 							$links[] = '<span class="edit"><a href="' . admin_url( 'admin.php?page=wpdf-forms&action=notifications&form_id=' . $item->ID ) . '" aria-label="Notifications">Notifications</a></span>';
-							$links[] = '<span class="edit"><a href="' . $link . '" aria-label="View">Submissions</a></span>';
+							$links[] = '<span class="edit"><a href="' . $submissions_link . '" aria-label="View">Submissions</a></span>';
 							$links[] = '<span class="delete"><a href="' . $del_link . '" aria-label="Delete">Delete</a></span>';
 						} else {
-							$links[] = '<span class="edit"><a href="' . $link . '" aria-label="View">Submissions</a></span>';
+							$links[] = '<span class="edit"><a href="' . $submissions_link . '" aria-label="View">Submissions</a></span>';
 						}
 
 						echo '<td>';
