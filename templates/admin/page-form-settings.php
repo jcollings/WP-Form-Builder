@@ -52,6 +52,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 			<div class="wpdf-full">
 				<div class="wpdf-left__inside">
 
+					<div id="error-wrapper"></div>
+
 					<h2 class="wpdf-settings__header">
 						General Settings
 					</h2>

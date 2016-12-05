@@ -45,6 +45,20 @@
             file: $('#field-placeholder .wpdf-panel[data-field-type="file"]').clone().show()
         };
 
+        _draggable_elem.click(function(){
+
+            // load template for file
+            var template = templates[$(this).data('field')].clone();
+            template.addClass('wpdf-panel--active wpdf-panel--new');
+            _sortable_elem.append(template);
+            _sortable_elem.find('.wpdf-panel--new').wrap('<li class="draggable ui-state-highlight ui-draggable ui-draggable-handle wpdf-dropped-item"></li>').removeClass('wpdf-panel--new');
+            $('body').trigger('wpdf_element_added', template);
+
+            // trigger that element has been changed
+            $(document).trigger('wpdf_changed');
+
+        });
+
         _sortable_elem.sortable({
             placeholder: "sortable-placeholder",
             handle: '.wpdf-panel__header',
@@ -191,6 +205,21 @@
 
         $(document).on('click', '.wpdf-panel__header .wpdf-panel__toggle', function () {
             $(this).parents('.wpdf-panel').toggleClass('wpdf-panel--active');
+        });
+
+    });
+
+})(jQuery);
+
+/**
+ * Panel Name
+ */
+(function($){
+
+    $(document).ready(function() {
+
+        $(document).on('keyup change', '.wpdf-input--label', function(){
+            $(this).parents('.wpdf-panel').find('.wpdf-panel__header span.name').text( $(this).val() );
         });
 
     });
@@ -569,6 +598,11 @@
     $(document).on('wpdf_changed', function(){
         if ( false === _changed ){
             _changed = true;
+
+            var wrap = $('#error-wrapper');
+            if ( wrap.length > 0 ) {
+                wrap.append('<p class="notice notice-warning wpdf-notice">You have unsaved changes, to save these click the update button.</p>');
+            }
         }
     });
 

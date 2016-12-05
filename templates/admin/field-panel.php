@@ -10,7 +10,7 @@ $field_type = $field->get_type();
 ?>
 <div class="wpdf-panel wpdf-panel--white <?php echo $active == true ? 'wpdf-panel--active' : ''; ?>" data-field-type="<?php echo $field_type; ?>">
 	<div class="wpdf-panel__header">
-		<?php echo ucfirst($field_type); ?>: <?php echo $field->get_label(); ?>
+		<?php echo ucfirst($field_type); ?>: <span class="name"><?php echo $field->get_label(); ?></span>
 		<a class="wpdf-tooltip wpdf-panel__delete wpdf-del-field" title="Delete field from form"><?php _e('Delete','wpdf'); ?></a>
 		<a href="#" class="wpdf-panel__toggle wpdf-tooltip-blank" title="Toggle display of field settings"></a>
 	</div>
@@ -32,7 +32,7 @@ $field_type = $field->get_type();
 					<span class="wpdf-tooltip wpdf-tooltip__inline" title="Text displayed before the field on the form">?</span>
 				</label>
 
-				<input type="text" class="wpdf-input" name="field[][label]" value="<?php echo $field->get_label(); ?>">
+				<input type="text" class="wpdf-input wpdf-input--label" name="field[][label]" value="<?php echo $field->get_label(); ?>">
 			</div>
 			<div class="wpdf-col wpdf-col__half">
 				<label for="" class="wpdf-label">

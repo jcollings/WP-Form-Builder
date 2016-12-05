@@ -24,6 +24,9 @@ if($form !== false){
 		<div class="wpdf-cols">
 			<div class="wpdf-left">
 				<div class="wpdf-left__inside">
+
+					<div id="error-wrapper"></div>
+
 					<div class="wpdf-fields">
 						<ul id="sortable">
 

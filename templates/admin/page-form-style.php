@@ -22,6 +22,8 @@ if($form !== false){
 			<div class="wpdf-full">
 				<div class="wpdf-left__inside">
 
+					<div id="error-wrapper"></div>
+
 					<h2 class="wpdf-settings__header">
 						Form Styles
 					</h2>

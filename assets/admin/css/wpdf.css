@@ -83,6 +83,11 @@
   border-bottom: 1px solid #dedede;
 }
 
+.wpdf-form-manager .wpdf-notice {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .wpdf-form-manager .wpdf-clear {
   clear: both;
 }

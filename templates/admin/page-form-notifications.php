@@ -40,7 +40,10 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 		<div class="wpdf-cols">
 
 			<div class="wpdf-full">
+
 				<div class="wpdf-left__inside  wpdf-repeater" data-min="0" data-template-name="notification_repeater" data-template-index="notification\[[0-9]*\]" data-template-prefix="notification">
+
+					<div id="error-wrapper"></div>
 
 					<ul class="wpdf-notifications wpdf-repeater-container">
 						<script type="text/html" class="wpdf-repeater-template">
