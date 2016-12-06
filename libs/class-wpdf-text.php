@@ -52,6 +52,8 @@ class WPDF_Text {
 			// shortcode.
 			'shortcode_error_empty_forms' => __( 'You currently have no forms available, please create one and try again.', 'wpdf' ),
 			'shortcode_error_selection'   => __( 'An error occurred with your selected, please try again.', 'wpdf' ),
+			// general.
+			'general_form_saved' => __( 'Changes have been saved.', 'wpdf' ),
 		);
 
 	}

@@ -43,7 +43,15 @@ $notifications = isset($settings['notifications']) && !empty($settings['notifica
 
 				<div class="wpdf-left__inside  wpdf-repeater" data-min="0" data-template-name="notification_repeater" data-template-index="notification\[[0-9]*\]" data-template-prefix="notification">
 
-					<div id="error-wrapper"></div>
+					<div id="error-wrapper">
+						<?php
+						if ( $this->get_success() > 0 ) {
+							?>
+							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo WPDF()->text->get('form_saved', 'general'); ?></p>
+							<?php
+						}
+						?>
+					</div>
 
 					<ul class="wpdf-notifications wpdf-repeater-container">
 						<script type="text/html" class="wpdf-repeater-template">

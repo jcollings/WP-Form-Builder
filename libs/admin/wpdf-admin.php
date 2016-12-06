@@ -26,6 +26,8 @@ class WPDF_Admin {
 	 */
 	protected $_errors = array();
 
+	protected $_success = 0;
+
 	/**
 	 * WPDF_Admin constructor.
 	 */
@@ -159,6 +161,8 @@ class WPDF_Admin {
 			exit();
 		}
 
+		$this->_success = isset($_GET['success']) && intval($_GET['success']) >= 1 ? intval($_GET['success']) : false;
+
 		if ( isset( $_POST['wpdf-action'] ) ) {
 
 			switch ( $_POST['wpdf-action'] ) {
@@ -285,6 +289,15 @@ class WPDF_Admin {
 	 */
 	public function get_errors() {
 		return $this->_errors;
+	}
+
+	/**
+	 * Get success flag
+	 *
+	 * @return int
+	 */
+	public function get_success() {
+		return $this->_success;
 	}
 
 	/**
@@ -669,7 +682,7 @@ class WPDF_Admin {
 		) );
 
 		if ( ! is_wp_error( $post ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id ) );
+			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' ) );
 			exit();
 		}
 
@@ -703,7 +716,7 @@ class WPDF_Admin {
 		) );
 
 		if ( ! is_wp_error( $post ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id ) );
+			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id . '&success=1' ) );
 			exit();
 		}
 
@@ -762,7 +775,7 @@ class WPDF_Admin {
 		) );
 
 		if ( ! is_wp_error( $post ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=style&form_id=' . $form_id ) );
+			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=style&form_id=' . $form_id . '&success=1' ) );
 			exit();
 		}
 		die();
@@ -921,7 +934,7 @@ class WPDF_Admin {
 
 		$post = wp_insert_post( $postarr, true );
 		if ( ! is_wp_error( $post ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $post ) );
+			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $post . '&success=1' ) );
 			exit();
 		}
 

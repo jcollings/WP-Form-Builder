@@ -25,7 +25,15 @@ if($form !== false){
 			<div class="wpdf-left">
 				<div class="wpdf-left__inside">
 
-					<div id="error-wrapper"></div>
+					<div id="error-wrapper">
+						<?php
+						if ( $this->get_success() > 0 ) {
+							?>
+							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo WPDF()->text->get('form_saved', 'general'); ?></p>
+							<?php
+						}
+						?>
+					</div>
 
 					<div class="wpdf-fields">
 						<ul id="sortable">

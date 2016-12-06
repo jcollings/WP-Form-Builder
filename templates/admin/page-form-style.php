@@ -22,7 +22,15 @@ if($form !== false){
 			<div class="wpdf-full">
 				<div class="wpdf-left__inside">
 
-					<div id="error-wrapper"></div>
+					<div id="error-wrapper">
+						<?php
+						if ( $this->get_success() > 0 ) {
+							?>
+							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo WPDF()->text->get('form_saved', 'general'); ?></p>
+							<?php
+						}
+						?>
+					</div>
 
 					<h2 class="wpdf-settings__header">
 						Form Styles

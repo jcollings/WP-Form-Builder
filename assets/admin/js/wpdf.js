@@ -606,12 +606,17 @@
 
             var wrap = $('#error-wrapper');
             if ( wrap.length > 0 ) {
-                wrap.append('<p class="notice notice-warning wpdf-notice">You have unsaved changes, to save these click the update button.</p>');
+                wrap.html('<p class="notice notice-warning wpdf-notice">You have unsaved changes, to save these click the update button.</p>');
             }
         }
     });
 
     $(document).on('click', '.wpdf-form-manager--inputs input, .wpdf-form-manager--inputs select, .wpdf-form-manager--inputs textarea', function(){
+
+        if( $(this).hasClass('wpdf-header__submit') ){
+            return;
+        }
+
         $(document).trigger('wpdf_changed');
     });
 
