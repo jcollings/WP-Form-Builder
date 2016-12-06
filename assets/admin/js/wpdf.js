@@ -56,6 +56,9 @@
 
             _sortable_elem.find('.placeholder').hide();
 
+            // re-indexed rows
+            _sortable_elem.find('li').wpdf_reindex_rows();
+
             // trigger that element has been changed
             $(document).trigger('wpdf_changed');
 
