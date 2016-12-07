@@ -14,6 +14,11 @@
  */
 function wpdf_get_uploads_dir() {
 
+	$upload_dir = WP_CONTENT_DIR . '/uploads/';
+	if ( ! file_exists( $upload_dir ) ) {
+		mkdir( $upload_dir );
+	}
+
 	$upload_dir = WP_CONTENT_DIR . '/uploads/wpdf/';
 	if ( ! file_exists( $upload_dir ) ) {
 		mkdir( $upload_dir );

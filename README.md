@@ -1,6 +1,6 @@
 # WP Form Builder
 Author: James Collings  
-Version: 0.3.1  
+Version: 0.3.2  
 Homepage: https://www.wpformbuilder.com/  
 Documentation: https://www.wpformbuilder.com/documentation/  
 Demo: https://www.wpformbuilder.com/demo/  
@@ -230,6 +230,13 @@ A modal window will open up allowing you to choose from a list of forms previous
 ![Tinymce Button](./assets/docs/Form-Insert.png)
 
 ## Changelog
+
+### 0.3.2
+* FIX: Sanitize data when editing the form
+* FIX: Move form settings from post_content to meta field
+* FIX: Display status messages when editing and saving data
+* ADD: Make field label required
+* ADD: Click and add field to form
 
 ### 0.3.1
 * ADD: Form Preview link
