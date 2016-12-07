@@ -418,6 +418,12 @@
         margin-bottom: 10px;
     }
 
+    .wpdf-col.wpdf-col--required{
+        input, select, textarea {
+            border: 1px solid red;
+        }
+    }
+
     .wpdf-col.wpdf-col__half {
         width: 46%;
         margin-left: 2%;

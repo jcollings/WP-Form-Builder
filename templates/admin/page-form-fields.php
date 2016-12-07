@@ -14,10 +14,10 @@ if($form !== false){
 	$fields = $form->get_fields();
 }
 ?>
-<form action="" method="post">
+<form id="wpdf-form-fields" action="" method="post">
 
 	<input type="hidden" name="wpdf-action" value="edit-form-fields" />
-	<input type="hidden" name="wpdf-form" value="<?php echo $form_id; ?>" />
+	<input type="hidden" name="wpdf-form" value="<?php echo esc_attr( $form_id ); ?>" />
 	<div class="wpdf-form-manager wpdf-form-manager--inputs">
 
 		<?php $this->display_form_header('fields', $form); ?>

@@ -643,4 +643,37 @@
         }
     }
 
+    /**
+     * Required field validation
+     */
+    $(document).ready(function(){
+       var _form = $('#wpdf-form-fields');
+       var _error = false;
+       if ( _form.length > 0 ){
+
+           $(this).on('submit', function( e ){
+
+               // deactivate all required fields
+               $(this).find('.wpdf-col--required').removeClass('wpdf-col--required');
+
+               $(this).find('.wpdf-fields .wpdf-input__required').each(function(){
+
+                   if( $(this).val().trim() == "" ){
+                       e.preventDefault();
+                       _error = true;
+                       $(this).parents('.wpdf-panel').addClass('wpdf-panel--active');
+                       $(this).parents('.wpdf-col').addClass('wpdf-col--required');
+                   }
+               });
+
+               if(_error) {
+                   var wrap = $('#error-wrapper');
+                   if (wrap.length > 0) {
+                       wrap.html('<p class="notice notice-error wpdf-notice">Please make sure you have filled in all required fields before saving, highlighted in red below.</p>');
+                   }
+               }
+           });
+       }
+    });
+
 })(jQuery);

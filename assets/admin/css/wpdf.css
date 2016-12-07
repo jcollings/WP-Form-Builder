@@ -422,6 +422,10 @@
   margin-bottom: 10px;
 }
 
+.wpdf-form-manager .wpdf-col.wpdf-col--required input, .wpdf-form-manager .wpdf-col.wpdf-col--required select, .wpdf-form-manager .wpdf-col.wpdf-col--required textarea {
+  border: 1px solid red;
+}
+
 .wpdf-form-manager .wpdf-col.wpdf-col__half {
   width: 46%;
   margin-left: 2%;
