@@ -268,12 +268,28 @@ class WPDF_FormField {
 	 */
 	public function save( $field ) {
 
+		// sanitize css classes.
+		$html_classes = isset( $field['css_class'] ) ? $field['css_class'] : '';
+		$output_classes = array();
+
+		if ( ! empty( $html_classes ) ) {
+			$classes = explode( ' ', $html_classes );
+			if ( ! empty( $classes ) ) {
+				foreach ( $classes as $class ) {
+					$sanitizes = sanitize_html_class( $class );
+					if ( ! empty( $sanitizes ) ) {
+						$output_classes[] = $sanitizes;
+					}
+				}
+			}
+		}
+
 		$data = array(
 			'type'        => $field['type'],
 			'label'       => $field['label'],
 			'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : '',
 			'default'     => isset( $field['default'] ) ? $field['default'] : '',
-			'extra_class' => isset( $field['css_class'] ) ? $field['css_class'] : '',
+			'extra_class' => implode( ' ', $output_classes ),
 		);
 
 		$data['validation'] = array(
