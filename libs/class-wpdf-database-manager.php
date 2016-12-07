@@ -352,5 +352,23 @@ class WPDF_DatabaseManager {
 				update_option( 'wpdf_db', 2 );
 			}
 		}
+
+		if ( $db_version < 3 ) {
+
+			$query = new WP_Query( array(
+				'post_type' => 'wpdf_form',
+				'posts_per_page' => -1,
+			) );
+
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $post ) {
+
+					$content = maybe_unserialize( $post->post_content ) ? unserialize( $post->post_content ) : array();
+					update_post_meta( $post->ID, '_form_data', $content );
+				}
+			}
+
+			update_option( 'wpdf_db', 3 );
+		}
 	}
 }

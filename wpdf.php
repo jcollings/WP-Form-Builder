@@ -29,6 +29,13 @@ class WPDF_DeveloperForms {
 	protected $version = '0.3.1';
 
 	/**
+	 * Database version
+	 *
+	 * @var int
+	 */
+	protected $db_version = 3;
+
+	/**
 	 * Plugin Directory
 	 *
 	 * @var bool|string
@@ -369,6 +376,15 @@ class WPDF_DeveloperForms {
 	 */
 	public function get_forms() {
 		return $this->_forms;
+	}
+
+	/**
+	 * Get database version
+	 *
+	 * @return int
+	 */
+	public function get_db_version() {
+		return $this->db_version;
 	}
 
 	/**

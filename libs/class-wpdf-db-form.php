@@ -37,7 +37,7 @@ class WPDF_DB_Form extends WPDF_Form {
 		$post    = get_post( $form_id );
 		if ( $post && 'wpdf_form' === $post->post_type ) :
 			$this->ID = $form_id;
-			$form = get_post_meta( $form_id , '_form_settings', true );
+			$form = get_post_meta( $form_id , '_form_data', true );
 
 			$fields = isset( $form['fields'] ) && ! empty( $form['fields'] ) ? $form['fields'] : array();
 			parent::__construct( 'Form ' . $form_id, $fields );
@@ -173,7 +173,7 @@ class WPDF_DB_Form extends WPDF_Form {
 		if ( is_admin() ) {
 			$post = get_post( $this->ID );
 			if ( $post && 'wpdf_form' === $post->post_type ) {
-				return get_post_meta( $this->ID , '_form_settings', true );
+				return get_post_meta( $this->ID , '_form_data', true );
 			}
 		}
 		return false;

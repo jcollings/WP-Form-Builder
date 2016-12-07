@@ -26,7 +26,19 @@ class WPDF_Admin {
 	 */
 	protected $_errors = array();
 
+	/**
+	 * If form has been saved
+	 *
+	 * @var int
+	 */
 	protected $_success = 0;
+
+	/**
+	 * If upgrade is available
+	 *
+	 * @var bool
+	 */
+	protected $_upgrade = false;
 
 	/**
 	 * WPDF_Admin constructor.
@@ -124,6 +136,21 @@ class WPDF_Admin {
 	 * On Admin init, process admin actions before view is loaded.
 	 */
 	function init() {
+
+		// Check for database update.
+		$current_db_version = get_option( 'wpdf_db', 0 );
+		if ( $current_db_version < WPDF()->get_db_version() ) {
+			$this->_upgrade = true;
+		}
+
+		$action = isset( $_GET['action'] ) ? sanitize_title( $_GET['action'] ) : false;
+		if ( 'upgrade' === $action ) {
+			$db = new WPDF_DatabaseManager();
+			$db->install();
+			wp_redirect( admin_url( '/admin.php?page=wpdf-forms' ) );
+			exit();
+		}
+
 		$delete_submission = isset( $_GET['delete_submission'] ) ? $_GET['delete_submission'] : false;
 		if ( $delete_submission ) {
 
@@ -209,6 +236,15 @@ class WPDF_Admin {
 	 * Display admin content, loads individual views
 	 */
 	function wpdf_form_page() {
+
+		if($this->_upgrade){
+			?>
+			<div class="update-nag">
+				WP Form Builder Database upgrade is required! <a href="<?php echo esc_url( admin_url( '/admin.php?page=wpdf-forms&action=upgrade' ) ); ?>" aria-label="Please update WPDF database now">Please upgrade now</a>.
+			</div>
+			<?php
+			return;
+		}
 
 		echo '<div class="wrap wpdf">';
 
@@ -602,7 +638,7 @@ class WPDF_Admin {
 	private function save_form_settings() {
 
 		$form_id   = intval( $_POST['wpdf-form'] );
-		$form_data = get_post_meta( $form_id, '_form_settings', true );
+		$form_data = get_post_meta( $form_id, '_form_data', true );
 
 		$settings = $_POST['wpdf_settings'];
 
@@ -675,12 +711,9 @@ class WPDF_Admin {
 			$form_data['settings']['recaptcha_private'] = $settings['recaptcha_private'];
 		}
 
-		if ( update_post_meta( $form_id , '_form_settings', $form_data ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' ) );
-			exit();
-		}
-
-		die();
+		update_post_meta( $form_id , '_form_data', $form_data );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' ) );
+		exit();
 	}
 
 	/**
@@ -689,7 +722,7 @@ class WPDF_Admin {
 	private function save_form_notifications() {
 
 		$form_id   = intval( $_POST['wpdf-form'] );
-		$form_data = $form_data = get_post_meta( $form_id, '_form_settings', true );
+		$form_data = $form_data = get_post_meta( $form_id, '_form_data', true );
 
 		$form_data['notifications'] = array();
 		foreach ( $_POST['notification'] as $i => $notification ) {
@@ -703,12 +736,9 @@ class WPDF_Admin {
 			);
 		}
 
-		if ( update_post_meta( $form_id , '_form_settings', $form_data ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id . '&success=1' ) );
-			exit();
-		}
-
-		die();
+		update_post_meta( $form_id , '_form_data', $form_data );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=notifications&form_id=' . $form_id . '&success=1' ) );
+		exit();
 	}
 
 	/**
@@ -717,7 +747,7 @@ class WPDF_Admin {
 	private function save_form_style() {
 
 		$form_id   = intval( $_POST['wpdf-form'] );
-		$form_data = get_post_meta( $form_id, '_form_settings', true );
+		$form_data = get_post_meta( $form_id, '_form_data', true );
 
 		$style    = isset( $_POST['wpdf_style'] ) ? $_POST['wpdf_style'] : array();
 		$disabled = isset( $_POST['wpdf_style_disable'] ) ? $_POST['wpdf_style_disable'] : array();
@@ -756,11 +786,9 @@ class WPDF_Admin {
 			$form_data['theme_disabled'][ $key ] = in_array( $key, $disabled, true ) ? true : false;
 		}
 
-		if ( update_post_meta( $form_id , '_form_settings', $form_data ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=style&form_id=' . $form_id . '&success=1' ) );
-			exit();
-		}
-		die();
+		update_post_meta( $form_id , '_form_data', $form_data );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=style&form_id=' . $form_id . '&success=1' ) );
+		exit();
 	}
 
 	/**
@@ -808,7 +836,7 @@ class WPDF_Admin {
 		);
 
 		$post = wp_insert_post( $postarr, true );
-		if ( ! is_wp_error( $post ) && update_post_meta( $post , '_form_settings', $form_data ) ) {
+		if ( ! is_wp_error( $post ) && update_post_meta( $post , '_form_data', $form_data ) ) {
 			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $post ) );
 			exit();
 		} else {
@@ -873,19 +901,17 @@ class WPDF_Admin {
 		);
 
 		// update existing post.
-		$form_data = get_post_meta( $form_id, '_form_settings', true );
+		$form_data = get_post_meta( $form_id, '_form_data', true );
 
 		if ( ! is_array( $form_data ) ) {
 			$form_data = array();
 		}
 
 		$form_data['fields'] = $fields;
-		if ( update_post_meta( $form_id , '_form_settings', $form_data ) ) {
-			wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $form_id . '&success=1' ) );
-			exit();
-		}
 
-		die();
+		update_post_meta( $form_id , '_form_data', $form_data );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=manage&form_id=' . $form_id . '&success=1' ) );
+		exit();
 	}
 }
 
