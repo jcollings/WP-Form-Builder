@@ -147,6 +147,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/fields/class-wpdf-radio-field.php';
 		include_once 'libs/fields/class-wpdf-checkbox-field.php';
 		include_once 'libs/fields/class-wpdf-file-field.php';
+		include_once 'libs/fields/class-wpdf-number-field.php';
 
 		include_once 'libs/class-wpdf-validation.php';
 		include_once 'libs/class-wpdf-notification.php';

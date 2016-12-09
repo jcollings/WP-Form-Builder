@@ -230,6 +230,9 @@ class WPDF_Form {
 					case 'file':
 						$this->_fields[ $field_id ] = new WPDF_FileField( $field_id, $type, $field );
 						break;
+					case 'number':
+						$this->_fields[ $field_id ] = new WPDF_NumberField( $field_id, $type, $field );
+						break;
 				}
 
 				if ( 'file' === $type ) {

@@ -593,6 +593,9 @@ class WPDF_Admin {
 				case 'file':
 					$field = new WPDF_FileField( '', $field );
 					break;
+				case 'number':
+					$field = new WPDF_NumberField( '', $field );
+					break;
 				default:
 					$field = new WPDF_FormField( '', $field );
 					break;
@@ -627,6 +630,8 @@ class WPDF_Admin {
 				return new WPDF_CheckboxField( $field_name, $field_type, $args );
 			case 'file':
 				return new WPDF_FileField( $field_name, $field_type, $args );
+			case 'number':
+				return new WPDF_NumberField( $field_name, $field_type, $args );
 			default:
 				return new WPDF_FormField( $field_name, $field_type, $args );
 		}

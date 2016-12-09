@@ -42,7 +42,8 @@
             select: $('#field-placeholder .wpdf-panel[data-field-type="select"]').clone().show(),
             checkbox: $('#field-placeholder .wpdf-panel[data-field-type="checkbox"]').clone().show(),
             radio: $('#field-placeholder .wpdf-panel[data-field-type="radio"]').clone().show(),
-            file: $('#field-placeholder .wpdf-panel[data-field-type="file"]').clone().show()
+            file: $('#field-placeholder .wpdf-panel[data-field-type="file"]').clone().show(),
+            number: $('#field-placeholder .wpdf-panel[data-field-type="number"]').clone().show()
         };
 
         _draggable_elem.click(function(){
