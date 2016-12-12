@@ -187,7 +187,7 @@ class WPDF_FormData {
 			$result = isset( $this->_data[ $field_id ] ) ? $this->_data[ $field_id ] : false;
 			$result = $this->unslash_value( $result );
 		} else {
-			$result = $this->_defaults[ $field_id ];
+			$result = isset( $this->_defaults[ $field_id ] ) ? $this->_defaults[ $field_id ] : '';
 		}
 
 		$result = apply_filters( 'wpdf/field_data', $result, $field_id );

@@ -20,27 +20,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="wpdf-tooltip wpdf-tooltip__inline" title="Field type to display">?</span>
 		</label>
 
-		<select name="" id="">
-			<option value="input">Number Input</option>
-			<option value="input-range">Number Range Input</option>
-			<option value="slider">Number Slider</option>
-			<option value="slider-range">Number Range Slider</option>
+		<select name="field[][display_type]" id="">
+			<option value="input" <?php selected( 'input', $this->get_display_type(), true ); ?>>Number Input</option>
+			<option value="input-range" <?php selected( 'input-range', $this->get_display_type(), true ); ?>>Number Range Input</option>
+			<option value="slider" <?php selected( 'slider', $this->get_display_type(), true ); ?>>Number Slider</option>
+			<option value="slider-range" <?php selected( 'slider-range', $this->get_display_type(), true ); ?>>Number Range Slider</option>
 		</select>
 	</div>
 </div>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__half">
 		<label for="" class="wpdf-label">Minimum <span class="wpdf-tooltip wpdf-tooltip__inline" title="Minimum allowed value">?</span></label>
-		<input class="wpdf-input" name="field[][min]" type="text" />
+		<input class="wpdf-input" name="field[][min]" type="text" value="<?php echo esc_attr( $this->get_min_value() ); ?>" />
 	</div>
 	<div class="wpdf-col wpdf-col__half">
 		<label for="" class="wpdf-label">Maximum <span class="wpdf-tooltip wpdf-tooltip__inline" title="Maximum allowed value">?</span></label>
-		<input class="wpdf-input" name="field[][max]" type="text" />
+		<input class="wpdf-input" name="field[][max]" type="text" value="<?php echo esc_attr( $this->get_max_value() ); ?>" />
 	</div>
 </div>
 <div class="wpdf-field-row">
 	<div class="wpdf-col wpdf-col__half">
 		<label for="" class="wpdf-label">Number Increment<span class="wpdf-tooltip wpdf-tooltip__inline" title="Number increment">?</span></label>
-		<input class="wpdf-input" name="field[][increment]" type="text" />
+		<input class="wpdf-input" name="field[][step]" type="text" value="<?php echo esc_attr( $this->get_step_value() ); ?>" />
 	</div>
 </div>
