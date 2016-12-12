@@ -99,26 +99,65 @@ class WPDF_NumberField extends WPDF_FormField {
 	 */
 	public function output( $form_data ) {
 
+		$value = $form_data->get( $this->_name );
+
 		// Allowed types input, input-range, slider, slider-range.
 		switch ( $this->get_display_type() ) {
 			case 'input':
 			case 'slider':
 
-				$value = $form_data->get( $this->_name );
-				echo '<input type="number" name="' . esc_attr( $this->get_input_name() ) . '" value="' . esc_attr( $value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
-				break;
+				$input_type = 'slider' === $this->get_display_type() ? 'hidden' : 'number';
+
+				echo '<div class="wpdf-number--single ' . esc_attr( $this->get_display_type() ) . '">';
+				echo '<input type="' . esc_attr( $input_type ) . '" name="' . esc_attr( $this->get_input_name() ) . '" value="' . esc_attr( $value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
+
+				if ( 'slider' === $this->get_display_type() ) {
+					$this->display_slider_element();
+				}
+
+				echo '</div>';
+
+			break;
 			case 'input-range':
 			case 'slider-range':
 
-				$suffix = '_min';
-				$value = $form_data->get( $this->_name . $suffix );
-				echo '<input type="number" name="' . esc_attr( $this->get_input_name() . $suffix ) . '" value="' . esc_attr( $value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
+				$input_type = 'slider-range' === $this->get_display_type() ? 'hidden' : 'number';
 
-				$suffix = '_max';
-				$value = $form_data->get( $this->_name . $suffix );
-				echo '<input type="number" name="' . esc_attr( $this->get_input_name() . $suffix ) . '" value="' . esc_attr( $value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
-				break;
+				echo '<div class="wpdf-number--range ' . esc_attr( $this->get_display_type() ) . '">';
+
+				$suffix = '[min]';
+				$min_value = is_array( $value ) && isset( $value['min'] ) ? $value['min'] : '';
+				echo '<input type="' . esc_attr( $input_type ) . '" name="' . esc_attr( $this->get_input_name() . $suffix ) . '" value="' . esc_attr( $min_value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
+
+				if ( 'input-range' === $this->get_display_type() ) {
+					echo '<span class="wpdf-range-text">to</span>';
+				}
+
+				$suffix = '[max]';
+				$max_value = is_array( $value ) && isset( $value['max'] ) ? $value['max'] : '';
+				echo '<input type="' . esc_attr( $input_type ) . '" name="' . esc_attr( $this->get_input_name() . $suffix ) . '" value="' . esc_attr( $max_value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
+
+				if ( 'slider-range' === $this->get_display_type() ) {
+					$this->display_slider_element();
+				}
+
+				echo '</div>';
+
+			break;
 		}
+	}
+
+	/**
+	 * Display div to generate slider
+	 */
+	protected function display_slider_element() {
+
+		$range  = 'no';
+		if ( 'slider-range' === $this->get_display_type() ) {
+			$range = 'yes';
+		}
+
+		echo '<div class="wpdf-range-slider" data-range="' . esc_attr( $range ) . '" data-min="' . esc_attr( $this->get_min_value() ) . '" data-max="' . esc_attr( $this->get_max_value() ) . '" data-step="' . esc_attr( $this->get_step_value() ) . '"></div>';
 	}
 
 	/**

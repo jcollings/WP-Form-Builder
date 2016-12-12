@@ -74,3 +74,88 @@
     });
 
 })(jQuery);
+
+(function($){
+
+    $(document).ready(function(){
+
+        var _number_fields = $('.wpdf-input-number');
+
+        if(_number_fields.length == 0){
+            return;
+        }
+
+        _number_fields.each(function(){
+
+            var _slider = $(this).find('.wpdf-range-slider');
+            if(_slider.length > 0){
+                var _min = _slider.data('min');
+                var _max = _slider.data('max');
+                var _step = _slider.data('step');
+                var _range = _slider.data('range');
+
+                var _config = {
+                    min: _min,
+                    max: _max,
+                    step: _step,
+                    values: []
+                };
+
+                var inputs = [];
+
+                if ( _range == 'yes' ) {
+                    _config.range = true;
+                    inputs.push($(this).find('input[name$="[min]"]'));
+                    inputs.push($(this).find('input[name$="[max]"]'));
+
+                    _config.values.push(inputs[0].val());
+                    _config.values.push(inputs[1].val());
+
+                }else{
+                    inputs.push($(this).find('input'));
+
+                    _config.values.push(inputs[0].val());
+                }
+
+                // set input values depending on slider type
+                _config.slide = function( event, ui ) {
+                    if ( _range == 'yes' ) {
+                        // ui.values [low, high]
+                        inputs[0].val(ui.values[0]);
+                        inputs[1].val(ui.values[1]);
+                    }else{
+                        // ui.value
+                        inputs[0].val(ui.value);
+                    }
+                };
+
+                _slider.slider(_config).each(function() {
+
+                    // Add labels to slider whose values
+                    // are specified by min, max
+
+                    // Get the options for this slider (specified above)
+                    var opt = $(this).data().uiSlider.options;
+
+                    // Get the number of possible values
+                    var vals = opt.max - opt.min;
+
+                    // Position the labels
+                    for (var i = 0; i <= vals; i++) {
+
+                        // Create a new element and position it with percentages
+                        var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i/vals*100) + '%');
+
+                        // Add the element inside #slider
+                        _slider.append(el);
+
+                    }
+
+                });
+            }
+
+        });
+
+    });
+
+})(jQuery);

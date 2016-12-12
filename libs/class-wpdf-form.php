@@ -332,7 +332,6 @@ class WPDF_Form {
 			$this->set_error( __( 'An Error occurred: PHP discarded POST data because of request exceeding post_max_size.', 'wpdf' ) );
 		}
 
-
 		// clear data array.
 		$this->_submitted  = true;
 		$this->_validation = new WPDF_Validation( $this->_rules );
