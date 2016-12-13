@@ -108,6 +108,42 @@ class WPDF_Text {
 			'fields.number.step.label' => __( 'Number Increment', 'wpdf' ),
 			'fields.number.default.help' => __( 'Default Value', 'wpdf' ),
 			'fields.number.default.label' => __( 'Default Value', 'wpdf' ),
+
+			// Checkbox field text.
+			'fields.checkbox.values.heading.label' => __( 'Values', 'wpdf' ),
+			'fields.checkbox.values.heading.help' => __( 'List of available options', 'wpdf' ),
+			'fields.checkbox.values.label.label' => __( 'Label', 'wpdf' ),
+			'fields.checkbox.values.label.help' => __( 'Text displayed in dropdown', 'wpdf' ),
+			'fields.checkbox.values.value.label' => __( 'Value', 'wpdf' ),
+			'fields.checkbox.values.value.help' => __( 'Value stored in when selected, leave blank to auto generate from label', 'wpdf' ),
+			'fields.checkbox.values.default.label' => __( 'Default', 'wpdf' ),
+			'fields.checkbox.values.default.help' => __( 'Check value to make default when form is loaded', 'wpdf' ),
+
+			// Radio field text.
+			'fields.radio.values.heading.label' => __( 'Values', 'wpdf' ),
+			'fields.radio.values.heading.help' => __( 'List of available options', 'wpdf' ),
+			'fields.radio.values.label.label' => __( 'Label', 'wpdf' ),
+			'fields.radio.values.label.help' => __( 'Text displayed in dropdown', 'wpdf' ),
+			'fields.radio.values.value.label' => __( 'Value', 'wpdf' ),
+			'fields.radio.values.value.help' => __( 'Value stored in when selected, leave blank to auto generate from label', 'wpdf' ),
+			'fields.radio.values.default.label' => __( 'Default', 'wpdf' ),
+			'fields.radio.values.default.help' => __( 'Check value to make default when form is loaded', 'wpdf' ),
+
+			// Select field text.
+			'fields.select.empty_text.label' => __( 'Empty Text', 'wpdf' ),
+			'fields.select.empty_text.help' => __( 'Default value shown when the form is loaded, leave empty to not show', 'wpdf' ),
+			'fields.select.select_type.label' => __( 'Select Type', 'wpdf' ),
+			'fields.select.select_type.help' => __( 'Multiple selects allow the user to select multiple values instead of only a single value.', 'wpdf' ),
+			'fields.select.select_type.single.label' => __( 'Single', 'wpdf' ),
+			'fields.select.select_type.multiple.label' => __( 'Multiple', 'wpdf' ),
+			'fields.select.values.heading.label' => __( 'Values', 'wpdf' ),
+			'fields.select.values.heading.help' => __( 'List of available options', 'wpdf' ),
+			'fields.select.values.label.label' => __( 'Label', 'wpdf' ),
+			'fields.select.values.label.help' => __( 'Text displayed in dropdown', 'wpdf' ),
+			'fields.select.values.value.label' => __( 'Value', 'wpdf' ),
+			'fields.select.values.value.help' => __( 'Value stored in when selected, leave blank to auto generate from label', 'wpdf' ),
+			'fields.select.values.default.label' => __( 'Default', 'wpdf' ),
+			'fields.select.values.default.help' => __( 'Check value to make default when form is loaded', 'wpdf' ),
 		);
 
 	}
