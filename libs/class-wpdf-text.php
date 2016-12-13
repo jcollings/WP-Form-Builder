@@ -7,6 +7,9 @@
  * @created 22/11/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 /**
  * Class WPDF_Text
  */
@@ -54,6 +57,57 @@ class WPDF_Text {
 			'shortcode_error_selection'   => __( 'An error occurred with your selected, please try again.', 'wpdf' ),
 			// general.
 			'general_form_saved' => __( 'Changes have been saved.', 'wpdf' ),
+
+			// General field text.
+			'fields.general.label.help' => __( 'Text displayed before the field on the form', 'wpdf' ),
+			'fields.general.label.label' => __( 'Label', 'wpdf' ),
+			'fields.general.placeholder.help' => __( 'Text displayed in the field when no value is entered', 'wpdf' ),
+			'fields.general.placeholder.label' => __( 'Placeholder', 'wpdf' ),
+			'fields.general.css_classes.help' => __( 'Add custom css classes to field output', 'wpdf' ),
+			'fields.general.css_classes.label' => __( 'CSS Classes', 'wpdf' ),
+			'fields.general.delete.help' => __( 'Delete field from form', 'wpdf' ),
+			'fields.general.toggle.help' => __( 'Toggle display of field settings', 'wpdf' ),
+			'fields.validation.heading.text' => __( 'Validation Rules', 'wpdf' ),
+			'fields.validation.heading.help' => __( 'Add rules to validate data entered', 'wpdf' ),
+			'fields.validation.button.text' => __( 'Add validation Rule', 'wpdf' ),
+			'fields.validation.type.option.placeholder' => __( 'Choose Validation Type', 'wpdf' ),
+			'fields.validation.type.option.required' => __( 'Required', 'wpdf' ),
+			'fields.validation.type.option.email' => __( 'Email', 'wpdf' ),
+			'fields.validation.type.option.unique' => __( 'Unique', 'wpdf' ),
+			'fields.validation.message.label' => __( 'Validation Message', 'wpdf' ),
+			'fields.validation.message.help' => __( 'Enter text to be displayed, or leave blank to display default text.', 'wpdf' ),
+
+			// Text field text.
+			'fields.text.default.help' => __( 'Default value shown when the form is loaded', 'wpdf' ),
+			'fields.text.default.label' => __( 'Default Value', 'wpdf' ),
+
+			// Textarea field text.
+			'fields.textarea.default.help' => __( 'Default value shown when the form is loaded', 'wpdf' ),
+			'fields.textarea.default.label' => __( 'Default Value', 'wpdf' ),
+			'fields.textarea.rows.help' => __( 'Changes the height of the text area by how many rows are displayed', 'wpdf' ),
+			'fields.textarea.rows.label' => __( 'Rows', 'wpdf' ),
+
+			// File file text.
+			'fields.file.max_file_size.label' => __( 'Maximum file size (Server Limit: %d)', 'wpdf' ),
+			'fields.file.max_file_size.help' => __( 'Maximum size of file allowed to be uploaded', 'wpdf' ),
+			'fields.file.allowed_ext.label' => __( 'Allowed Extensions', 'wpdf' ),
+			'fields.file.allowed_ext.help' => __( 'Comma separated list of allowed file extensions (jpg,jpeg,png)', 'wpdf' ),
+
+			// Number field text.
+			'fields.number.type.help' => __( 'Field type to display', 'wpdf' ),
+			'fields.number.type.label' => __( 'Type', 'wpdf' ),
+			'fields.number.type.option.input' => __( 'Number Input', 'wpdf' ),
+			'fields.number.type.option.input-range' => __( 'Number Range Input', 'wpdf' ),
+			'fields.number.type.option.slider' => __( 'Number Slider', 'wpdf' ),
+			'fields.number.type.option.slider-range' => __( 'Number Range Slider', 'wpdf' ),
+			'fields.number.min.help' => __( 'Minimum allowed value', 'wpdf' ),
+			'fields.number.min.label' => __( 'Minimum', 'wpdf' ),
+			'fields.number.max.help' => __( 'Maximum allowed value', 'wpdf' ),
+			'fields.number.max.label' => __( 'Maximum', 'wpdf' ),
+			'fields.number.step.help' => __( 'Number increment', 'wpdf' ),
+			'fields.number.step.label' => __( 'Number Increment', 'wpdf' ),
+			'fields.number.default.help' => __( 'Default Value', 'wpdf' ),
+			'fields.number.default.label' => __( 'Default Value', 'wpdf' ),
 		);
 
 	}

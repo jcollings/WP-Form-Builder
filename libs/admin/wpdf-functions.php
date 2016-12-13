@@ -7,6 +7,10 @@
  * @created 06/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Get list of available validation rules
  *
@@ -35,7 +39,7 @@ function wpdf_display_validation_block( $type = '', $data = array() ) {
 
 		<div class="wpdf-validation__selector">
 			<select name="field[][validation][][type]" class="validation_type">
-				<option value="">Choose Validation Type</option>
+				<option value=""><?php echo esc_html( WPDF()->text->get( 'fields.validation.type.option.placeholder' ) ); ?></option>
 				<?php foreach ( $rules as $id => $label ) : ?>
 					<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $id, $type, true ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
@@ -66,9 +70,9 @@ function wpdf_display_validation_block_section( $type = '', $data = array() ) {
 	?>
 	<div class="wpdf-col">
 		<label class="wpdf-label" for="">
-			Validation Message:
+			<?php echo esc_html( WPDF()->text->get( 'fields.validation.message.label' ) ); ?>
 			<span class="wpdf-tooltip wpdf-tooltip__inline"
-			      title="Enter text to be displayed, or leave blank to display default text.">?</span>
+			      title="<?php echo esc_attr( WPDF()->text->get( 'fields.validation.message.help' ) ); ?>">?</span>
 		</label>
 		<input type="text" name="field[][validation][][msg]"
 		       value="<?php echo isset( $data['msg'] ) ? esc_attr( $data['msg'] ) : ''; ?>"
