@@ -7,6 +7,10 @@
  * @created 07/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Shortcode to display form
  *

@@ -3,20 +3,28 @@
  * Form Style page
  *
  * @var WPDF_DB_Form $form
+ *
+ * @package WPDF/Admin
+ * @author James Collings
+ * @created 21/11/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $form_id = '';
-if($form !== false){
+if ( false !== $form ) {
 	$form_id = $form->get_id();
 }
 ?>
 <form action="" method="post">
 
-	<input type="hidden" name="wpdf-action" value="edit-form-style" />
-	<input type="hidden" name="wpdf-form" value="<?php echo $form_id; ?>" />
+	<input type="hidden" name="wpdf-action" value="edit-form-style"/>
+	<input type="hidden" name="wpdf-form" value="<?php echo esc_attr( $form_id ); ?>"/>
 	<div class="wpdf-form-manager wpdf-form-manager--inputs">
 
-		<?php $this->display_form_header('style', $form); ?>
+		<?php $this->display_form_header( 'style', $form ); ?>
 		<div class="wpdf-cols">
 
 			<div class="wpdf-full">
@@ -26,7 +34,7 @@ if($form !== false){
 						<?php
 						if ( $this->get_success() > 0 ) {
 							?>
-							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo WPDF()->text->get('form_saved', 'general'); ?></p>
+							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo esc_html( WPDF()->text->get( 'form_saved', 'general' ) ); ?></p>
 							<?php
 						}
 						?>
@@ -43,10 +51,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_bg_colour]', $form->get_style('form_bg_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_bg_colour]', $form->get_style( 'form_bg_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_bg_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_bg_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -56,10 +66,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_text_colour]', $form->get_style('form_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_text_colour]', $form->get_style( 'form_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -76,10 +88,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_bg_error_colour]', $form->get_style('form_bg_error_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_bg_error_colour]', $form->get_style( 'form_bg_error_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_error_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_bg_error_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_error_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_bg_error_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -89,10 +103,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_text_error_colour]', $form->get_style('form_text_error_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_text_error_colour]', $form->get_style( 'form_text_error_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_text_error_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_text_error_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_text_error_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_text_error_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -109,10 +125,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_bg_success_colour]', $form->get_style('form_bg_success_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_bg_success_colour]', $form->get_style( 'form_bg_success_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_success_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_bg_success_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_bg_success_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_bg_success_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -122,10 +140,13 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[form_text_success_colour]', $form->get_style('form_text_success_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[form_text_success_colour]', $form->get_style( 'form_text_success_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="form_text_success_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('form_text_success_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="form_text_success_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'form_text_success_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -142,10 +163,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_label_bg_colour]', $form->get_style('field_label_bg_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_label_bg_colour]', $form->get_style( 'field_label_bg_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_label_bg_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_label_bg_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_label_bg_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_label_bg_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -155,10 +178,13 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_label_text_colour]', $form->get_style('field_label_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_label_text_colour]', $form->get_style( 'field_label_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_label_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_label_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="field_label_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_label_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -168,10 +194,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_input_bg_colour]', $form->get_style('field_input_bg_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_input_bg_colour]', $form->get_style( 'field_input_bg_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_input_bg_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_input_bg_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_input_bg_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_input_bg_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -181,10 +209,13 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_input_text_colour]', $form->get_style('field_input_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_input_text_colour]', $form->get_style( 'field_input_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_input_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_input_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="field_input_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_input_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -194,10 +225,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_border_colour]', $form->get_style('field_border_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_border_colour]', $form->get_style( 'field_border_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_border_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_border_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_border_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_border_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -207,10 +240,13 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_error_border_colour]', $form->get_style('field_error_border_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_error_border_colour]', $form->get_style( 'field_error_border_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_error_border_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_error_border_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="field_error_border_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_error_border_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -220,14 +256,15 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[field_error_text_colour]', $form->get_style('field_error_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[field_error_text_colour]', $form->get_style( 'field_error_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="field_error_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('field_error_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="field_error_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'field_error_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
-
-
 
 
 					</table>
@@ -242,10 +279,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[checkbox_text_colour]', $form->get_style('checkbox_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[checkbox_text_colour]', $form->get_style( 'checkbox_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="checkbox_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('checkbox_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="checkbox_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'checkbox_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 					</table>
@@ -261,10 +300,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[button_bg_colour]', $form->get_style('button_bg_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[button_bg_colour]', $form->get_style( 'button_bg_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_bg_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('button_bg_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_bg_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'button_bg_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -274,10 +315,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[button_text_colour]', $form->get_style('button_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[button_text_colour]', $form->get_style( 'button_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('button_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'button_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -287,10 +330,12 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[button_hover_bg_colour]', $form->get_style('button_hover_bg_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[button_hover_bg_colour]', $form->get_style( 'button_hover_bg_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_hover_bg_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('button_hover_bg_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_hover_bg_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'button_hover_bg_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 
@@ -300,10 +345,13 @@ if($form !== false){
 								<span class="wpdf-tooltip" title="">?</span>
 							</td>
 							<td class="">
-								<?php wpdf_iris_picker('wpdf_style[button_hover_text_colour]', $form->get_style('button_hover_text_colour', true)); ?>
+								<?php wpdf_iris_picker( 'wpdf_style[button_hover_text_colour]', $form->get_style( 'button_hover_text_colour', true ) ); ?>
 							</td>
 							<td>
-								<label><input type="checkbox" name="wpdf_style_disable[]" value="button_hover_text_colour" class="wpdf-checkbox" <?php checked(true, $form->is_style_disabled('button_hover_text_colour'), true); ?>/> Disable</label>
+								<label><input type="checkbox" name="wpdf_style_disable[]"
+								              value="button_hover_text_colour"
+								              class="wpdf-checkbox" <?php checked( true, $form->is_style_disabled( 'button_hover_text_colour' ), true ); ?>/>
+									Disable</label>
 							</td>
 						</tr>
 

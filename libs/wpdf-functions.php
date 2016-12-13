@@ -7,6 +7,10 @@
  * @created 04/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Get uploads directory path
  *

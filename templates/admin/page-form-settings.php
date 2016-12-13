@@ -9,12 +9,16 @@
  * @created 06/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 $form_id = '';
 if ( false !== $form ) {
 	$form_id = $form->get_id();
 }
 
-$settings              = $form->export();
+$settings = $form->export();
 
 $confirmation_location = $confirmation_redirect = $confirmation_message = $confirmation_type = $submit_label = '';
 if ( $settings ) {
@@ -56,7 +60,7 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 						<?php
 						if ( $this->get_success() > 0 ) {
 							?>
-							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo WPDF()->text->get('form_saved', 'general'); ?></p>
+							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo esc_html( WPDF()->text->get( 'form_saved', 'general' ) ); ?></p>
 							<?php
 						}
 						?>
@@ -75,7 +79,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 							</td>
 							<td class="notification__input"><input id="form_label" type="text"
 							                                       name="wpdf_settings[form_label]"
-							                                       value="<?php echo esc_attr( $form->get_label() ); ?>"/></td>
+							                                       value="<?php echo esc_attr( $form->get_label() ); ?>"/>
+							</td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
@@ -95,7 +100,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 							</td>
 							<td class="notification__input"><input id="submit_label" type="text"
 							                                       name="wpdf_settings[submit_label]"
-							                                       value="<?php echo esc_attr( $submit_label ); ?>"/></td>
+							                                       value="<?php echo esc_attr( $submit_label ); ?>"/>
+							</td>
 						</tr>
 					</table>
 
@@ -156,13 +162,14 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[confirmation_redirect]"
 							                                       id="confirmation_redirect" type="text"
-							                                       value="<?php echo esc_attr( $confirmation_redirect ); ?>"/></td>
+							                                       value="<?php echo esc_attr( $confirmation_redirect ); ?>"/>
+							</td>
 						</tr>
 					</table>
 
 					<h2 class="wpdf-settings__header">
 						Form Errors <span class="wpdf-tooltip wpdf-tooltip__inline"
-						                       title="Modify text displayed on form output.">?</span>
+						                  title="Modify text displayed on form output.">?</span>
 					</h2>
 
 					<table class="wpdf-form-table">
@@ -179,7 +186,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
 								<label for="submit_label">Display list of field errors</label>
-								<span class="wpdf-tooltip" title="Enable the list of field errors below the general error">?</span>
+								<span class="wpdf-tooltip"
+								      title="Enable the list of field errors below the general error">?</span>
 							</td>
 							<td class="notification__input">
 								<select name="wpdf_settings[error][show_fields]" id="wpdf_settings-enable_style">
@@ -256,7 +264,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[recaptcha_public]"
 							                                       id="recaptcha_public" type="text"
-							                                       value="<?php echo esc_attr( $recaptcha_public ); ?>"/></td>
+							                                       value="<?php echo esc_attr( $recaptcha_public ); ?>"/>
+							</td>
 						</tr>
 						<tr>
 							<td class="wpdf-tooltip__wrapper">
@@ -265,7 +274,8 @@ $recaptcha_public  = $form->get_setting( 'recaptcha_public' );
 							</td>
 							<td class="notification__input"><input name="wpdf_settings[recaptcha_private]"
 							                                       id="recaptcha_private" type="text"
-							                                       value="<?php echo esc_attr( $recaptcha_private ); ?>"/></td>
+							                                       value="<?php echo esc_attr( $recaptcha_private ); ?>"/>
+							</td>
 						</tr>
 					</table>
 					&nbsp;

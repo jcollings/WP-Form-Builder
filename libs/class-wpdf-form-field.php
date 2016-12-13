@@ -1,4 +1,15 @@
 <?php
+/**
+ * Form field base class
+ *
+ * @package WPDF
+ * @author James Collings
+ * @created 06/08/2016
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 /**
  * Class WPDF_FormField

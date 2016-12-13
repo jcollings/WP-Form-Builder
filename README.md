@@ -1,6 +1,6 @@
 # WP Form Builder
 Author: James Collings  
-Version: 0.3.2  
+Version: 0.3.3  
 Homepage: https://www.wpformbuilder.com/  
 Documentation: https://www.wpformbuilder.com/documentation/  
 Demo: https://www.wpformbuilder.com/demo/  
@@ -230,6 +230,9 @@ A modal window will open up allowing you to choose from a list of forms previous
 ![Tinymce Button](./assets/docs/Form-Insert.png)
 
 ## Changelog
+
+### 0.3.3
+* ADD: Number input, Number Slider, and Number Range Slider field
 
 ### 0.3.2
 * FIX: Sanitize data when editing the form

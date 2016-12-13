@@ -7,6 +7,10 @@
  * @created 06/08/2016
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Class WPDF_Admin
  */

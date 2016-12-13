@@ -1,10 +1,15 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: james
- * Date: 30/11/2016
- * Time: 19:10
+ * Plugin Settings Page
+ *
+ * @package WPDF/Admin
+ * @author James Collings
+ * @created 30/11/2016
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 ?>
 <div class="wrap">
 

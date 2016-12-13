@@ -3,7 +3,7 @@
  * Plugin Name: WP Form Builder
  * Plugin URI: https://www.wpformbuilder.com/
  * Description: Drag & Drop form builder plugin, custom notifications, custom confirmation message, manage form submissions online.
- * Version: 0.3.2
+ * Version: 0.3.3
  * Author: James Collings
  * Author URI: https://www.jclabs.co.uk
  *
@@ -26,7 +26,7 @@ class WPDF_DeveloperForms {
 	 *
 	 * @var string
 	 */
-	protected $version = '0.3.2';
+	protected $version = '0.3.3';
 
 	/**
 	 * Database version

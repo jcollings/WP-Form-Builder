@@ -186,6 +186,6 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('css', ['sass:dev', 'sass:dist']);
-    grunt.registerTask('build', ['string-replace', 'markdown', 'clean:build', 'sass:dev', 'copy', 'compress']);
+    grunt.registerTask('build', ['string-replace', 'markdown', 'clean:build', 'sass:dev', 'sass:dist', 'uglify', 'copy', 'compress']);
 
 };
