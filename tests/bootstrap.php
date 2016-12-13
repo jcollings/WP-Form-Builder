@@ -83,3 +83,16 @@ class WPDF_Unit_Tests_Bootstrap {
 
 WPDF_Unit_Tests_Bootstrap::instance();
 
+// Mock Classes
+class WPDF_Test_Form extends WPDF_Form {
+
+	/**
+	 * Mark form as being submit
+	 *
+	 * @param bool $var Set value.
+	 */
+	public function submitted($var = true){
+		$this->_submitted = $var;
+	}
+}
+

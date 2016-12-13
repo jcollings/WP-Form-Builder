@@ -55,11 +55,14 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 
 	public function testTextField(){
 
-		$form = new WPDF_Form("TestForm", array(
+		$form = new WPDF_Test_Form("TestForm", array(
 			'fname' => array(
 				'type' => 'text'
 			)
 		));
+
+		// mark form as being submitted
+		$form->submitted();
 
 		$field = $form->get_field('fname');
 
@@ -74,7 +77,7 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 
 	public function testTextFieldDefault(){
 
-		$form = new WPDF_Form("TestForm", array(
+		$form = new WPDF_Test_Form("TestForm", array(
 			'fname' => array(
 				'type' => 'text',
 				'default' => 'asd'
@@ -86,6 +89,9 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		// default value displayed for non submitted form
 		$data = new WPDF_FormData($form, array(), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => 'asd')));
+
+		// mark form as being submitted
+		$form->submitted();
 
 		// default value is not forced for submitted form without value
 		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());

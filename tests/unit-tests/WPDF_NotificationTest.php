@@ -23,11 +23,15 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 
 	public function testBasicConditionalNotification(){
 
-		$form = new WPDF_Form("TestForm", array(
+		$form = new WPDF_Test_Form("TestForm", array(
 			'name' => array(
 				'type' => 'text'
 			)
 		));
+
+		// mark form as being submitted
+		$form->submitted();
+
 		$field = $form->get_field('name');
 
 		$notificationValid = new WPDF_Notification(array(
@@ -48,11 +52,15 @@ class WPDF_NotificationTest extends WP_UnitTestCase {
 
 	public function testComplexConditionalNotification(){
 
-		$form = new WPDF_Form("TestForm", array(
+		$form = new WPDF_Test_Form("TestForm", array(
 			'name' => array(
 				'type' => 'text'
 			)
 		));
+
+		// mark form as being submitted
+		$form->submitted();
+
 		$field = $form->get_field('name');
 
 		$notificationEq = new WPDF_Notification(array(
