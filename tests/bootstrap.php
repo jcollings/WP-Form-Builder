@@ -86,6 +86,8 @@ WPDF_Unit_Tests_Bootstrap::instance();
 // Mock Classes
 class WPDF_Test_Form extends WPDF_Form {
 
+	private $_fake_token = false;
+
 	/**
 	 * Mark form as being submit
 	 *
@@ -93,6 +95,33 @@ class WPDF_Test_Form extends WPDF_Form {
 	 */
 	public function submitted($var = true){
 		$this->_submitted = $var;
+	}
+
+	/**
+	 * @param WPDF_FormData $data Form data to load
+	 */
+	public function data($data){
+		$this->_data = $data;
+	}
+
+	/**
+	 * Allow token override.
+	 *
+	 * @param bool $token
+	 */
+	public function token( $token = false){
+		$this->_fake_token = $token;
+	}
+
+	/**
+	 * Override token verification for test form
+	 *
+	 * @param string $token
+	 *
+	 * @return bool
+	 */
+	public function verify_token($token = ''){
+		return $this->_fake_token;
 	}
 }
 

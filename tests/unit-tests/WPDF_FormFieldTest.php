@@ -13,7 +13,20 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		$parser = xml_parser_create();
 		xml_parse_into_struct($parser, $string, $values);
 
+		$depth = 0;
+
+
+		$level = isset($attrs['level']) ? intval($attrs['level']) : -1;
+		unset($attrs['level']);
+		$attr_count = count($attrs);
+
 		foreach($values as $row){
+
+			if($row['type'] == 'open')
+				$depth++;
+
+			if($row['tag'] == 'close')
+				$depth--;
 
 			// check if we are on the correct element
 			if( strcasecmp($row['tag'], $element) === 0 && in_array($row['type'], array('complete', 'open'))){
@@ -24,8 +37,12 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 				// check if attributes exist on element
 				$attributes = isset( $row['attributes'] ) ? $row['attributes'] : false;
 
+				if($level > -1 && $level !== $row['level']){
+					return false;
+				}
+
 				// if exact match attribute count has to be the same
-				if( ($attributes && count($attributes) == count($attrs)) || !$exact ){
+				if( ($attributes && count($attributes) == $attr_count) || !$exact ){
 
 					foreach($attrs as $attr_name => $attr_val){
 
@@ -36,7 +53,7 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 					}
 				}
 
-				if( count($attrs) == count($element_match) &&  empty(array_diff($attrs, $element_match))){
+				if( $attr_count == count($element_match) &&  empty(array_diff($attrs, $element_match))){
 					return true;
 				}
 			}
@@ -48,6 +65,12 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 	protected function getFieldOutput(WPDF_FormField $field, WPDF_FormData $data){
 		ob_start();
 		$field->output($data);
+		return ob_get_clean();
+	}
+
+	protected function getFieldRowOutput(WPDF_Form $form, $field_id){
+		ob_start();
+		wpdf_display_field($form, $field_id);
 		return ob_get_clean();
 	}
 
