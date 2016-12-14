@@ -13,20 +13,11 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		$parser = xml_parser_create();
 		xml_parse_into_struct($parser, $string, $values);
 
-		$depth = 0;
-
-
 		$level = isset($attrs['level']) ? intval($attrs['level']) : -1;
 		unset($attrs['level']);
 		$attr_count = count($attrs);
 
 		foreach($values as $row){
-
-			if($row['type'] == 'open')
-				$depth++;
-
-			if($row['tag'] == 'close')
-				$depth--;
 
 			// check if we are on the correct element
 			if( strcasecmp($row['tag'], $element) === 0 && in_array($row['type'], array('complete', 'open'))){
@@ -72,6 +63,49 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		ob_start();
 		wpdf_display_field($form, $field_id);
 		return ob_get_clean();
+	}
+
+	public function testRequireFieldLabel(){
+
+		$form = new WPDF_Test_Form("TestForm", array(
+			'fname' => array(
+				'type' => 'text',
+				'validation' => 'required'
+			)
+		));
+
+		$form->token(true);
+
+		// mark form as being submitted
+		$form->submitted();
+
+		// check to make sure no required message is visible on the label
+		$field = $form->get_field('fname');
+		$row = $this->getFieldRowOutput($form, 'fname');
+		$this->assertTrue($this->htmlHasAttributes($row, 'label', ['for' => 'fname', 'level' => 3]));
+		$this->assertTrue($this->htmlHasAttributes($row, 'span', ['level' => 4]));
+
+	}
+
+	public function testNonRequireFieldLabel(){
+
+		$form = new WPDF_Test_Form("TestForm", array(
+			'fname' => array(
+				'type' => 'text'
+			)
+		));
+
+		$form->token(true);
+
+		// mark form as being submitted
+		$form->submitted();
+
+		// check to make sure no required message is visible on the label
+		$field = $form->get_field('fname');
+		$row = $this->getFieldRowOutput($form, 'fname');
+		$this->assertTrue($this->htmlHasAttributes($row, 'label', ['for' => 'fname', 'level' => 3]));
+		$this->assertFalse($this->htmlHasAttributes($row, 'span', ['level' => 4]));
+
 	}
 
 	#region text field

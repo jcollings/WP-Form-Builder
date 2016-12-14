@@ -9,7 +9,10 @@ Updated: 01/12/2016
 
 ## About
 
-WP Form Builder plugin make it easy to create and display forms within your WordPress theme, With a WordPress admin section where you can easily view past form submissions. 
+Create your next form with ease using our new drag and drop form builder, with multiple field types, each with validation helping to capture the data you require, whether it’s a simple contact form or even a complex questionnaire we can build it.
+Setup email notifications to alert administrators about new form submissions, or even just thank users for completing the form, or do nothing, the choice is yours with our configurable form notifications and confirmations.
+
+Simply change colours of the form to match your website’s theme via our style editor and preview the form, when ready to display the form use our new WYSIWYG button to output and configure the form shortcode. 
 
 ## Features
 
@@ -21,6 +24,7 @@ WP Form Builder plugin make it easy to create and display forms within your Word
 
 ## Documentation
 
+* [Installation](#installation)
 * [Managing forms](#managing-forms)
 * [Creating a form](#creating-a-form)
 * [Managing fields](#managing-fields)
@@ -37,7 +41,11 @@ WP Form Builder plugin make it easy to create and display forms within your Word
 * [Form submissions](#form-submissions)
 * [Adding form to page](#adding-form-to-page)
     
-    
+### Installation
+
+1. Download the latest version of the plugin from CodeCanyon.
+1. Extract the download to your websites wp-content/plugins folder.
+1. Activate the plugin from the WordPress Admin plugins section.
 
 ### Managing Forms
 

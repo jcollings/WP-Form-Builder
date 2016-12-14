@@ -668,7 +668,13 @@ class WPDF_Form {
 	 * @param string $name Field id.
 	 */
 	public function label( $name ) {
-		echo '<label for="' . esc_attr( $name ) . '" >' . esc_html( $this->_fields[ $name ]->get_label() ) . '</label>';
+		$required = '';
+		if ( $this->field_has_validation( $name ) ) {
+			$required_text = apply_filters('wpdf/field_required_text', '*', $this, $name);
+			$required = ' <span>' . esc_html( $required_text ) . '</span>';
+		}
+
+		echo '<label for="' . esc_attr( $name ) . '" >' . esc_html( $this->_fields[ $name ]->get_label() ) . $required . '</label>';
 	}
 
 	/**
@@ -1071,5 +1077,25 @@ class WPDF_Form {
 			<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( $public_key ); ?>"></div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Check to see if field has validation rule
+	 *
+	 * @param string $name Field name.
+	 * @param string $rule Validation type.
+	 *
+	 * @return bool
+	 */
+	public function field_has_validation( $name, $rule = 'required' ) {
+
+		if ( isset( $this->_rules[ $name ] ) ) {
+			foreach ( $this->_rules[ $name ] as $row_rule ) {
+				if ( $rule === $row_rule['type'] ) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
