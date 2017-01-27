@@ -43,9 +43,14 @@
         return found;
     };
 
-    $(document).ready(function(){
+    function init_field_conditions(event, form){
 
         var _forms = $('.wpdf-form');
+
+        if(form != undefined){
+            _forms = form;
+        }
+
         _forms.each(function(){
             var _form = $(this);
 
@@ -70,16 +75,19 @@
                 _form.find('input, select').trigger('wpdf_display_check');
             }
         })
+    }
 
-    });
+    $('body').on('wpdf_form_init', init_field_conditions);
 
 })(jQuery);
 
 (function($){
 
-    $(document).ready(function(){
-
+    function init_range_sliders(event, form){
         var _number_fields = $('.wpdf-input-number');
+        if(form != undefined){
+            form.find('.wpdf-input-number');
+        }
 
         if(_number_fields.length == 0){
             return;
@@ -155,8 +163,9 @@
             }
 
         });
+    }
 
-    });
+    $('body').on('wpdf_form_init', init_range_sliders);
 
 })(jQuery);
 
@@ -184,19 +193,19 @@
             json = $.parseJSON(json);
             if(json.status == 'ERR'){
 
-                console.log( $form.replaceWith( json.message ) );
+                $form.replaceWith( json.message );
 
                 // re-fetch form
                 $form = $('#' + id);
 
                 $form.attr('target', iframe.attr('name'));
                 $form.append('<input type="hidden" name="wpdf_ajax" value="iframe" />');
+                $('body').trigger('wpdf_form_init',[ $form ]);
 
             }else{
 
                 if( json.redirect != undefined ){
 
-                    //
                     window.location.replace( json.redirect );
 
                 }else if( json.message != undefined ){
@@ -218,6 +227,15 @@
         $('.wpdf-form').each(function(){
             wpdf_ajax_form($(this));
         });
+    });
+
+})(jQuery);
+
+(function($){
+
+    // initialize forms
+    $(document).ready(function(){
+        $('body').trigger('wpdf_form_init');
     });
 
 })(jQuery);
