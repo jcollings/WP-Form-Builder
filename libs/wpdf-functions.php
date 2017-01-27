@@ -124,11 +124,12 @@ function wpdf_display_field( $form, $field_id ) {
 		return;
 	}
 
+	$id = $form->get_field( $field_id )->get_input_name() . '_' . $form->get_id();
 	?>
-	<div class="wpdf-form-row <?php $form->classes( $field_id, 'validation' ); ?> <?php $form->classes( $field_id, 'type' ); ?>">
+	<div id="<?php echo esc_attr( $id ); ?>" class="wpdf-form-row <?php $form->classes( $field_id, 'validation' ); ?> <?php $form->classes( $field_id, 'type' ); ?>">
 		<div class="wpdf-label"><?php $form->label( $field_id ); ?></div>
 		<div class="wpdf-input"><?php $form->input( $field_id ); ?></div>
-		<?php $form->error( $field_id ); ?>
+		<div class="ajax_field_error"><?php $form->error( $field_id ); ?></div>
 	</div>
 	<?php
 }

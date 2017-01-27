@@ -1139,9 +1139,8 @@ class WPDF_Form {
 			$json['error_message'] = ob_get_clean();
 
 			// Display list of field errors.
-			$show_errors = $this->get_setting( 'show_fields', 'error' );
 			$errors = array();
-			if ( 'no' !== $show_errors && ! empty( $this->_errors ) ) {
+			if ( ! empty( $this->_errors ) ) {
 				foreach ( $this->_errors as $field_id => $error ) {
 
 					// Get formatted error.
@@ -1149,7 +1148,7 @@ class WPDF_Form {
 					$this->error( $field_id );
 					$formatted_field_error = ob_get_clean();
 					if ( ! empty( $formatted_field_error ) ) {
-						$errors[ $this->_fields[ $field_id ]->get_input_name() ] = $formatted_field_error;
+						$errors[ $this->_fields[ $field_id ]->get_input_name() . '_' . $this->get_id() ] = $formatted_field_error;
 					}
 				}
 			}

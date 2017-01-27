@@ -199,6 +199,22 @@
 
                 if(json.status == 'ERR'){
                     _form.find('.wpdf-ajax-response').html(json.error_message);
+
+                    $('.ajax_field_error').html('');
+
+                    for(var key in json.field_errors){
+
+                        if (!json.field_errors.hasOwnProperty(key)) continue;
+
+                        var obj = json.field_errors[key];
+                        _form.find( '#' + key + ' .ajax_field_error').html(obj);
+                    }
+                }else{
+                    if(json.redirect != undefined){
+
+                    }else if(json.message != undefined){
+                        _form.find('.wpdf-ajax-response').html(json.message);
+                    }
                 }
             });
         });
