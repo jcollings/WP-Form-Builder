@@ -159,3 +159,49 @@
     });
 
 })(jQuery);
+
+(function($){
+
+    function wpdf_ajax_form($form, on_complete)
+    {
+        var iframe;
+
+        if (!$form.attr('target'))
+        {
+            //create a unique iframe for the form
+            iframe = $("<iframe></iframe>").attr('name', 'wpdf_ajax_form_' + Math.floor(Math.random() * 999999)).hide().appendTo($('body'));
+            $form.attr('target', iframe.attr('name'));
+            $form.append('<input type="hidden" name="wpdf_ajax" value="iframe" />');
+        }
+
+        if (on_complete)
+        {
+            iframe = iframe || $('iframe[name=" ' + $form.attr('target') + ' "]');
+            iframe.load(function ()
+            {
+                var iframeBody = iframe[0].contentDocument.body,
+                    json = iframeBody.textContent || iframeBody.innerText;
+                on_complete(json);
+            });
+        }
+    }
+
+    /**
+     * Ajax forms
+     */
+    $(document).ready(function(){
+
+        $('.wpdf-form').each(function(){
+            var _form = $(this);
+            wpdf_ajax_form($(this), function(response){
+
+                var json = $.parseJSON(response);
+
+                if(json.status == 'ERR'){
+                    _form.find('.wpdf-ajax-response').html(json.error_message);
+                }
+            });
+        });
+    });
+
+})(jQuery);

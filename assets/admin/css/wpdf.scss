@@ -58,6 +58,12 @@
         left: 0;
         top: 0;
         bottom: 0;
+
+        // hide wp notification messages which are applied under h1 in admin section
+        & > div{
+            display: none;
+        }
+
     }
 
     .wpdf-header__logo h1 {

@@ -171,6 +171,13 @@ class WPDF_Form {
 	protected $_modules = array();
 
 	/**
+	 * Is request ajax
+	 *
+	 * @var bool
+	 */
+	protected $_is_ajax = false;
+
+	/**
 	 * WPDF_Form constructor.
 	 *
 	 * @param string $name Form name.
@@ -200,6 +207,9 @@ class WPDF_Form {
 			'type'    => 'message',
 			'message' => __( 'Form has been successfully submitted!', 'wpdf' ),
 		);
+
+		// set ajax
+		$this->_is_ajax = isset( $_POST['wpdf_ajax'] ) && 'iframe' === $_POST['wpdf_ajax'] ? true : false;
 
 		// load default settings.
 		$this->_settings = apply_filters( 'wpdf/form_settings', $this->_settings_default, $this->get_id() );
@@ -400,8 +410,8 @@ class WPDF_Form {
 				$this->_email_manager->send( $this->_data );
 			}
 
-			// redirect now if needed.
-			if ( 'redirect' === $this->_confirmation['type'] ) {
+			// redirect now if needed, but not if ajax.
+			if ( 'redirect' === $this->_confirmation['type'] && ! $this->is_ajax() ) {
 				wp_redirect( $this->_confirmation['redirect_url'] );
 				exit;
 			}
@@ -410,7 +420,6 @@ class WPDF_Form {
 
 			// on form complete.
 			do_action( 'wpdf/form_complete', $this, $this->_data );
-
 		endif;
 	}
 
@@ -602,6 +611,7 @@ class WPDF_Form {
 		<div class="wpdf-form-copy">
 			<?php echo wpautop( esc_html( $this->get_content() ) ); ?>
 		</div>
+		<div class="wpdf-ajax-response"></div>
 		<?php
 	}
 
@@ -1097,5 +1107,67 @@ class WPDF_Form {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Check if current request is ajax
+	 *
+	 * @return bool
+	 */
+	public function is_ajax() {
+		return $this->_is_ajax;
+	}
+
+	/**
+	 * Output ajax response
+	 *
+	 * @return void
+	 */
+	public function render_ajax() {
+
+		header( 'Content-Type: application/json' );
+
+		$json = array(
+			'status' => 'OK',
+		);
+
+		if ( $this->has_errors() ) {
+			$json['status'] = 'ERR';
+
+			ob_start();
+			$this->errors();
+			$json['error_message'] = ob_get_clean();
+
+			// Display list of field errors.
+			$show_errors = $this->get_setting( 'show_fields', 'error' );
+			$errors = array();
+			if ( 'no' !== $show_errors && ! empty( $this->_errors ) ) {
+				foreach ( $this->_errors as $field_id => $error ) {
+
+					// Get formatted error.
+					ob_start();
+					$this->error( $field_id );
+					$formatted_field_error = ob_get_clean();
+					if ( ! empty( $formatted_field_error ) ) {
+						$errors[ $this->_fields[ $field_id ]->get_input_name() ] = $formatted_field_error;
+					}
+				}
+			}
+
+			if ( ! empty( $errors ) ) {
+				$json['field_errors'] = $errors;
+			}
+		} else {
+			ob_start();
+			wpdf_display_confirmation( $this );
+			$confirmation = ob_get_clean();
+			$json['message'] = $confirmation;
+		}
+
+		if ( 'redirect' === $this->_confirmation['type'] ) {
+			$json['redirect'] = $this->_confirmation['redirect_url'];
+		}
+
+		echo json_encode( $json );
 	}
 }

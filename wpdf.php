@@ -344,6 +344,12 @@ class WPDF_DeveloperForms {
 		// load and process current form.
 		if ( $this->get_current_form() ) {
 			$this->_form->process();
+
+			// display ajax response.
+			if ( $this->_form->is_ajax() ) {
+				$this->_form->render_ajax();
+				die();
+			}
 		}
 	}
 
