@@ -580,6 +580,8 @@ class WPDF_Form {
 			if ( ! isset( $args['action'] ) ) {
 				$attrs .= sprintf( ' action="#%s"', esc_attr( $args['id'] ) );
 			}
+		}else{
+			$attrs .= sprintf( ' id="wpdf_form_%s"', esc_attr( $this->get_id() ) );
 		}
 
 		if ( isset( $args['action'] ) ) {
@@ -1133,39 +1135,16 @@ class WPDF_Form {
 
 		if ( $this->has_errors() ) {
 			$json['status'] = 'ERR';
-
-			ob_start();
-			$this->errors();
-			$json['error_message'] = ob_get_clean();
-
-			// Display list of field errors.
-			$errors = array();
-			if ( ! empty( $this->_errors ) ) {
-				foreach ( $this->_errors as $field_id => $error ) {
-
-					// Get formatted error.
-					ob_start();
-					$this->error( $field_id );
-					$formatted_field_error = ob_get_clean();
-					if ( ! empty( $formatted_field_error ) ) {
-						$errors[ $this->_fields[ $field_id ]->get_input_name() . '_' . $this->get_id() ] = $formatted_field_error;
-					}
-				}
+		}else{
+			if ( 'redirect' === $this->_confirmation['type'] ) {
+				$json['redirect'] = $this->_confirmation['redirect_url'];
 			}
-
-			if ( ! empty( $errors ) ) {
-				$json['field_errors'] = $errors;
-			}
-		} else {
-			ob_start();
-			wpdf_display_confirmation( $this );
-			$confirmation = ob_get_clean();
-			$json['message'] = $confirmation;
 		}
 
-		if ( 'redirect' === $this->_confirmation['type'] ) {
-			$json['redirect'] = $this->_confirmation['redirect_url'];
-		}
+		ob_start();
+		wpdf_display_form( "WPDF_FORM_". $this->get_id() );
+		$confirmation = ob_get_clean();
+		$json['message'] = $confirmation;
 
 		echo json_encode( $json );
 	}

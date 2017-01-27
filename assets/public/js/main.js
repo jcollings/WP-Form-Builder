@@ -162,8 +162,9 @@
 
 (function($){
 
-    function wpdf_ajax_form($form, on_complete)
+    function wpdf_ajax_form($form)
     {
+        var id = $form.attr('id');
         var iframe;
 
         if (!$form.attr('target'))
@@ -174,16 +175,39 @@
             $form.append('<input type="hidden" name="wpdf_ajax" value="iframe" />');
         }
 
-        if (on_complete)
+        iframe = iframe || $('iframe[name=" ' + $form.attr('target') + ' "]');
+        iframe.load(function ()
         {
-            iframe = iframe || $('iframe[name=" ' + $form.attr('target') + ' "]');
-            iframe.load(function ()
-            {
-                var iframeBody = iframe[0].contentDocument.body,
-                    json = iframeBody.textContent || iframeBody.innerText;
-                on_complete(json);
-            });
-        }
+            var iframeBody = iframe[0].contentDocument.body,
+                json = iframeBody.textContent || iframeBody.innerText;
+
+            json = $.parseJSON(json);
+            if(json.status == 'ERR'){
+
+                console.log( $form.replaceWith( json.message ) );
+
+                // re-fetch form
+                $form = $('#' + id);
+
+                $form.attr('target', iframe.attr('name'));
+                $form.append('<input type="hidden" name="wpdf_ajax" value="iframe" />');
+
+            }else{
+
+                if( json.redirect != undefined ){
+
+                    //
+                    window.location.replace( json.redirect );
+
+                }else if( json.message != undefined ){
+
+                    $form.replaceWith( json.message );
+                    $form.attr('target', iframe.attr('name'));
+                    $form.append('<input type="hidden" name="wpdf_ajax" value="iframe" />');
+                }
+            }
+
+        });
     }
 
     /**
@@ -192,31 +216,7 @@
     $(document).ready(function(){
 
         $('.wpdf-form').each(function(){
-            var _form = $(this);
-            wpdf_ajax_form($(this), function(response){
-
-                var json = $.parseJSON(response);
-
-                if(json.status == 'ERR'){
-                    _form.find('.wpdf-ajax-response').html(json.error_message);
-
-                    $('.ajax_field_error').html('');
-
-                    for(var key in json.field_errors){
-
-                        if (!json.field_errors.hasOwnProperty(key)) continue;
-
-                        var obj = json.field_errors[key];
-                        _form.find( '#' + key + ' .ajax_field_error').html(obj);
-                    }
-                }else{
-                    if(json.redirect != undefined){
-
-                    }else if(json.message != undefined){
-                        _form.find('.wpdf-ajax-response').html(json.message);
-                    }
-                }
-            });
+            wpdf_ajax_form($(this));
         });
     });
 
