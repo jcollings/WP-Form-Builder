@@ -745,7 +745,7 @@ class WPDF_Form {
 		if ( empty( $label ) ) {
 			$label = $this->_settings['labels']['submit'];
 		}
-		echo '<input type="submit" value="' . esc_attr( $label ) . '" class="wpdf-button wpdf-submit-button" />';
+		echo '<input type="submit" value="' . esc_attr( $label ) . '" class="wpdf-button wpdf-submit-button" /><div class="wpdf-spinner"></div>';
 	}
 
 	/**

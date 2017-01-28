@@ -227,6 +227,11 @@
         $('.wpdf-form').each(function(){
             wpdf_ajax_form($(this));
         });
+
+        $('body').on('submit', '.wpdf-form', function(){
+            $(this).addClass('wpdf-ajax-loading');
+            $(this).find('.wpdf-submit-button').prop('disabled', true);
+        });
     });
 
 })(jQuery);
