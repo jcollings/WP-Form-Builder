@@ -1135,17 +1135,18 @@ class WPDF_Form {
 
 		if ( $this->has_errors() ) {
 			$json['status'] = 'ERR';
-		}else{
+		} else {
 			if ( 'redirect' === $this->_confirmation['type'] ) {
 				$json['redirect'] = $this->_confirmation['redirect_url'];
 			}
 		}
 
 		ob_start();
-		wpdf_display_form( "WPDF_FORM_". $this->get_id() );
+		wpdf_display_form( 'WPDF_FORM_' . $this->get_id() );
 		$confirmation = ob_get_clean();
 		$json['message'] = $confirmation;
 
-		echo json_encode( $json );
+		echo wp_json_encode( $json );
+		exit;
 	}
 }
