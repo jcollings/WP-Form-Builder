@@ -157,8 +157,6 @@ class WPDF_DeveloperForms {
 		include_once 'libs/wpdf-functions.php';
 		include_once 'libs/wpdf-shortcodes.php';
 
-		include_once 'libs/modules/class-wpdf-user-registration.php';
-
 		if ( is_admin() ) {
 			include_once 'libs/admin/wpdf-functions.php';
 			include_once 'libs/admin/wpdf-admin.php';
