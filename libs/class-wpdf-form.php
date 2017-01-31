@@ -164,13 +164,6 @@ class WPDF_Form {
 	protected $_field_display_conds = array();
 
 	/**
-	 * Loaded plugin modules
-	 *
-	 * @var array
-	 */
-	protected $_modules = array();
-
-	/**
 	 * Is request ajax
 	 *
 	 * @var bool
@@ -356,10 +349,6 @@ class WPDF_Form {
 			$this->set_error( __( 'Your session has expired', 'wpdf' ) );
 		}
 
-		// load modules
-		// todo: modules should be loaded after form has been registered with all settings.
-		$this->load_modules();
-
 		$form_data = $this->_data->to_array();
 
 		foreach ( $this->_fields as $field_id => $field ) {
@@ -421,30 +410,6 @@ class WPDF_Form {
 			// on form complete.
 			do_action( 'wpdf/form_complete', $this, $this->_data );
 		endif;
-	}
-
-	/**
-	 * Load form plugin modules
-	 *
-	 * @throws Error Error message.
-	 */
-	public function load_modules() {
-
-		$modules = apply_filters( 'wpdf/list_modules', array() );
-
-		foreach ( $modules as $module_id => $module ) {
-
-			// check if class exists.
-			// todo: How should we handle errors like this, report it?
-			if ( ! class_exists( $module ) ) {
-				throw new Error( 'WPDF Module could not be loaded: ' . $module );
-			}
-
-			// check if class key exists.
-			if ( $this->get_setting( $module_id ) ) {
-				$this->_modules[ $module_id ] = new $module;
-			}
-		}
 	}
 
 	/**

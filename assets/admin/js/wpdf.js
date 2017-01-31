@@ -84,8 +84,6 @@
             }
         });
 
-        _sortable_elem.disableSelection();
-
         /**
          * make field buttons draggable to sortable fields
          */

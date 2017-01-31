@@ -92,6 +92,13 @@ class WPDF_DeveloperForms {
 	public $text = null;
 
 	/**
+	 * Loaded modules
+	 *
+	 * @var array
+	 */
+	protected $_modules = null;
+
+	/**
 	 * Single instance of class
 	 *
 	 * @var null
@@ -123,6 +130,7 @@ class WPDF_DeveloperForms {
 
 		add_action( 'wp_loaded', array( $this, 'load_db_forms' ), 9 );
 		add_action( 'wp_loaded', array( $this, 'process_form' ) );
+		add_action( 'init', array( $this, 'load_modules' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'on_activation' ) );
 
@@ -181,6 +189,32 @@ class WPDF_DeveloperForms {
 		if ( $preview ) {
 			include_once 'libs/class-wpdf-preview.php';
 			new WPDF_Preview( $preview );
+		}
+	}
+
+	/**
+	 * Load form plugin modules
+	 *
+	 * @throws Exception Error message.
+	 */
+	public function load_modules() {
+
+		if ( ! is_null( $this->_modules ) ) {
+			return;
+		}
+
+		$this->_modules = array();
+
+		$modules = apply_filters( 'wpdf/list_modules', array() );
+
+		foreach ( $modules as $module_id => $module ) {
+
+			// check if class exists.
+			if ( ! class_exists( $module ) ) {
+				throw new Exception( 'WPDF Module could not be loaded: ' . $module );
+			}
+
+			$this->_modules[ $module_id ] = new $module;
 		}
 	}
 
