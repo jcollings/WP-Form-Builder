@@ -649,79 +649,94 @@ class WPDF_Admin {
 		$form_id   = intval( $_POST['wpdf-form'] );
 		$form_data = get_post_meta( $form_id, '_form_data', true );
 
-		$settings = $_POST['wpdf_settings'];
+		$section = isset($_GET['setting']) ? $_GET['setting'] : '';
+		$modules = WPDF()->get_modules();
+		$url_prepend = '';
 
-		// save form settings array.
-		if ( ! isset( $form_data['settings'] ) ) {
-			$form_data['settings'] = array();
-		}
+		if ( ! empty( $modules ) && isset( $modules[ $section ] ) ){
 
-		$form_data['content'] = isset( $settings['form_content'] ) ? $settings['form_content'] : '';
-
-		$form_data['settings'] = array(
-			'labels' => array(
-				'submit' => $settings['submit_label'],
-			),
-		);
-
-		// save form confirmations array.
-		if ( ! isset( $form_data['confirmations'] ) ) {
-			$form_data['confirmations'] = array();
-		}
-
-		$form_data['confirmations'] = array(
-			array(
-				'type'         => $settings['confirmation_type'],
-				'redirect_url' => $settings['confirmation_redirect'],
-				'message'      => $settings['confirmation_message'],
-			),
-		);
-		// save how confirmation should display.
-		$form_data['confirmation_location'] = isset( $settings['confirmation_location'] ) && in_array( $settings['confirmation_location'], array(
-			'replace',
-			'after',
-		), true ) ? $settings['confirmation_location'] : 'after';
-
-		if ( ! empty( $settings['form_label'] ) ) {
-			$form_data['form_label'] = $settings['form_label'];
-		}
-
-		if ( isset( $settings['enable_style'] ) ) {
-			$form_data['settings']['enable_style'] = $settings['enable_style'];
-		} else {
-			$form_data['settings']['enable_style'] = 'enabled';
-		}
-
-		if ( isset( $settings['enable_layout_css'] ) ) {
-			$form_data['settings']['enable_layout_css'] = $settings['enable_layout_css'];
-		} else {
-			$form_data['settings']['enable_layout_css'] = 'enabled';
-		}
-
-		// settings error.
-		if ( isset( $settings['error'] ) ) {
-
-			$form_data['settings']['error'] = array();
-
-			if ( isset( $settings['error']['general_message'] ) ) {
-				$form_data['settings']['error']['general_message'] = $settings['error']['general_message'];
+			$module = $modules[ $section ];
+			if ( method_exists( $module, 'save_settings' ) ) {
+				$form_data['settings'][ $section ] = $module->save_settings();
 			}
 
-			if ( isset( $settings['error']['show_fields'] ) ) {
-				$form_data['settings']['error']['show_fields'] = $settings['error']['show_fields'];
-			}
-		}
+			$url_prepend = '&setting=' . sanitize_title( $section );
 
-		// save recaptcha settings.
-		if ( isset( $settings['recaptcha_public'] ) ) {
-			$form_data['settings']['recaptcha_public'] = $settings['recaptcha_public'];
-		}
-		if ( isset( $settings['recaptcha_private'] ) ) {
-			$form_data['settings']['recaptcha_private'] = $settings['recaptcha_private'];
+		} else {
+			$settings = $_POST['wpdf_settings'];
+
+			// save form settings array.
+			if ( ! isset( $form_data['settings'] ) ) {
+				$form_data['settings'] = array();
+			}
+
+			$form_data['content'] = isset( $settings['form_content'] ) ? $settings['form_content'] : '';
+
+			$form_data['settings'] = array(
+				'labels' => array(
+					'submit' => $settings['submit_label'],
+				),
+			);
+
+			// save form confirmations array.
+			if ( ! isset( $form_data['confirmations'] ) ) {
+				$form_data['confirmations'] = array();
+			}
+
+			$form_data['confirmations'] = array(
+				array(
+					'type'         => $settings['confirmation_type'],
+					'redirect_url' => $settings['confirmation_redirect'],
+					'message'      => $settings['confirmation_message'],
+				),
+			);
+			// save how confirmation should display.
+			$form_data['confirmation_location'] = isset( $settings['confirmation_location'] ) && in_array( $settings['confirmation_location'], array(
+				'replace',
+				'after',
+			), true ) ? $settings['confirmation_location'] : 'after';
+
+			if ( ! empty( $settings['form_label'] ) ) {
+				$form_data['form_label'] = $settings['form_label'];
+			}
+
+			if ( isset( $settings['enable_style'] ) ) {
+				$form_data['settings']['enable_style'] = $settings['enable_style'];
+			} else {
+				$form_data['settings']['enable_style'] = 'enabled';
+			}
+
+			if ( isset( $settings['enable_layout_css'] ) ) {
+				$form_data['settings']['enable_layout_css'] = $settings['enable_layout_css'];
+			} else {
+				$form_data['settings']['enable_layout_css'] = 'enabled';
+			}
+
+			// settings error.
+			if ( isset( $settings['error'] ) ) {
+
+				$form_data['settings']['error'] = array();
+
+				if ( isset( $settings['error']['general_message'] ) ) {
+					$form_data['settings']['error']['general_message'] = $settings['error']['general_message'];
+				}
+
+				if ( isset( $settings['error']['show_fields'] ) ) {
+					$form_data['settings']['error']['show_fields'] = $settings['error']['show_fields'];
+				}
+			}
+
+			// save recaptcha settings.
+			if ( isset( $settings['recaptcha_public'] ) ) {
+				$form_data['settings']['recaptcha_public'] = $settings['recaptcha_public'];
+			}
+			if ( isset( $settings['recaptcha_private'] ) ) {
+				$form_data['settings']['recaptcha_private'] = $settings['recaptcha_private'];
+			}
 		}
 
 		update_post_meta( $form_id , '_form_data', $form_data );
-		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' ) );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' . $url_prepend ) );
 		exit();
 	}
 

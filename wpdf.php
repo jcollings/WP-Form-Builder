@@ -162,6 +162,7 @@ class WPDF_DeveloperForms {
 		include_once 'libs/class-wpdf-email-manager.php';
 		include_once 'libs/class-wpdf-database-manager.php';
 
+		include_once 'libs/class-wpdf-addon.php';
 		include_once 'libs/wpdf-functions.php';
 		include_once 'libs/wpdf-shortcodes.php';
 
@@ -443,6 +444,15 @@ class WPDF_DeveloperForms {
 				$this->_forms[ $form_key ] = array( 'form_id' => $id );
 			}
 		}
+	}
+
+	/**
+	 * Get list of installed modules
+	 *
+	 * @return WPDF_Addon[]
+	 */
+	public function get_modules(){
+		return $this->_modules;
 	}
 }
 
