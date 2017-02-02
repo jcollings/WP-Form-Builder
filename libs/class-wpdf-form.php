@@ -394,6 +394,8 @@ class WPDF_Form {
 				return;
 			}
 
+			do_action( 'wpdf/form_processed', $this);
+
 			// store form data in database.
 			if ( $this->get_setting( 'database' ) === 'yes' && ! defined( 'WPDF_PREVIEW' ) ) {
 				$db = new WPDF_DatabaseManager();

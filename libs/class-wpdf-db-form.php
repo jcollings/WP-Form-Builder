@@ -44,7 +44,8 @@ class WPDF_DB_Form extends WPDF_Form {
 			$form = get_post_meta( $form_id , '_form_data', true );
 
 			$fields = isset( $form['fields'] ) && ! empty( $form['fields'] ) ? $form['fields'] : array();
-			parent::__construct( 'Form ' . $form_id, $fields, $form['settings'] );
+			$settings = isset($form['settings']) ? $form['settings'] : array();
+			parent::__construct( 'Form ' . $form_id, $fields, $settings );
 
 			// load settings.
 //			if ( isset( $form['settings'] ) ) {

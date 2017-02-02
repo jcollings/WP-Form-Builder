@@ -73,4 +73,13 @@ class WPDF_Addon {
 	public function is_setup(){
 		return $this->setup;
 	}
+
+	/**
+	 * Log class error
+	 *
+	 * @param $msg
+	 */
+	protected function log( $msg ) {
+		file_put_contents( __DIR__ . '/debug.log', date( 'Y-m-d H:i:s - ' . $this->get_name() .': ' ) . json_encode( $msg ) . "\n", FILE_APPEND );
+	}
 }
