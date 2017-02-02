@@ -657,7 +657,7 @@ class WPDF_Admin {
 
 			$module = $modules[ $section ];
 			if ( method_exists( $module, 'save_settings' ) ) {
-				$form_data['settings'][ $section ] = $module->save_settings();
+				$form_data['settings'][ $module->get_setting_key() ] = $module->save_settings();
 			}
 
 			$url_prepend = '&setting=' . sanitize_title( $section );

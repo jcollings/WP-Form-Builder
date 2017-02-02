@@ -174,9 +174,10 @@ class WPDF_Form {
 	 * WPDF_Form constructor.
 	 *
 	 * @param string $name Form name.
-	 * @param array  $fields Form fields.
+	 * @param array $fields Form fields.
+	 * @param array $settings
 	 */
-	public function __construct( $name, $fields = array() ) {
+	public function __construct( $name, $fields = array(), $settings = array() ) {
 
 		// Setup default values.
 		$this->_name             = $name;
@@ -205,7 +206,11 @@ class WPDF_Form {
 		$this->_is_ajax = isset( $_POST['wpdf_ajax'] ) && 'iframe' === $_POST['wpdf_ajax'] ? true : false;
 
 		// load default settings.
-		$this->_settings = apply_filters( 'wpdf/form_settings', $this->_settings_default, $this->get_id() );
+		$this->_settings = $this->_settings_default;
+		if ( ! empty( $settings ) ) {
+			$this->settings( $settings );
+		}
+		$this->_settings = apply_filters( 'wpdf/form_settings', $this->_settings, $this->get_id() );
 
 		// mark form as submitted.
 		$this->_submitted = isset( $_POST['wpdf_action'] ) && $_POST['wpdf_action'] == $this->get_name() ? true : false;
@@ -290,6 +295,8 @@ class WPDF_Form {
 		}
 
 		$this->_data = new WPDF_FormData( $this, $_POST, $_FILES );
+
+		do_action('wpdf/form_init', $this);
 	}
 
 	/**

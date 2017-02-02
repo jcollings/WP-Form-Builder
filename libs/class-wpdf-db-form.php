@@ -44,12 +44,12 @@ class WPDF_DB_Form extends WPDF_Form {
 			$form = get_post_meta( $form_id , '_form_data', true );
 
 			$fields = isset( $form['fields'] ) && ! empty( $form['fields'] ) ? $form['fields'] : array();
-			parent::__construct( 'Form ' . $form_id, $fields );
+			parent::__construct( 'Form ' . $form_id, $fields, $form['settings'] );
 
 			// load settings.
-			if ( isset( $form['settings'] ) ) {
-				$this->settings( $form['settings'] );
-			}
+//			if ( isset( $form['settings'] ) ) {
+//				$this->settings( $form['settings'] );
+//			}
 
 			// load style.
 			$style          = isset( $form['theme'] ) ? $form['theme'] : array();
