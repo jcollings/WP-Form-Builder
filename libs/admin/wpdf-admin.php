@@ -394,7 +394,11 @@ class WPDF_Admin {
 								} else {
 									$content = esc_html( $submission->content );
 								}
-								echo "<p><strong>{$form->get_field_label($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+
+								$content = apply_filters('wpdf/admin/display_field_value', $content, $submission, $submissions, $form);
+								if($content){
+									echo "<p><strong>{$form->get_field_label($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+								}
 							}
 						}
 
