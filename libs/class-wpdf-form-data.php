@@ -62,23 +62,25 @@ class WPDF_FormData {
 	 * WPDF_FormData constructor.
 	 *
 	 * @param WPDF_Form $form  Form object.
+	 */
+	public function __construct( $form ) {
+
+		$this->_data     = array();
+		$this->_raw_data = array();
+		$this->_fields   = $form->get_fields();
+		$this->_submitted = $form->is_submitted() === true ? true : false;
+		$this->_upload_dir = $form->get_upload_folder();
+	}
+
+	/**
+	 * Load data from form submission
+	 *
 	 * @param array     $data Post data.
 	 * @param array     $upload_data File upload data.
 	 */
-	public function __construct( $form, $data, $upload_data ) {
+	public function form_data( $data, $upload_data ) {
 
-		$fields          = $form->get_fields();
-		$this->_data     = array();
-		$this->_raw_data = array();
-		$this->_fields   = $fields;
-
-		$this->_submitted = $form->is_submitted() === true ? true : false;
-
-		$upload_dir = wpdf_get_uploads_dir();
-		$this->_upload_dir = $form->get_upload_folder();
-		$upload_dir = trailingslashit( $upload_dir ) . trailingslashit( $this->_upload_dir );
-
-		foreach ( $fields as $field_id => $field ) {
+		foreach ( $this->_fields as $field_id => $field ) {
 
 			$this->_raw_data[ $field_id ] = isset( $data[ $field->get_input_name() ] ) ? $field->sanitize( $data[ $field->get_input_name() ] ) : false;
 			$this->_defaults[ $field_id ] = $field->get_default_value();
@@ -98,6 +100,8 @@ class WPDF_FormData {
 							$raw_file_name = sanitize_file_name( $upload_data[ $field->get_input_name() ]['name'] );
 
 							// create directory if needed.
+							$upload_dir = wpdf_get_uploads_dir();
+							$upload_dir = trailingslashit( $upload_dir ) . trailingslashit( $this->_upload_dir );
 							if ( ! file_exists( $upload_dir ) ) {
 								mkdir( $upload_dir );
 							}
@@ -156,6 +160,54 @@ class WPDF_FormData {
 					}
 				}
 			}
+		}
+	}
+
+	public function submission_data( $submission_data = array() ){
+
+		if ( empty( $submission_data ) ) {
+			return;
+		}
+
+		$this->_submitted = true;
+		
+		$this->_fields = array();
+
+		foreach ($submission_data as $data){
+			$field_id = $data->field;
+			$this->_data[ $field_id ] = $data->content;
+			$field = array(
+				'label' => $data->field_label
+			);
+
+			$type = $data->field_type;
+			switch ( $type ) {
+				case 'text':
+					$this->_fields[ $field_id ] = new WPDF_TextField( $field_id, $type, $field );
+					break;
+				case 'textarea':
+					$this->_fields[ $field_id ] = new WPDF_TextareaField( $field_id, $type, $field );
+					break;
+				case 'select':
+					$this->_fields[ $field_id ] = new WPDF_SelectField( $field_id, $type, $field );
+					break;
+				case 'radio':
+					$this->_fields[ $field_id ] = new WPDF_RadioField( $field_id, $type, $field );
+					break;
+				case 'checkbox':
+					$this->_fields[ $field_id ] = new WPDF_CheckboxField( $field_id, $type, $field );
+					break;
+				case 'file':
+					$this->_fields[ $field_id ] = new WPDF_FileField( $field_id, $type, $field );
+					break;
+				case 'number':
+					$this->_fields[ $field_id ] = new WPDF_NumberField( $field_id, $type, $field );
+					break;
+				default:
+					$this->_fields[ $field_id ] = new WPDF_FormField( $field_id, $type, $field );
+					break;
+			}
+
 		}
 	}
 

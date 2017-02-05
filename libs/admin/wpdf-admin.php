@@ -259,7 +259,12 @@ class WPDF_Admin {
 			$form = new WPDF_DB_Form( $form_id );
 		}
 
+		// get submission id, if found load into form data
 		$submission_id = isset( $_GET['submission'] ) ? $_GET['submission'] : false;
+		if($submission_id){
+			$form->load_submission( $submission_id );
+		}
+
 		$action        = isset( $_GET['action'] ) ? $_GET['action'] : false;
 
 		if ( 'new' === $action ) {
@@ -361,11 +366,11 @@ class WPDF_Admin {
 						<?php
 
 						$db          = new WPDF_DatabaseManager();
-						$submissions = $db->get_submission( $submission_id );
+						$submissions = $db->get_submission_detail( $submission_id );
 						$db->mark_as_read( $submission_id );
 
 						// get user name.
-						$user_id = isset( $submissions[0]->user_id ) ? $submissions[0]->user_id : 'N/A';
+						$user_id = isset( $submissions->user_id ) ? $submissions->user_id : 'N/A';
 						$user    = 'Guest';
 						if ( intval( $user_id ) > 0 ) {
 							$user = get_user_by( 'id', intval( $user_id ) );
@@ -375,29 +380,25 @@ class WPDF_Admin {
 						}
 
 						// get ip.
-						$ip = isset( $submissions[0]->ip ) ? $submissions[0]->ip : 'N/A';
+						$ip = isset( $submissions->ip ) ? $submissions->ip : 'N/A';
 
 						// date.
-						$date = isset( $submissions[0]->created ) ? $submissions[0]->created : false;
+						$date = isset( $submissions->created ) ? $submissions->created : false;
 						if ( $date ) {
 							$date = date( 'M j, Y @ H:i', strtotime( $date ) );
 						}
 
+						$form_data = $form->get_data();
+						$submissions = $form_data->to_array();
 						if ( ! empty( $submissions ) ) {
+							foreach ( $submissions as $field_id => $value ) {
 
-							foreach ( $submissions as $submission ) {
+								$field = $form_data->get_field($field_id);
+								$label = $field->get_label();
 
-								if ( 'virtual' === $submission->field_type ) {
-									$content = apply_filters( 'wpdf/display_submission_field', $submission->content, $submission->field, $form );
-								} elseif ( 'file' === $submission->field_type ) {
-									$content = '<a target="_blank" href="' . esc_attr( trailingslashit( wpdf_get_uploads_url() ) . $submission->content ) . '">' . esc_html( $submission->content ) . '</a>';
-								} else {
-									$content = esc_html( $submission->content );
-								}
-
-								$content = apply_filters('wpdf/admin/display_field_value', $content, $submission, $submissions, $form);
-								if($content){
-									echo "<p><strong>{$form->get_field_label($submission->field, $submission->field_label)}</strong>:<br />{$content}</p>";
+								$value = apply_filters( 'wpdf/display_field_value', $value, $field_id, $form_data );
+								if ( ! empty( $value ) ) {
+									echo "<p><strong>{$label}</strong>:<br />{$value}</p>";
 								}
 							}
 						}

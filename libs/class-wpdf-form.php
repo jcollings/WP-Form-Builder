@@ -294,7 +294,7 @@ class WPDF_Form {
 			}
 		}
 
-		$this->_data = new WPDF_FormData( $this, $_POST, $_FILES );
+		$this->_data = new WPDF_FormData( $this);
 
 		do_action('wpdf/form_init', $this);
 	}
@@ -337,6 +337,8 @@ class WPDF_Form {
 	 * Process form submission request
 	 */
 	public function process() {
+
+		$this->_data->form_data($_POST, $_FILES);
 
 		if ( ! wp_verify_nonce( $_POST['wpdf_nonce'], 'wpdf_submit_form_' . $this->get_name() ) ) {
 			$this->set_error( __( 'An Error occurred when submitting the form, please retry.', 'wpdf' ) );
@@ -419,6 +421,13 @@ class WPDF_Form {
 			// on form complete.
 			do_action( 'wpdf/form_complete', $this, $this->_data );
 		endif;
+	}
+
+	public function load_submission($submission_id){
+
+		$db          = new WPDF_DatabaseManager();
+		$submission_data = $db->get_submission_data( $submission_id );
+		$this->_data->submission_data($submission_data);
 	}
 
 	/**
@@ -633,6 +642,15 @@ class WPDF_Form {
 	 */
 	public function get_validation_rules() {
 		return $this->_rules;
+	}
+
+	/**
+	 * Get form data
+	 *
+	 * @return WPDF_FormData
+	 */
+	public function get_data(){
+		return $this->_data;
 	}
 
 	/**

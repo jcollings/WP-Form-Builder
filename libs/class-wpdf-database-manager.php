@@ -264,6 +264,34 @@ class WPDF_DatabaseManager {
 	}
 
 	/**
+	 * Get submission details by id
+	 *
+	 * @param int $submission_id Submission id.
+	 *
+	 * @return array|null|object
+	 */
+	public function get_submission_detail( $submission_id ) {
+
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT * FROM {$this->_submission_table} st WHERE st.id=%d", $submission_id );
+		return $wpdb->get_row( $query );
+	}
+
+	/**
+	 * Get submission data by id
+	 *
+	 * @param int $submission_id Submission id.
+	 *
+	 * @return array|null|object
+	 */
+	public function get_submission_data( $submission_id ) {
+
+		global $wpdb;
+		$query = $wpdb->prepare( "SELECT * FROM {$this->_submission_data_table} sdt WHERE sdt.submission_id=%d", $submission_id );
+		return $wpdb->get_results( $query );
+	}
+
+	/**
 	 * Mark submission as read
 	 *
 	 * @param int $submission_id Submission id.
