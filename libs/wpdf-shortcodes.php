@@ -24,7 +24,14 @@ function wpdf_shortcode_form( $atts, $content = null ) {
 	$a = shortcode_atts( array(
 		'form'    => '',
 		'form_id' => 0,
+		'title' => true,
+		'ajax' => true
 	), $atts );
+
+	$display_args = array(
+		'title' => $a['title'] === 'true' || $a['title'] === true ? true : false,
+		'ajax' => $a['ajax'] === 'true' || $a['ajax'] === true ? true : false,
+	);
 
 	$form_id = intval( $a['form_id'] );
 	if ( $form_id > 0 ) {
@@ -140,7 +147,7 @@ function wpdf_shortcode_form( $atts, $content = null ) {
 	endif;
 
 	ob_start();
-	wpdf_display_form( $form_key );
+	wpdf_display_form( $form_key, $display_args );
 
 	return ob_get_clean();
 }

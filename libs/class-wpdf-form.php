@@ -577,6 +577,10 @@ class WPDF_Form {
 			$classes .= esc_attr( $args['class'] );
 		}
 
+		if( $args['ajax'] === true){
+			$classes .= 'wpdf-form__ajax';
+		}
+
 		if ( 'enabled' === $this->get_setting( 'enable_layout_css' ) ) {
 			$classes .= ' wpdf-form__layout';
 		}
@@ -590,13 +594,14 @@ class WPDF_Form {
 
 		echo '<form ' . $attrs . '>';
 		?>
+		<?php if($args['title'] === true): ?>
 		<div class="wpdf-form-title">
 			<h1><?php echo esc_html( $this->get_label() ); ?></h1>
 		</div>
+		<?php endif; ?>
 		<div class="wpdf-form-copy">
 			<?php echo wpautop( esc_html( $this->get_content() ) ); ?>
 		</div>
-		<div class="wpdf-ajax-response"></div>
 		<?php
 	}
 
@@ -742,13 +747,22 @@ class WPDF_Form {
 
 	/**
 	 * Display form closing tag
+	 *
+	 * @param array $args
 	 */
-	public function end() {
+	public function end($args = array()) {
 
 		// hidden fields.
 		wp_nonce_field( 'wpdf_submit_form_' . $this->get_name(), 'wpdf_nonce' );
 		echo '<input type="hidden" name="wpdf_action" value="' . esc_attr( $this->get_name() ) . '" />';
 		echo '<input type="hidden" name="wpdf_token" value="' . esc_attr( $this->get_token() ) . '" />';
+
+		// output arguments
+		if ( ! empty( $args ) ) {
+			foreach ( $args as $key => $value ) {
+				echo '<input type="hidden" name="wpdf_attr_' . esc_attr($key) . '" value="' . esc_attr( $value ) . '" />';
+			}
+		}
 
 		echo '</form>';
 	}
@@ -1119,6 +1133,20 @@ class WPDF_Form {
 	 */
 	public function render_ajax() {
 
+		$attrs = array(
+			'wpdf_attr_title' => 'title'
+		);
+
+		// load arguments passed to shortcode
+		$args = array(
+			'ajax' => true,
+		);
+		foreach( $attrs as $attr => $key ) {
+			if(isset($_POST[$attr])){
+				$args[$key] = $_POST[$attr];
+			}
+		};
+
 		header( 'Content-Type: application/json' );
 
 		$json = array(
@@ -1134,7 +1162,7 @@ class WPDF_Form {
 		}
 
 		ob_start();
-		wpdf_display_form( 'WPDF_FORM_' . $this->get_id() );
+		wpdf_display_form( 'WPDF_FORM_' . $this->get_id(), $args);
 		$confirmation = ob_get_clean();
 		$json['message'] = $confirmation;
 

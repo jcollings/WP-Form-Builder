@@ -82,12 +82,13 @@ function wpdf_get_form( $name ) {
  * Display default output of form
  *
  * @param string $name Form name.
+ * @param array $args
  */
-function wpdf_display_form( $name ) {
+function wpdf_display_form( $name, $args = array() ) {
 
 	$form = wpdf_get_form( $name );
 
-	$form->start();
+	$form->start($args);
 
 	if ( $form->is_complete() ) {
 
@@ -109,7 +110,7 @@ function wpdf_display_form( $name ) {
 		$form->submit();
 	}
 
-	$form->end();
+	$form->end($args);
 }
 
 /**

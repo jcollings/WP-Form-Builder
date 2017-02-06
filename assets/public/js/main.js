@@ -224,11 +224,11 @@
      */
     $(document).ready(function(){
 
-        $('.wpdf-form').each(function(){
+        $('.wpdf-form__ajax').each(function(){
             wpdf_ajax_form($(this));
         });
 
-        $('body').on('submit', '.wpdf-form', function(){
+        $('body').on('submit', '.wpdf-form__ajax', function(){
             $(this).addClass('wpdf-ajax-loading');
             $(this).find('.wpdf-submit-button').prop('disabled', true);
         });

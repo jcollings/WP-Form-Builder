@@ -51,9 +51,9 @@
 
                 if( _form_options[_value] !== undefined && _form_options[_value]['type'] !== undefined ){
                     if( _form_options[_value]['type'] == 'form_id'){
-                        editor.insertContent( '[wp_form form_id="'+_value+'" /]' );
+                        editor.insertContent( '[wp_form form_id="'+_value+'" ajax="true" /]' );
                     }else{
-                        editor.insertContent( '[wp_form form="'+_value+'" /]' );
+                        editor.insertContent( '[wp_form form="'+_value+'" ajax="true" /]' );
                     }
                     editor.windowManager.close();
                 }else{
