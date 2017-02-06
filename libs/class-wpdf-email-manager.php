@@ -60,11 +60,11 @@ class WPDF_EmailManager {
 	/**
 	 * Send email notification
 	 *
-	 * @param WPDF_FormData $data Form data.
+	 * @param WPDF_FormData $form_data Form data.
 	 *
 	 * @return bool
 	 */
-	public function send( $data ) {
+	public function send( $form_data ) {
 
 		if ( empty( $this->_notifications ) ) {
 			// no notifications were needing to be sent.
@@ -86,7 +86,7 @@ class WPDF_EmailManager {
 		}
 
 		$all    = '';
-		$fields = $data->to_array();
+		$fields = $form_data->to_array();
 		foreach ( $fields as $field_id => $value ) {
 
 			// dont show empty fields.
@@ -94,16 +94,11 @@ class WPDF_EmailManager {
 				continue;
 			}
 
-			$field = $data->get_field( $field_id );
-			if ( $field->is_type( 'file' ) ) {
+			$field = $form_data->get_field( $field_id );
+			$value = apply_filters( 'wpdf/display_field_value', $value, $field_id, $form_data );
 
-				$link = trailingslashit( $data->get_upload_folder() ) . $value;
-
-				if ( 'html' === $this->_email_type ) {
-					$value = '<a href="' . wpdf_get_uploads_url() . $link . '">' . $value . '</a>';
-				} else {
-					$value = wpdf_get_uploads_url() . $link;
-				}
+			if ( 'html' === $this->_email_type ) {
+				// todo: Convert url to link
 			}
 
 			$tag                       = $this->setup_merge_tag( 'field_' . $field_id );
@@ -113,7 +108,7 @@ class WPDF_EmailManager {
 				'{{field_value}}' => $value,
 			) );
 
-			if ( ! $field->is_type( 'password' ) ) {
+			if ( ! $field->is_type( 'password' ) && ! $field->is_type( 'virtual' ) ) {
 				// dont add password fields to {{fields}} tag.
 				$all .= $tag;
 			}
@@ -130,7 +125,7 @@ class WPDF_EmailManager {
 		// loop through notifications, setup, and send.
 		foreach ( $this->_notifications as $notification ) {
 
-			if ( ! $notification->is_valid( $data ) ) {
+			if ( ! $notification->is_valid( $form_data ) ) {
 				continue;
 			}
 

@@ -165,3 +165,24 @@ function wpdf_get_ip() {
 
 	return $ip;
 }
+
+/**
+ * Override display of file
+ *
+ * @param string $value
+ * @param string $field_id
+ * @param WPDF_FormData $data
+ *
+ * @return mixed
+ */
+function wpdf_file_field_value($value, $field_id, $data){
+
+	$field = $data->get_field($field_id);
+	if ( $field->is_type( 'file' ) ) {
+		$link = trailingslashit( $data->get_upload_folder() ) . $value;
+		$value = wpdf_get_uploads_url() . $link;
+	}
+
+	return $value;
+}
+add_filter( 'wpdf/display_field_value', 'wpdf_file_field_value', 10, 3 );

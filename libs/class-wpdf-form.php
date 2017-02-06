@@ -396,7 +396,7 @@ class WPDF_Form {
 				return;
 			}
 
-			do_action( 'wpdf/form_processed', $this);
+			do_action( 'wpdf/form_processed', $this, $this->_data);
 
 			// store form data in database.
 			if ( $this->get_setting( 'database' ) === 'yes' && ! defined( 'WPDF_PREVIEW' ) ) {
@@ -725,7 +725,7 @@ class WPDF_Form {
 	 * @param string $label Submit button text.
 	 * @param array  $args Submit button display arguments.
 	 */
-	public function submit( $label = false, $args = array() ) {
+	public function submit( $label = '', $args = array() ) {
 
 		if ( ! $this->has_valid_token() ) {
 			return;

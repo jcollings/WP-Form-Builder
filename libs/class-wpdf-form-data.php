@@ -59,6 +59,13 @@ class WPDF_FormData {
 	private $_upload_dir = null;
 
 	/**
+	 * Current Form
+	 *
+	 * @var WPDF_Form
+	 */
+	private $_form = null;
+
+	/**
 	 * WPDF_FormData constructor.
 	 *
 	 * @param WPDF_Form $form  Form object.
@@ -67,6 +74,7 @@ class WPDF_FormData {
 
 		$this->_data     = array();
 		$this->_raw_data = array();
+		$this->_form = $form;
 		$this->_fields   = $form->get_fields();
 		$this->_submitted = $form->is_submitted() === true ? true : false;
 		$this->_upload_dir = $form->get_upload_folder();
@@ -273,7 +281,13 @@ class WPDF_FormData {
 	 * @return bool|WPDF_FormField
 	 */
 	public function get_field( $field_id ) {
-		return isset( $this->_fields[ $field_id ] ) ? $this->_fields[ $field_id ] : false;
+		$found = isset( $this->_fields[ $field_id ] ) ? $this->_fields[ $field_id ] : false;
+
+		if ( ! $found ){
+			return new WPDF_FormField($field_id, 'virtual');
+		}
+
+		return $found;
 	}
 
 	/**
@@ -332,5 +346,10 @@ class WPDF_FormData {
 	 */
 	public function is_submitted() {
 		return $this->_submitted;
+	}
+
+	public function save_virtual_field($field_id, $value){
+
+		$this->_data[ $field_id ] = $value;
 	}
 }
