@@ -26,6 +26,11 @@ class WPDF_TextField extends WPDF_FormField {
 	public function output( $form_data ) {
 
 		$value = $form_data->get( $this->_name );
-		echo '<input type="' . esc_attr( $this->get_type() ) . '" name="' . esc_attr( $this->get_input_name() ) . '" value="' . esc_attr( $value ) . '" id="' . esc_attr( $this->get_id() ) . '" class="' . esc_attr( $this->get_classes() ) . '" />';
+		echo '<input type="' . esc_attr( $this->get_type() )
+		     . '" name="' . esc_attr( $this->get_input_name() )
+		     . '" value="' . esc_attr( $value )
+		     . '" id="' . esc_attr( $this->get_id() )
+		     . '" class="' . esc_attr( $this->get_classes() )
+		     . '" placeholder="' . esc_attr( $this->get_placeholder() ) . '" />';
 	}
 }
