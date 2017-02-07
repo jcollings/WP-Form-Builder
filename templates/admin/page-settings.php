@@ -37,6 +37,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'Upload directory writable' => true === is_writable( wpdf_get_uploads_dir() ) ? 'yes' : 'no',
 			),
 		);
+
+		// dislay list of addons
+		$modules = WPDF()->get_modules();
+		if ( ! empty( $modules ) ) {
+			$rows = array();
+			foreach ( $modules as $module ) {
+				$rows[$module->get_name()] = $module->get_version();
+			}
+
+			if ( ! empty( $rows ) ) {
+				$debug_info['Addons'] = $rows;
+			}
+		}
 		?>
 
 		<?php foreach ( $debug_info as $section => $section_data ) : ?>

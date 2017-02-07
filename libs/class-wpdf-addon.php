@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WPDF_Addon {
 
 	/**
+	 * Plugin Version
+	 *
+	 * @var string
+	 */
+	protected $version;
+
+	/**
 	 * Addon Name
 	 *
 	 * @var string
@@ -81,5 +88,14 @@ class WPDF_Addon {
 	 */
 	protected function log( $msg ) {
 		file_put_contents( __DIR__ . '/debug.log', date( 'Y-m-d H:i:s - ' . $this->get_name() .': ' ) . json_encode( $msg ) . "\n", FILE_APPEND );
+	}
+
+	/**
+	 * Get plugin version
+	 *
+	 * @return string
+	 */
+	public function get_version() {
+		return $this->version;
 	}
 }
