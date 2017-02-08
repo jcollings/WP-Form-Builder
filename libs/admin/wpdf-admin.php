@@ -851,8 +851,8 @@ class WPDF_Admin {
 			'notifications' => array(
 				array(
 					'to'      => '{{admin_email}}',
-					'subject' => 'New Form Submission',
-					'message' => 'New Form Submission: {{fields}}',
+					'subject' => 'New Submission from {{form_name}}',
+					'message' => '{{fields}}',
 				),
 			),
 		);
