@@ -48,11 +48,19 @@ class WPDF_EmailManager {
 	protected $_email_type = 'html';
 
 	/**
+	 * WPDF Form
+	 *
+	 * @var WPDF_Form
+	 */
+	protected $_form;
+
+	/**
 	 * WPDF_EmailManager constructor.
 	 *
 	 * @param array $notifications List of form notifications.
 	 */
-	public function __construct( $notifications ) {
+	public function __construct( $form, $notifications ) {
+		$this->_form = $form;
 		$this->_notifications = $notifications;
 	}
 
@@ -116,6 +124,10 @@ class WPDF_EmailManager {
 
 		// add admin_email merge tag to both raw and html tags.
 		$raw_template_tags[ $this->setup_merge_tag( 'admin_email' ) ] = $template_tags[ $this->setup_merge_tag( 'admin_email' ) ] = get_option( 'admin_email' );
+		$raw_template_tags[ $this->setup_merge_tag( 'site_name' ) ] = $template_tags[ $this->setup_merge_tag( 'site_name' ) ] = get_option( 'blogname' );
+		$raw_template_tags[ $this->setup_merge_tag( 'site_url' ) ] = $template_tags[ $this->setup_merge_tag( 'site_url' ) ] = get_option( 'siteurl' );
+		$raw_template_tags[ $this->setup_merge_tag( 'form_name' ) ] = $template_tags[ $this->setup_merge_tag( 'form_name' ) ] = $this->_form->get_label();
+
 
 		$template_tags[ $this->setup_merge_tag( 'fields' ) ] = $all;
 		$template_tags                                       = array_reverse( $template_tags, true );

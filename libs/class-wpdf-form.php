@@ -406,7 +406,7 @@ class WPDF_Form {
 
 			// send email notifications with template tags.
 			if ( ! empty( $this->_notifications ) ) {
-				$this->_email_manager = new WPDF_EmailManager( $this->_notifications );
+				$this->_email_manager = new WPDF_EmailManager( $this, $this->_notifications );
 				$this->_email_manager->send( $this->_data );
 			}
 

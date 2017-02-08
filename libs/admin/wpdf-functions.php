@@ -126,6 +126,11 @@ function wpdf_display_notification_settings( $notification, $i = '', $field_keys
 						                                          rows="10"><?php echo esc_textarea( $notification['message'] ); ?></textarea>
 						</td>
 						<td>
+							Admin Email: <code>admin_email</code><br />
+							Site Name: <code>site_name</code><br />
+							Site Url: <code>site_url</code><br />
+							Form Name: <code>form_name</code><br /><br />
+
 							Form data can be displayed in the message using merge tags, to display all fields <code>{{fields}}</code>,
 							to display individual fields you can use the following merge tags: <?php
 							echo '<br />' . implode( ',<br /> ', $field_keys );
