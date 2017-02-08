@@ -43,7 +43,7 @@ Simply change colours of the form to match your website’s theme via our style 
     
 ### Installation
 
-1. Download the latest version of the plugin from CodeCanyon.
+1. Download the latest version of the plugin from [Github here](https://github.com/jcollings/WP-Form-Builder/archive/master.zip).
 1. Extract the download to your websites wp-content/plugins folder.
 1. Activate the plugin from the WordPress Admin plugins section.
 
