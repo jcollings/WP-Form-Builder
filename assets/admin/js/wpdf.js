@@ -603,10 +603,11 @@
         if ( false === _changed ){
             _changed = true;
 
-            var wrap = $('#error-wrapper');
-            if ( wrap.length > 0 ) {
-                wrap.html('<p class="notice notice-warning wpdf-notice">You have unsaved changes, to save these click the update button.</p>');
-            }
+            // todo: had to be removed due to auto-complete triggering it
+            // var wrap = $('#error-wrapper');
+            // if ( wrap.length > 0 ) {
+            //     wrap.html('<p class="notice notice-warning wpdf-notice">You have unsaved changes, to save these click the update button.</p>');
+            // }
         }
     });
 

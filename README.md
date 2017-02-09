@@ -239,6 +239,11 @@ A modal window will open up allowing you to choose from a list of forms previous
 
 ## Changelog
 
+### 0.4
+* ADD: Scaffold addon class for extending form
+* ADD: shortcode parameters title and ajax
+* ADD: Option to submit form via AJAX (iframe support for old browsers)
+
 ### 0.3.3
 * ADD: Number input, Number Slider, and Number Range Slider field
 

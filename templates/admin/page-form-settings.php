@@ -23,7 +23,7 @@ $settings_tab = isset($_GET['setting']) ? $_GET['setting'] : '';
 // modules
 $modules = WPDF()->get_modules();
 ?>
-<form action="" method="post">
+<form action="" method="post" autocomplete="off">
 
 	<input type="hidden" name="wpdf-action" value="edit-form-settings"/>
 	<input type="hidden" name="wpdf-form" value="<?php echo esc_attr( $form_id ); ?>"/>
@@ -66,10 +66,17 @@ $modules = WPDF()->get_modules();
 
 					<div id="error-wrapper">
 						<?php
-						if ( $this->get_success() > 0 ) {
+						if ( $this->get_success() == 1 ) {
 							?>
 							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo esc_html( WPDF()->text->get( 'form_saved', 'general' ) ); ?></p>
 							<?php
+						}else{
+
+							$errorno = isset($_GET['errorno']) ? $_GET['errorno'] : 0;
+
+							if ( ! empty( $modules ) && isset( $modules[ $settings_tab ] ) ){
+								$modules[$settings_tab]->_display_error( $errorno );
+							}
 						}
 						?>
 					</div>

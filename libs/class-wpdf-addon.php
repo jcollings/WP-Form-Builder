@@ -35,7 +35,21 @@ class WPDF_Addon {
 	protected $setting_key;
 
 	/**
-	 * Is plugin setu
+	 * List of admin error codes and messages
+	 *
+	 * @var array
+	 */
+	protected $_error_codes = array();
+
+	/**
+	 * Current Error Code
+	 *
+	 * @var int
+	 */
+	protected $_error_code = 0;
+
+	/**
+	 * Is plugin setup
 	 *
 	 * @var bool
 	 */
@@ -97,5 +111,41 @@ class WPDF_Addon {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * Set error nubmer
+	 *
+	 * @param int $errorno
+	 */
+	protected function _set_error( $errorno = 0 ) {
+		$this->_error_code = $errorno;
+	}
+
+	/**
+	 * if error when saving, return error number
+	 *
+	 * @return bool|int
+	 */
+	public function _has_error() {
+
+		if ( $this->_error_code > 0 ) {
+			return $this->_error_code;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Display addon error when saving settings
+	 *
+	 * @param $errorno
+	 */
+	public function _display_error( $errorno ) {
+
+		$msg = isset( $this->_error_codes[$errorno] ) ? $this->_error_codes[$errorno] : 'An General Error has Occurred, Please try again.'
+		?>
+		<p class="notice notice-error wpdf-notice"><?php echo esc_html( $msg ); ?></p>
+		<?php
 	}
 }

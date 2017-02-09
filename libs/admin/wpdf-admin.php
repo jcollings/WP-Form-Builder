@@ -657,15 +657,22 @@ class WPDF_Admin {
 		$section = isset($_GET['setting']) ? $_GET['setting'] : '';
 		$modules = WPDF()->get_modules();
 		$url_prepend = '';
+		$success = 1;
+		$err_str = '';
 
 		if ( ! empty( $modules ) && isset( $modules[ $section ] ) ){
 
+			// todo: How do we handle errors?
 			$module = $modules[ $section ];
 			if ( method_exists( $module, 'save_settings' ) ) {
 				$form_data['settings'][ $module->get_setting_key() ] = $module->save_settings();
+				if($error = $module->_has_error()){
+					$err_str = '&errorno=' . intval($error);
+					$success = 0;
+				}
 			}
 
-			$url_prepend = '&setting=' . sanitize_title( $section );
+			$url_prepend = '&setting=' . sanitize_title( $section ) . $err_str;
 
 		} else {
 			$settings = $_POST['wpdf_settings'];
@@ -741,7 +748,7 @@ class WPDF_Admin {
 		}
 
 		update_post_meta( $form_id , '_form_data', $form_data );
-		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=1' . $url_prepend ) );
+		wp_redirect( admin_url( 'admin.php?page=wpdf-forms&action=settings&form_id=' . $form_id . '&success=' . $success . $url_prepend ) );
 		exit();
 	}
 
