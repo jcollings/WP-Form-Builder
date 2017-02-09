@@ -124,11 +124,13 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		$field = $form->get_field('fname');
 
 		// no value
-		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
+		$data = new WPDF_FormData($form);
+		$data->form_data(array('wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => '')));
 
 		// basic value
-		$data = new WPDF_FormData($form, array( $field->get_input_name() => 'test value', 'wpdf_action' => 'TestForm'), array());
+		$data = new WPDF_FormData($form);
+		$data->form_data(array( $field->get_input_name() => 'test value', 'wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => 'test value')));
 	}
 
@@ -144,18 +146,21 @@ class WPDF_FormFieldTest extends WP_UnitTestCase {
 		$field = $form->get_field('fname');
 
 		// default value displayed for non submitted form
-		$data = new WPDF_FormData($form, array(), array());
+		$data = new WPDF_FormData($form);
+		$data->form_data(array(), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => 'asd')));
 
 		// mark form as being submitted
 		$form->submitted();
 
 		// default value is not forced for submitted form without value
-		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm'), array());
+		$data = new WPDF_FormData($form);
+		$data->form_data(array('wpdf_action' => 'TestForm'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => '')));
 
 		// default value is not forced for submitted form with value
-		$data = new WPDF_FormData($form, array('wpdf_action' => 'TestForm', $field->get_input_name() => 'test-value'), array());
+		$data = new WPDF_FormData($form);
+		$data->form_data(array('wpdf_action' => 'TestForm', $field->get_input_name() => 'test-value'), array());
 		$this->assertTrue($this->htmlHasAttributes($this->getFieldOutput($field, $data), 'input', array( 'type' => 'text', 'name' => $field->get_input_name(), 'value' => 'test-value')));
 	}
 
