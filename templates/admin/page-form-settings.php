@@ -70,7 +70,7 @@ $modules = WPDF()->get_modules();
 							?>
 							<p class="notice notice-success wpdf-notice wpdf-notice--success"><?php echo esc_html( WPDF()->text->get( 'form_saved', 'general' ) ); ?></p>
 							<?php
-						}else{
+						}elseif ( $this->get_success() === 0 ){
 
 							$errorno = isset($_GET['errorno']) ? $_GET['errorno'] : 0;
 
