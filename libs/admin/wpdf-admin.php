@@ -192,7 +192,7 @@ class WPDF_Admin {
 			exit();
 		}
 
-		$this->_success = isset($_GET['success']) && intval($_GET['success']) >= 1 ? intval($_GET['success']) : false;
+		$this->_success = isset($_GET['success']) ? intval($_GET['success']) : false;
 
 		if ( isset( $_POST['wpdf-action'] ) ) {
 
