@@ -1,6 +1,6 @@
 # WP Form Builder
 Author: James Collings  
-Version: 0.3.3  
+Version: 0.4 
 Homepage: https://www.wpformbuilder.com/  
 Documentation: https://www.wpformbuilder.com/documentation/  
 Demo: https://www.wpformbuilder.com/demo/  

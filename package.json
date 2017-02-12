@@ -5,7 +5,7 @@
   "author": "James Collings",
   "copyright": "",
   "license": "",
-  "version": "0.3.3",
+  "version": "0.4",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
