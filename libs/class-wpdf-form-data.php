@@ -108,7 +108,7 @@ class WPDF_FormData {
 							$raw_file_name = sanitize_file_name( $upload_data[ $field->get_input_name() ]['name'] );
 
 							// create directory if needed.
-							$upload_dir = wpdf_get_uploads_dir();
+							$upload_dir = wpdf_get_uploads_dir($this->_form);
 							$upload_dir = trailingslashit( $upload_dir ) . trailingslashit( $this->_upload_dir );
 							if ( ! file_exists( $upload_dir ) ) {
 								mkdir( $upload_dir );
@@ -117,7 +117,7 @@ class WPDF_FormData {
 							// Randomly generate prefix.
 							do {
 								$prefix = substr( md5( time() ), 0, 5 );
-								$file_name = $prefix . '-' . $raw_file_name;
+								$file_name = $field->get_name() . '-' . $prefix . '-' . $raw_file_name;
 							} while ( file_exists( $upload_dir . $file_name ) );
 
 							if ( move_uploaded_file( $upload_data[ $field->get_input_name() ]['tmp_name'], $upload_dir . $file_name ) ) {

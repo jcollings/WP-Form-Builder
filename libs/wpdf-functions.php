@@ -14,18 +14,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get uploads directory path
  *
+ * @param WPDF_Form $form
+ *
  * @return string
  */
-function wpdf_get_uploads_dir() {
+function wpdf_get_uploads_dir($form = null) {
 
 	$upload_dir = WP_CONTENT_DIR . '/uploads/';
 	if ( ! file_exists( $upload_dir ) ) {
 		mkdir( $upload_dir );
 	}
 
-	$upload_dir = WP_CONTENT_DIR . '/uploads/wpdf/';
+	$upload_dir .= 'wpdf/';
 	if ( ! file_exists( $upload_dir ) ) {
 		mkdir( $upload_dir );
+	}
+
+	// make sure form folder exists
+	if($form){
+
+		$formId = $form->get_id();
+		if(!$formId){
+			$formId = $form->get_name();
+		}
+		if ( ! file_exists( $upload_dir . trailingslashit($formId ) ) ) {
+			mkdir( $upload_dir . trailingslashit($formId) );
+		}
 	}
 
 	return $upload_dir;
@@ -180,8 +194,7 @@ function wpdf_file_field_value($value, $field_id, $data){
 
 	$field = $data->get_field($field_id);
 	if ( $field->is_type( 'file' ) ) {
-		$link = trailingslashit( $data->get_upload_folder() ) . $value;
-		$value = wpdf_get_uploads_url() . $link;
+		$value = wpdf_get_uploads_url() . $value;
 	}
 
 	return $value;

@@ -1002,7 +1002,13 @@ class WPDF_Form {
 		$transient_key = sprintf( 'wpdf_token_%s', $token );
 		$transient = get_transient( 'wpdf_token_' . $token );
 		if ( ! isset( $transient['upload_dir'] ) ) {
-			$transient['upload_dir'] = md5( $token . $transient['time'] );
+
+			$formId = $this->get_id();
+			if(!$formId){
+				$formId = $this->get_name();
+			}
+
+			$transient['upload_dir'] = trailingslashit($formId) . md5( $token . $transient['time'] );
 			set_transient( $transient_key, $transient );
 		}
 
